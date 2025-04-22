@@ -1,15 +1,11 @@
+import AppRouter from "./routes/AppRouter";
 
 function App() {
 
-
   return (
-    <>
-      <div>
-        <p> Condo Web </p>
-      </div>
-
-    </>
+    <div>
+      <AppRouter />
+    </div>
   )
 }
-
 export default App
