@@ -28,8 +28,9 @@ function Login() {
       // call api
       const body = { name: input.inputUser, password: input.inputPassword };
       const result = await login(body);
+      console.log(result.data);
       setToken(result.data.token);
-      setUser(result.data.userData);
+      setUser(result.data.user);
       navigate(0);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);

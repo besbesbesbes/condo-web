@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+
 const useUserStore = create(
   persist(
     (set) => ({
-      user: {},
-      setUser: (newVal) => set({ user: newVal }),
+      user: null,
       token: "",
+      setUser: (newVal) => set({ user: newVal }),
       setToken: (newVal) => set({ token: newVal }),
     }),
     {
@@ -14,4 +15,5 @@ const useUserStore = create(
     }
   )
 );
+
 export default useUserStore;
