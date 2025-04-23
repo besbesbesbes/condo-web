@@ -26,7 +26,6 @@ const userRouter = createBrowserRouter([
 
 export default function AppRouter() {
   const user = useUserStore((state) => state.user);
-  console.log(Boolean(user));
   const finalRouter = user ? userRouter : guestRouter;
   return <RouterProvider router={finalRouter} />;
 }

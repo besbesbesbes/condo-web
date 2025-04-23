@@ -2,11 +2,13 @@ import { useState } from "react";
 import useUserStore from "../stores/user-store";
 import { login } from "../apis/auth-api";
 import { useNavigate } from "react-router-dom";
+import useMainStore from "../stores/main-store";
 
 function Login() {
   const navigate = useNavigate();
   const setToken = useUserStore((state) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
+  const setCurMenu = useMainStore((state) => state.setCurMenu);
   const [input, setInput] = useState({
     inputUser: "",
     inputPassword: "",
@@ -28,7 +30,6 @@ function Login() {
       // call api
       const body = { name: input.inputUser, password: input.inputPassword };
       const result = await login(body);
-      console.log(result.data);
       setToken(result.data.token);
       setUser(result.data.user);
       navigate(0);
