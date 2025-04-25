@@ -1,28 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import useMainStore from "../stores/main-store";
 import { NumericFormat } from "react-number-format";
-import { addTran, getNewTranInfoApi } from "../apis/new-api";
+import { editTranApi } from "../apis/trans-api";
 import useUserStore from "../stores/user-store";
-import ModalExpenseType from "../components/ModalExpenseType";
-import ModalPaidBy from "../components/ModalPaidBy";
-import { useNavigate } from "react-router-dom";
+import ModalConfirmDelete from "../components/ModalConfirmDelete";
 
-function New() {
-  const navigate = useNavigate();
-  const setCurMenu = useMainStore((state) => state.setCurMenu);
+function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const token = useUserStore((state) => state.token);
-  const [users, setUsers] = useState({});
-  const [types, setTypes] = useState({});
   const [input, setInput] = useState({
-    recordDate: new Date().toISOString().slice(0, 10),
-    recordTime: new Date().toTimeString().slice(0, 5),
+    tranId: "",
+    recordDate: "",
+    recordTime: "",
     paidById: "",
     paidBy: "",
     type: "",
     typeId: "",
     totalAmt: "",
-    myPortion: 0.5,
+    myPortion: 0,
     myAmt: 0,
     otherAmt: 0,
     remark: "",
@@ -30,6 +24,18 @@ function New() {
 
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+  };
+
+  const hdlEditTran = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await editTranApi(token, input);
+      console.log(result);
+      setSelectedTran(null);
+      getTrans();
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
   };
 
   useEffect(() => {
@@ -45,46 +51,36 @@ function New() {
     }
   }, [input.totalAmt, input.myPortion]);
 
-  const getNewTranInfo = async () => {
-    try {
-      const result = await getNewTranInfoApi(token);
-      console.log(result.data);
-      if (!input.paidBy) {
-        setInput({
-          ...input,
-          paidBy: result.data.paidUser,
-          paidById: result.data.paidUserId,
-        });
-      }
-      setUsers(result.data.users);
-      setTypes(result.data.types);
-    } catch (err) {
-      console.log(err?.response?.data?.msg || err.message);
-    }
-  };
-
-  const hdlAddTran = async (e) => {
-    e.preventDefault();
-    try {
-      const result = await addTran(token, input);
-      console.log(result);
-      navigate("/");
-    } catch (err) {
-      console.log(err?.response?.data?.msg || err.message);
-    }
-  };
-
   useEffect(() => {
-    setCurMenu("NEW");
-    getNewTranInfo();
+    console.log(selectedTran);
+    setInput((prev) => ({
+      ...prev,
+      tranId: selectedTran.tranId,
+      recordDate: new Date(selectedTran.recordDate).toISOString().split("T")[0],
+      recordTime: new Date(selectedTran.recordDate).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }),
+      paidBy: selectedTran.paidUser.userName,
+      paidById: selectedTran.paidUserId,
+      type: selectedTran.expenseType.expenseName,
+      typeId: selectedTran.expenseTypeId,
+      totalAmt: selectedTran.totalAmt,
+      myPortion: selectedTran.myPortion,
+      myAmt: selectedTran.myAmt,
+      otherAmt: selectedTran.otherAmt,
+      remark: selectedTran.remark,
+    }));
   }, []);
-
   return (
-    <div>
+    <>
       <div className="w-screen h-[calc(100svh-60px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
         <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-          <p className="text-2xl font-bold py-2">New Transaction</p>
+          <p className="text-2xl font-bold py-2">Transactions Detail</p>
         </div>
+
         {/* record date */}
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">Record Date :</p>
@@ -225,35 +221,42 @@ function New() {
           name="remark"
           onChange={hdlInput}
         />
-        {/* button add */}
+        {/* button */}
+        <div className="flex gap-4">
+          <button
+            className="w-[100px] border-1 bg-orange-500 text-white cursor-pointer py-1 "
+            onClick={hdlEditTran}
+          >
+            Save
+          </button>
+          <button
+            className="w-[100px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+            onClick={(e) => {
+              e.stopPropagation();
+              document.getElementById("confirm-delete-modal").showModal();
+            }}
+          >
+            Delete
+          </button>
+        </div>
         <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
-          onClick={hdlAddTran}
+          className="w-[150px] border-1 bg-slate-500 text-white cursor-pointer py-1 mt-auto mb-10"
+          onClick={() => setSelectedTran(null)}
         >
-          Add
+          Back
         </button>
-        {/* <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
-          onClick={() => console.log(input)}
-        >
-          Input
-        </button> */}
       </div>
       <Footer />
-      {/* modal paid by */}
-      <dialog id="paid_by_modal" className="modal">
-        <ModalPaidBy users={users} setInput={setInput} />
-      </dialog>
-      {/* modal expense type */}
-      <dialog id="expense_type_modal" className="modal">
-        <ModalExpenseType
-          types={types}
-          setInput={setInput}
-          getNewTranInfo={getNewTranInfo}
+      {/* modal confirm delete */}
+      <dialog id="confirm-delete-modal" className="modal">
+        <ModalConfirmDelete
+          selectedTran={selectedTran}
+          setSelectedTran={setSelectedTran}
+          getTrans={getTrans}
         />
       </dialog>
-    </div>
+    </>
   );
 }
 
-export default New;
+export default TransDetail;

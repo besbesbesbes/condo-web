@@ -71,9 +71,28 @@ export function SettingIcon(props) {
     </svg>
   );
 }
+export function EditIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+        <path
+          d="M17.923 3.528a1.803 1.803 0 112.549 2.55l-8.073 8.072L9 15l.85-3.4 8.073-8.072zM16 6l2 2"
+          strokeLinejoin="round"
+        />
+        <path d="M12.5 3H12a9 9 0 109 9v-.5" />
+      </g>
+    </svg>
+  );
+}
 export const icons = {
   TransIcon,
   NewIcon,
   ReportIcon,
   SettingIcon,
+  EditIcon,
 };
