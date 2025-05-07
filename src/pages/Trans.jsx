@@ -5,19 +5,24 @@ import useUserStore from "../stores/user-store";
 import { getTransApi } from "../apis/trans-api";
 import { NumericFormat } from "react-number-format";
 import TransDetail from "./TransDetail";
+import { SearchIcon } from "../icons/menuIcon";
 
 function Trans() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const [trans, setTrans] = useState(null);
+  const [transRaw, setTransRaw] = useState(null);
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
   const [selectedTran, setSelectedTran] = useState(null);
+  const today = new Date();
+  const [yearInput, setYearInput] = useState(today.getFullYear());
+  const [searchInput, setSearchInput] = useState("");
 
   const getTrans = async () => {
     try {
-      const result = await getTransApi(token);
+      const result = await getTransApi(token, { yearInput });
       console.log(result.data);
-      setTrans(result.data.trans);
+      setTransRaw(result.data.trans);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
     }
@@ -28,10 +33,27 @@ function Trans() {
   };
 
   useEffect(() => {
+    if (!searchInput) {
+      setTrans(transRaw);
+    } else {
+      const lower = searchInput.toLowerCase();
+      const filtered = transRaw?.filter((el) => {
+        return (
+          el.remark?.toLowerCase().includes(lower) ||
+          el.expenseType.expenseName?.toLowerCase().includes(lower) ||
+          el.paidUser.userName?.toLowerCase().includes(lower) ||
+          el.totalAmt?.toString().includes(lower)
+        );
+      });
+      setTrans(filtered);
+    }
+  }, [searchInput, transRaw]);
+
+  useEffect(() => {
     setCurMenu("TRANS");
     getTrans();
     setSelectedTran(null);
-  }, []);
+  }, [yearInput]);
 
   return (
     <div>
@@ -46,6 +68,32 @@ function Trans() {
           <div className="w-screen h-[calc(100svh-60px)] bg-white overflow-y-auto flex flex-col gap-2 items-center relative">
             <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
               <p className="text-2xl font-bold py-2">Transactions</p>
+            </div>
+            {/* search */}
+            <div className="w-11/12  flex items-center gap-2">
+              <div className="flex w-full py-1 gap-1 border px-1">
+                <input
+                  className="bg-white w-full"
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+                <div className="px-2 text-black flex justify-center items-center">
+                  <SearchIcon className="w-[15px]" />
+                </div>
+              </div>
+              <select
+                className="border-b bg-amber-100 text-center w-[100px] py-1"
+                name="year"
+                value={yearInput}
+                onChange={(e) => setYearInput(e.target.value)}
+              >
+                {Array.from({ length: 10 }, (_, i) => 2021 + i).map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {trans?.length ? (

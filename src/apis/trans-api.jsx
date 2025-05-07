@@ -2,8 +2,8 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-export const getTransApi = async (token) =>
-  await axios.get(`${baseUrl}/trans`, {
+export const getTransApi = async (token, body) =>
+  await axios.post(`${baseUrl}/trans`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

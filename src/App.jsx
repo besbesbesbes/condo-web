@@ -6,7 +6,7 @@ function App() {
     (config) => {
       if (config.url.includes("localhost:8001")) {
         // config.url = config.url.replace("localhost:8002", "192.168.1.132:8002");
-        config.url = config.url.replace("localhost:8001", "192.168.1.11:8001");
+        config.url = config.url.replace("localhost:8001", "192.168.1.143:8001");
       }
       return config;
     },

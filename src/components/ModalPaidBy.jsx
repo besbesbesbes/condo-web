@@ -1,9 +1,9 @@
 import React from "react";
 
-function ModalPaidBy({ users, setInput }) {
+function ModalPaidBy({ users, setInput, headerTxt }) {
   return (
     <div className="w-[300px] h-auto bg-white shadow-xl rounded-xl fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg">
-      <p className="font-bold">Select Paid by</p>
+      <p className="font-bold">{headerTxt ? headerTxt : "Select Paid by"}</p>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div className="border-1 w-10/12 h-[300px] flex flex-col overflow-auto p-2 items-center gap-2">
         {users?.length ? (
@@ -16,6 +16,8 @@ function ModalPaidBy({ users, setInput }) {
                   ...prev,
                   paidBy: el.userName,
                   paidById: el.userId,
+                  userName: el.userName,
+                  userId: el.userId,
                 }));
                 e.target.closest("dialog").close();
               }}
