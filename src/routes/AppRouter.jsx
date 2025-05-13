@@ -9,6 +9,7 @@ import Trans from "../pages/Trans";
 import New from "../pages/New";
 import Report from "../pages/Report";
 import Setting from "../pages/Setting";
+import Chat from "../pages/Chat";
 
 const guestRouter = createBrowserRouter([
   { path: "/", element: <Login /> },
@@ -20,6 +21,7 @@ const userRouter = createBrowserRouter([
   { path: "/trans", element: <Trans /> },
   { path: "/new", element: <New /> },
   { path: "/report", element: <Report /> },
+  { path: "/chat", element: <Chat /> },
   { path: "/setting", element: <Setting /> },
   { path: "*", element: <Navigate to="/trans" /> },
 ]);

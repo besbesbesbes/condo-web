@@ -5,6 +5,7 @@ import useUserStore from "../stores/user-store";
 import { useNavigate } from "react-router-dom";
 import { getUserInfoApi } from "../apis/user-api";
 import ModalChangePassword from "../components/ModalChangePassword";
+import { testDB } from "../apis/test-api";
 
 function Setting() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -13,11 +14,25 @@ function Setting() {
   const token = useUserStore((state) => state.token);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({});
+  const [testTxt, setTestTxt] = useState("");
 
   const getUserInfo = async () => {
     try {
       const result = await getUserInfoApi(token);
       setUserInfo(result.data.user);
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
+  };
+
+  const hdlTestDB = async () => {
+    try {
+      const result = await testDB();
+      setTestTxt(result.data.test.test);
+
+      setTimeout(() => {
+        setTestTxt("");
+      }, 500);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
     }
@@ -59,6 +74,13 @@ function Setting() {
         >
           Logout
         </button>
+        <button
+          className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
+          onClick={hdlTestDB}
+        >
+          Test DB
+        </button>
+        {testTxt ? <p className="font-bold text-red-500">{testTxt}</p> : null}
       </div>
       <Footer />
       {/* modal change password */}

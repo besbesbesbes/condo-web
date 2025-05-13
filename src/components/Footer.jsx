@@ -12,6 +12,7 @@ function MenuBox({ icon: Icon, txt }) {
     setCurMenu(desPage);
     navigate(`/${desPage}`);
   };
+
   return (
     <div
       className={`flex justify-center items-center cursor-pointer ${
@@ -35,10 +36,11 @@ function MenuBox({ icon: Icon, txt }) {
 
 function Footer() {
   return (
-    <div className="bg-slate-700 w-screen h-[60px] grid grid-cols-4 text-white font-bold text-xs">
+    <div className="bg-slate-700 w-screen h-[60px] grid grid-cols-5 text-white font-bold text-xs">
       <MenuBox txt="TRANS" icon={icons.TransIcon} />
       <MenuBox txt="NEW" icon={icons.NewIcon} />
       <MenuBox txt="REPORT" icon={icons.ReportIcon} />
+      <MenuBox txt="CHAT" icon={icons.ChatIcon} />
       <MenuBox txt="SETTING" icon={icons.SettingIcon} />
       {/* <button onClick={() => console.log(curMenu)}>Test</button> */}
     </div>
