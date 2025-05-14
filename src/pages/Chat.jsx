@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import Footer from "../components/Footer";
 import { getChatInfoApi, addNewMsg } from "../apis/chat-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
+
+const socketUrl = import.meta.env.VITE_API_BASE_URL_SOCKET;
 
 export default function Chat() {
   const token = useUserStore((state) => state.token);
@@ -31,7 +34,7 @@ export default function Chat() {
       const result = await addNewMsg(token, input);
       console.log(result.data);
       setInput((prev) => ({ ...prev, txt: "" }));
-      getChatInfo();
+      // getChatInfo();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
     }
@@ -40,6 +43,27 @@ export default function Chat() {
   useEffect(() => {
     setCurMenu("CHAT");
     getChatInfo();
+
+    // ✅ SOCKET.IO CONNECTION
+    const socket = io(socketUrl, {
+      transports: ["websocket", "polling"],
+    }); // replace with your backend URL if needed
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    // Socket newMessage
+    socket.on("newMessage", (newMsg) => {
+      console.log(newMsg);
+      //add newMsg to Msgs
+      setMsgs((prevMsgs) => [...prevMsgs, newMsg]);
+    });
+
+    // optional: cleanup
+    return () => {
+      socket.disconnect();
+      console.log("Socket disconnected");
+    };
   }, []);
 
   return (
@@ -58,7 +82,7 @@ export default function Chat() {
           {msgs ? (
             msgs.map((el, idx) => (
               <div
-                id={idx}
+                key={idx}
                 className={`py-3  w-fit min-w-[200px] px-2 rounded-xl ${
                   user.userId === el.userId
                     ? "self-end bg-orange-200"
