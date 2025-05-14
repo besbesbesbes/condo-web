@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import Footer from "../components/Footer";
 import { getChatInfoApi, addNewMsg } from "../apis/chat-api";
@@ -8,6 +8,7 @@ import useMainStore from "../stores/main-store";
 const socketUrl = import.meta.env.VITE_API_BASE_URL_SOCKET;
 
 export default function Chat() {
+  const bottomRef = useRef(null);
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -16,6 +17,10 @@ export default function Chat() {
     txt: "",
   });
   const [msgs, setMsgs] = useState(null);
+
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const getChatInfo = async () => {
     try {
@@ -39,6 +44,10 @@ export default function Chat() {
       console.log(err?.response?.data?.msg || err.message);
     }
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [msgs]);
 
   useEffect(() => {
     setCurMenu("CHAT");
@@ -95,7 +104,7 @@ export default function Chat() {
           ) : (
             <p>No message</p>
           )}
-
+          <div ref={bottomRef} />
           {/* <button onClick={() => console.log(msgs)}>msgs</button> */}
         </div>
         {/* input area */}
