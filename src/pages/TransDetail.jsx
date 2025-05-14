@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { NumericFormat } from "react-number-format";
 import { editTranApi } from "../apis/trans-api";
+import { getNewTranInfoApi } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import ModalConfirmDelete from "../components/ModalConfirmDelete";
+import ModalExpenseType from "../components/ModalExpenseType";
+import ModalPaidBy from "../components/ModalPaidBy";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const token = useUserStore((state) => state.token);
+  const [users, setUsers] = useState({});
+  const [types, setTypes] = useState({});
   const [input, setInput] = useState({
     tranId: "",
     recordDate: "",
@@ -33,6 +38,19 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       console.log(result);
       setSelectedTran(null);
       getTrans();
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
+  };
+
+  const getNewTranInfo = async () => {
+    try {
+      const result = await getNewTranInfoApi(token);
+      console.log(result.data);
+      console.log(result.data.users);
+      console.log(result.data.types);
+      setUsers(result.data.users);
+      setTypes(result.data.types);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
     }
@@ -73,6 +91,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       otherAmt: selectedTran.otherAmt,
       remark: selectedTran.remark,
     }));
+    getNewTranInfo();
   }, []);
   return (
     <>
@@ -253,6 +272,19 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           selectedTran={selectedTran}
           setSelectedTran={setSelectedTran}
           getTrans={getTrans}
+        />
+      </dialog>
+      {/* modal paid by */}
+      <dialog id="paid_by_modal" className="modal">
+        <ModalPaidBy users={users} setInput={setInput} />
+      </dialog>
+      {/* modal expense type */}
+      <dialog id="expense_type_modal" className="modal">
+        <ModalExpenseType
+          input={input}
+          types={types}
+          setInput={setInput}
+          getNewTranInfo={getNewTranInfo}
         />
       </dialog>
     </>

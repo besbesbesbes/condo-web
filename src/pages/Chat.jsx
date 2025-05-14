@@ -92,9 +92,9 @@ export default function Chat() {
             msgs.map((el, idx) => (
               <div
                 key={idx}
-                className={`py-3  w-fit min-w-[200px] px-2 rounded-xl ${
+                className={`py-3  w-fit px-4 rounded-xl ${
                   user.userId === el.userId
-                    ? "self-end bg-orange-200"
+                    ? "self-end bg-orange-200 text-right"
                     : "bg-slate-200"
                 }`}
               >

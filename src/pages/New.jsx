@@ -56,6 +56,8 @@ function New() {
           paidById: result.data.paidUserId,
         });
       }
+      console.log(result.data.users);
+      console.log(result.data.types);
       setUsers(result.data.users);
       setTypes(result.data.types);
     } catch (err) {
@@ -232,12 +234,12 @@ function New() {
         >
           Add
         </button>
-        {/* <button
+        <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={() => console.log(input)}
         >
           Input
-        </button> */}
+        </button>
       </div>
       <Footer />
       {/* modal paid by */}
@@ -247,6 +249,7 @@ function New() {
       {/* modal expense type */}
       <dialog id="expense_type_modal" className="modal">
         <ModalExpenseType
+          input={input}
           types={types}
           setInput={setInput}
           getNewTranInfo={getNewTranInfo}

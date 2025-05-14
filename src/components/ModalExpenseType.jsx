@@ -4,7 +4,7 @@ import { addNewType } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import ModalEditType from "./ModalEditType";
 
-function ModalExpenseType({ types, setInput, getNewTranInfo }) {
+function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   const [newType, setNewType] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const token = useUserStore((state) => state.token);
@@ -40,37 +40,38 @@ function ModalExpenseType({ types, setInput, getNewTranInfo }) {
         tabIndex={-1}
       >
         {types?.length ? (
-          types.map((el, idx) => (
-            <div
-              key={idx}
-              className="w-full flex justify-center items-center relative"
-            >
+          types
+            .filter((el) => el.userId === input.paidById)
+            .map((el, idx) => (
               <div
-                className=" w-3/4 text-center font-bold cursor-pointer "
-                onClick={(e) => {
-                  setInput((prev) => ({
-                    ...prev,
-                    type: el.expenseName,
-                    typeId: el.expenseTypeId,
-                  }));
-                  e.target.closest("dialog").close();
-                }}
+                key={idx}
+                className="w-full flex justify-center items-center relative"
               >
-                {el.expenseName}
+                <div
+                  className="w-3/4 text-center font-bold cursor-pointer"
+                  onClick={(e) => {
+                    setInput((prev) => ({
+                      ...prev,
+                      type: el.expenseName,
+                      typeId: el.expenseTypeId,
+                    }));
+                    e.target.closest("dialog").close();
+                  }}
+                >
+                  {el.expenseName}
+                </div>
+                <div
+                  className="w-[20px] h-[20px] bg-slate-200 flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedType(el);
+                    document.getElementById("edit_type_modal").showModal();
+                  }}
+                >
+                  <p className="text-xs">E</p>
+                </div>
               </div>
-              <div
-                className="w-[20px] h-[20px] bg-slate-200 flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedType(el);
-                  document.getElementById("edit_type_modal").showModal();
-                }}
-              >
-                {/* <EditIcon /> */}
-                <p className="text-xs">E</p>
-              </div>
-            </div>
-          ))
+            ))
         ) : (
           <p>No type</p>
         )}
