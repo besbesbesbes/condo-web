@@ -15,7 +15,7 @@ function MenuBox({ icon: Icon, txt }) {
 
   return (
     <div
-      className={`flex justify-center items-center cursor-pointer ${
+      className={`flex justify-center items-start py-1 cursor-pointer ${
         txt === curMenu ? "bg-slate-300" : ""
       }`}
       onClick={(e) => {
@@ -36,7 +36,7 @@ function MenuBox({ icon: Icon, txt }) {
 
 function Footer() {
   return (
-    <div className="bg-slate-700 w-screen h-[60px] grid grid-cols-5 text-white font-bold text-xs">
+    <div className="bg-slate-700 w-screen h-[80px] grid grid-cols-5  text-white font-bold text-xs">
       <MenuBox txt="TRANS" icon={icons.TransIcon} />
       <MenuBox txt="NEW" icon={icons.NewIcon} />
       <MenuBox txt="REPORT" icon={icons.ReportIcon} />
