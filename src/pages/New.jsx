@@ -169,7 +169,7 @@ function New() {
           </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-amber-100"
-            value={input.myPortion === "" ? "" : input.myPortion * 100}
+            value={input.myPortion === "" ? 0 : input.myPortion * 100}
             name="myPortion"
             suffix="%"
             thousandSeparator
@@ -180,7 +180,7 @@ function New() {
             onValueChange={(values) => {
               setInput((prev) => ({
                 ...prev,
-                myPortion: values.floatValue ? values.floatValue / 100 : "", // store as decimal (e.g., 0.25)
+                myPortion: values.floatValue ? values.floatValue / 100 : 0, // store as decimal (e.g., 0.25)
               }));
             }}
           />
@@ -234,12 +234,12 @@ function New() {
         >
           Add
         </button>
-        {/* <button
+        <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={() => console.log(input)}
         >
           Input
-        </button> */}
+        </button>
       </div>
       <Footer />
       {/* modal paid by */}
