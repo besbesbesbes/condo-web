@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
+import { socket } from "../utils/socket";
 import Footer from "../components/Footer";
 import { getChatInfoApi, addNewMsg } from "../apis/chat-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
-
-const socketUrl = import.meta.env.VITE_API_BASE_URL_SOCKET;
 
 export default function Chat() {
   const bottomRef = useRef(null);
@@ -53,14 +51,6 @@ export default function Chat() {
     setCurMenu("CHAT");
     getChatInfo();
 
-    // ✅ SOCKET.IO CONNECTION
-    const socket = io(socketUrl, {
-      transports: ["websocket", "polling"],
-    }); // replace with your backend URL if needed
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-    });
-
     // Socket newMessage
     socket.on("newMessage", (newMsg) => {
       console.log(newMsg);
@@ -71,8 +61,6 @@ export default function Chat() {
     // optional: cleanup
     return () => {
       socket.off("newMessage");
-      socket.disconnect();
-      console.log("Socket disconnected");
     };
   }, []);
 

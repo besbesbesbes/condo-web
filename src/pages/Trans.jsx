@@ -94,6 +94,12 @@ function Trans() {
                   </option>
                 ))}
               </select>
+              <button
+                className="bg-orange-700 text-center w-[100px] py-1 text-white cursor-pointer"
+                onClick={() => window.location.reload()}
+              >
+                Refresh
+              </button>
             </div>
 
             {trans?.length ? (

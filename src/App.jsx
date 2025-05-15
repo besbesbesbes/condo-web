@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import AppRouter from "./routes/AppRouter";
 import axios from "axios";
+import { socket } from "./utils/socket";
 
 function App() {
   // axios.interceptors.request.use(
@@ -17,6 +19,19 @@ function App() {
   //     return Promise.reject(error);
   //   }
   // );
+
+  useEffect(() => {
+    // ✅ SOCKET.IO CONNECTION
+
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    return () => {
+      socket.disconnect();
+      console.log("Socket disconnected");
+    };
+  }, []);
 
   return (
     <div>
