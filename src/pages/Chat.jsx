@@ -70,6 +70,7 @@ export default function Chat() {
 
     // optional: cleanup
     return () => {
+      socket.off("newMessage");
       socket.disconnect();
       console.log("Socket disconnected");
     };

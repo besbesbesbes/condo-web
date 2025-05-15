@@ -16,6 +16,8 @@ function ModalPaidBy({ users, setInput, headerTxt }) {
                   ...prev,
                   paidBy: el.userName,
                   paidById: el.userId,
+                  userName: el.userName,
+                  userId: el.userId,
                   type: "",
                   typeId: "",
                 }));
