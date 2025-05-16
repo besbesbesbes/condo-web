@@ -7,6 +7,7 @@ import useUserStore from "../stores/user-store";
 import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
 import { useNavigate } from "react-router-dom";
+import { addTranMail } from "../apis/mail-api";
 
 function New() {
   const navigate = useNavigate();
@@ -70,6 +71,12 @@ function New() {
     try {
       const result = await addTran(token, input);
       console.log(result);
+      const mail = await addTranMail(token, {
+        to: "smt.bes@gmail.com, warittha.chtn@gmail.com",
+        subject: "[KB Expense] New record added!",
+        text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
+      });
+      console.log(mail);
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
