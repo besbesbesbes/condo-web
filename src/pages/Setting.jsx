@@ -15,17 +15,22 @@ function Setting() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({});
   const [testTxt, setTestTxt] = useState("");
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const getUserInfo = async () => {
+    setIsLoad(true);
     try {
       const result = await getUserInfoApi(token);
       setUserInfo(result.data.user);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
   const hdlTestDB = async () => {
+    setIsLoad(true);
     try {
       const result = await testDB();
       setTestTxt(result.data.test.test);
@@ -35,6 +40,8 @@ function Setting() {
       }, 500);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
@@ -75,7 +82,7 @@ function Setting() {
           Logout
         </button>
         {/* version */}
-        <p className="text-xs">V 1.0.0</p>
+        <p className="text-xs">V 1.0.1</p>
         <button
           className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
           onClick={hdlTestDB}

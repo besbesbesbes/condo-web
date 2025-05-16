@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import AppRouter from "./routes/AppRouter";
 import axios from "axios";
 import { socket } from "./utils/socket";
+import Loading from "./components/Loading";
+import useMainStore from "./stores/main-store";
 
 function App() {
   // axios.interceptors.request.use(
@@ -19,6 +21,7 @@ function App() {
   //     return Promise.reject(error);
   //   }
   // );
+  const isLoad = useMainStore((state) => state.isLoad);
 
   useEffect(() => {
     // ✅ SOCKET.IO CONNECTION
@@ -34,8 +37,10 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="relative min-h-screen">
       <AppRouter />
+      {isLoad ? <Loading /> : null}
+      {/* <Loading /> */}
     </div>
   );
 }

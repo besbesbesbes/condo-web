@@ -17,14 +17,18 @@ function Trans() {
   const today = new Date();
   const [yearInput, setYearInput] = useState(today.getFullYear());
   const [searchInput, setSearchInput] = useState("");
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const getTrans = async () => {
+    setIsLoad(true);
     try {
       const result = await getTransApi(token, { yearInput });
       console.log(result.data);
       setTransRaw(result.data.trans);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

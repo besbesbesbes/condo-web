@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { deleteType, editType } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
+import useMainStore from "../stores/main-store";
 
 function ModalEditType({ selectedType, getNewTranInfo }) {
   const [typeTxt, setTypeTxt] = useState("");
   const token = useUserStore((state) => state.token);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const hdlDeleteType = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       const result = await deleteType(token, { selectedType });
       console.log(result.data);
@@ -15,11 +18,14 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
       e.target.closest("dialog").close();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
   const hdlEditType = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       const result = await editType(token, { selectedType, typeTxt });
       console.log(result.data);
@@ -27,6 +33,8 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
       e.target.closest("dialog").close();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

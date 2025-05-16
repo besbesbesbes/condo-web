@@ -3,14 +3,17 @@ import { EditIcon } from "../icons/menuIcon";
 import { addNewType } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import ModalEditType from "./ModalEditType";
+import useMainStore from "../stores/main-store";
 
 function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   const [newType, setNewType] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const token = useUserStore((state) => state.token);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const hdlAddNewType = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       if (!newType) {
         console.log("Plase fill new type!");
@@ -22,6 +25,8 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
       setNewType("");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import { NumericFormat } from "react-number-format";
 import { editTranApi } from "../apis/trans-api";
 import { getNewTranInfoApi } from "../apis/new-api";
+import useMainStore from "../stores/main-store";
 import useUserStore from "../stores/user-store";
 import ModalConfirmDelete from "../components/ModalConfirmDelete";
 import ModalExpenseType from "../components/ModalExpenseType";
@@ -10,6 +11,7 @@ import ModalPaidBy from "../components/ModalPaidBy";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const token = useUserStore((state) => state.token);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
   const [input, setInput] = useState({
@@ -33,6 +35,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
 
   const hdlEditTran = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       const result = await editTranApi(token, input);
       console.log(result);
@@ -40,10 +43,13 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       getTrans();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
   const getNewTranInfo = async () => {
+    setIsLoad(true);
     try {
       const result = await getNewTranInfoApi(token);
       console.log(result.data);
@@ -53,6 +59,8 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       setTypes(result.data.types);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

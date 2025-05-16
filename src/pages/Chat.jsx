@@ -10,6 +10,7 @@ export default function Chat() {
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [input, setInput] = useState({
     userId: null,
     txt: "",
@@ -21,6 +22,7 @@ export default function Chat() {
   };
 
   const getChatInfo = async () => {
+    setIsLoad(true);
     try {
       const result = await getChatInfoApi(token);
       setInput((prev) => ({ ...prev, userId: result.data.user.userId }));
@@ -28,11 +30,15 @@ export default function Chat() {
       console.log(result.data.msgs);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
   const hdlSendMsg = async (e) => {
     e.preventDefault();
+
+    setIsLoad(true);
     try {
       const result = await addNewMsg(token, input);
       console.log(result.data);
@@ -40,6 +46,8 @@ export default function Chat() {
       // getChatInfo();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

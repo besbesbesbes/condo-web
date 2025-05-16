@@ -1,12 +1,15 @@
 import React from "react";
 import { deleteTranApi } from "../apis/trans-api";
 import useUserStore from "../stores/user-store";
+import useMainStore from "../stores/main-store";
 
 function ModalConfirmDelete({ selectedTran, setSelectedTran, getTrans }) {
   const token = useUserStore((state) => state.token);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const hdlDeleteTran = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       const result = await deleteTranApi(token, selectedTran);
       console.log(result);
@@ -14,6 +17,8 @@ function ModalConfirmDelete({ selectedTran, setSelectedTran, getTrans }) {
       getTrans();
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

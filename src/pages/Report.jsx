@@ -17,6 +17,7 @@ function Report() {
   const [resultOther, setResultOther] = useState(null);
   const [resultSumOther, setResultSumOther] = useState(null);
   const [body, setBody] = useState(null);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [input, setInput] = useState({
     userName: userName,
     userId: userId,
@@ -29,6 +30,7 @@ function Report() {
   };
 
   const getReportInfo = async () => {
+    setIsLoad(true);
     try {
       const result = await getReportInfoApi(token, input);
       console.log(result.data);
@@ -40,6 +42,8 @@ function Report() {
       setResultSumOther(result.data.resultSumOther);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

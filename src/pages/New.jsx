@@ -11,6 +11,7 @@ import { addTranMail } from "../apis/mail-api";
 
 function New() {
   const navigate = useNavigate();
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const token = useUserStore((state) => state.token);
   const [users, setUsers] = useState({});
@@ -47,6 +48,7 @@ function New() {
   }, [input.totalAmt, input.myPortion]);
 
   const getNewTranInfo = async () => {
+    setIsLoad(true);
     try {
       const result = await getNewTranInfoApi(token);
       console.log(result.data);
@@ -63,11 +65,14 @@ function New() {
       setTypes(result.data.types);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
   const hdlAddTran = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       const result = await addTran(token, input);
       console.log(result);
@@ -80,6 +85,8 @@ function New() {
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

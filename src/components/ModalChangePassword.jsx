@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePasswordApi } from "../apis/user-api";
 import useUserStore from "../stores/user-store";
+import useMainStore from "../stores/main-store";
 
 function ModalChangePassword() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function ModalChangePassword() {
   const setToken = useUserStore((state) => state.setToken);
   const [errMsg, setErrMsg] = useState("");
   const [isShowErrMsg, setIsShowErrMsg] = useState(false);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [input, setInput] = useState({
     curPass: "",
     newPass: "",
@@ -27,6 +29,7 @@ function ModalChangePassword() {
   };
   const hdlChangePass = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       // validate
       if (
@@ -49,6 +52,8 @@ function ModalChangePassword() {
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
       hdlError(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 

@@ -15,12 +15,14 @@ function Login() {
   });
   const [errMsg, setErrMsg] = useState("");
   const [isShowErrMsg, setIsShowErrMsg] = useState(false);
+  const setIsLoad = useMainStore((state) => state.setIsLoad);
 
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
   };
   const hdlLogin = async (e) => {
     e.preventDefault();
+    setIsLoad(true);
     try {
       // validate
       if (!(input.inputUser.trim() && input.inputPassword.trim())) {
@@ -36,6 +38,8 @@ function Login() {
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
       hdlError(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
     }
   };
 
