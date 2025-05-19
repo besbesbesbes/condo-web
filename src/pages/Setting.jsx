@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { getUserInfoApi } from "../apis/user-api";
 import ModalChangePassword from "../components/ModalChangePassword";
 import { testDB } from "../apis/test-api";
+import { useTranslation } from "react-i18next";
 
 function Setting() {
+  const { t } = useTranslation();
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
@@ -54,10 +56,13 @@ function Setting() {
     <div>
       <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
         <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-          <p className="text-2xl font-bold py-2">Setting</p>
+          <p className="text-2xl font-bold py-2">{t("setting")}</p>
         </div>
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[100px]  text-right pr-2 font-bold">User :</p>
+          <p className="w-[100px]  text-right pr-2 font-bold">
+            {" "}
+            {t("userName")} :
+          </p>
           <p className="w-[150px] text-center border-b bg-slate-200">
             {userInfo.userName}
           </p>
@@ -69,7 +74,7 @@ function Setting() {
             document.getElementById("change_password_modal").showModal();
           }}
         >
-          Change Password
+          {t("changePassword")}
         </button>
         <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
@@ -79,15 +84,15 @@ function Setting() {
             navigate(0);
           }}
         >
-          Logout
+          {t("logout")}
         </button>
         {/* version */}
-        <p className="text-xs">V 1.0.2</p>
+        <p className="text-xs">V 1.1.0</p>
         <button
           className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
           onClick={hdlTestDB}
         >
-          Test DB
+          {t("testDB")}
         </button>
         {testTxt ? <p className="font-bold text-red-500">{testTxt}</p> : null}
       </div>

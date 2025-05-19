@@ -8,8 +8,10 @@ import useUserStore from "../stores/user-store";
 import ModalConfirmDelete from "../components/ModalConfirmDelete";
 import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
+import { useTranslation } from "react-i18next";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
+  const { t } = useTranslation();
   const token = useUserStore((state) => state.token);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [users, setUsers] = useState({});
@@ -105,12 +107,14 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
     <>
       <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
         <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-          <p className="text-2xl font-bold py-2">Transactions Detail</p>
+          <p className="text-2xl font-bold py-2">{t("transactionDetail")}</p>
         </div>
 
         {/* record date */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Record Date :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("recordDate")} :
+          </p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="date"
@@ -121,7 +125,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* record time */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">Record Time :</p>
+          <p className="w-[150px] text-right pr-2 font-bold">
+            {t("recordTime")} :
+          </p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="time"
@@ -133,7 +139,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
 
         {/* paid by */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Payer :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="text"
@@ -149,7 +155,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* type */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Type :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="text"
@@ -165,7 +171,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* amount */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">Total Amount :</p>
+          <p className="w-[150px] text-right pr-2 font-bold">
+            {t("totalAmount")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-amber-100"
             value={input.totalAmt === "" ? "" : input.totalAmt}
@@ -186,7 +194,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {/* My Portion */}
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">
-            Payer Portion :
+            {t("payerPortion")} :
           </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-amber-100"
@@ -208,7 +216,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* My Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Payer Amount :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("payerPortion")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-slate-200"
             value={input.myAmt === "" ? "" : input.myAmt}
@@ -223,7 +233,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* Other Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Other Amount :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("otherAmount")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-slate-200"
             value={input.otherAmt === "" ? "" : input.otherAmt}
@@ -238,7 +250,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-left pr-2 font-bold">Remark :</p>
+          <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
@@ -254,7 +266,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             className="w-[100px] border-1 bg-orange-500 text-white cursor-pointer py-1 "
             onClick={hdlEditTran}
           >
-            Save
+            {t("save")}
           </button>
           <button
             className="w-[100px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
@@ -263,14 +275,14 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               document.getElementById("confirm-delete-modal").showModal();
             }}
           >
-            Delete
+            {t("delete")}
           </button>
         </div>
         <button
           className="w-[150px] border-1 bg-slate-500 text-white cursor-pointer py-1 mt-auto mb-10"
           onClick={() => setSelectedTran(null)}
         >
-          Back
+          {t("back")}
         </button>
       </div>
       <Footer />

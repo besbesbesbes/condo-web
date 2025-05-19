@@ -3,8 +3,10 @@ import useUserStore from "../stores/user-store";
 import { login } from "../apis/auth-api";
 import { useNavigate } from "react-router-dom";
 import useMainStore from "../stores/main-store";
+import { useTranslation } from "react-i18next";
 
 function Login() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const setToken = useUserStore((state) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
@@ -54,10 +56,10 @@ function Login() {
   return (
     <div className="bg-slate-500 w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
-      <div className="bg-slate-100 w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 py-8 rounded-xl shadow-xl -translate-y-[50px]">
-        <p className="font-bold">Login</p>
+      <div className="bg-slate-100 w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 rounded-xl shadow-xl -translate-y-[50px]">
+        <p className="font-bold">{t("welcome")}</p>
         <div className=" w-full flex justify-center">
-          <p className="w-[100px] text-right pr-5">User :</p>
+          <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
           <input
             className="w-[120px] border border-gray-400 pl-2"
             type="text"
@@ -67,7 +69,7 @@ function Login() {
           />
         </div>
         <div className=" w-full flex justify-center">
-          <p className="w-[100px] text-right pr-5">Password :</p>
+          <p className="w-[100px] text-right pr-5">{t("password")} :</p>
           <input
             className="w-[120px] border border-gray-400 pl-2"
             type="password"
@@ -81,11 +83,27 @@ function Login() {
           className="w-[130px] border-1 bg-slate-500 text-white cursor-pointer py-1 "
           onClick={hdlLogin}
         >
-          Login
+          {t("login")}
         </button>
         {/* error message */}
-        {isShowErrMsg && <p className="font-bold text-red-500">{errMsg}</p>}
+        {isShowErrMsg && (
+          <p className="font-bold text-red-500">{errMsg}</p>
+        )}{" "}
+        <div className="self-end flex gap-2">
+          <p>{t("language")}</p>
+          <select
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="rounded border"
+            value={i18n.language}
+          >
+            <option value="en">English</option>
+            <option value="th">ภาษาไทย</option>
+            <option value="cn">中国人</option>
+            <option value="jp">日语</option>
+          </select>
+        </div>
       </div>
+      {/* language */}
     </div>
   );
 }

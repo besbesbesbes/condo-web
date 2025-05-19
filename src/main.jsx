@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
+import "./i18n";
 
 // Register service worker for PWA updates
 import { registerSW } from "virtual:pwa-register";

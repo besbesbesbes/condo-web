@@ -4,8 +4,10 @@ import Footer from "../components/Footer";
 import { getChatInfoApi, addNewMsg } from "../apis/chat-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
+import { useTranslation } from "react-i18next";
 
 export default function Chat() {
+  const { t } = useTranslation();
   const bottomRef = useRef(null);
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
@@ -80,7 +82,7 @@ export default function Chat() {
             className="text-2xl font-bold py-2"
             onClick={() => console.log(user)}
           >
-            Chat
+            {t("chat")}
           </p>
         </div>
         {/* chat area */}
@@ -118,7 +120,7 @@ export default function Chat() {
             className="bg-orange-500 w-[100px] font-bold text-white cursor-pointer"
             onClick={hdlSendMsg}
           >
-            Send
+            {t("send")}
           </button>
         </div>
       </div>

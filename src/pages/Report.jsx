@@ -5,8 +5,10 @@ import ModalPaidBy from "../components/ModalPaidBy";
 import { getReportInfoApi } from "../apis/report-api";
 import useUserStore from "../stores/user-store";
 import { NumericFormat } from "react-number-format";
+import { useTranslation } from "react-i18next";
 
 function Report() {
+  const { t } = useTranslation();
   const token = useUserStore((state) => state.token);
   const { userName, userId } = useUserStore((state) => state.user);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -57,11 +59,13 @@ function Report() {
     <div>
       <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-2 items-center relative">
         <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-          <p className="text-2xl font-bold py-2">Report</p>
+          <p className="text-2xl font-bold py-2">{t("report")}</p>
         </div>
         {/* User select */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[80px]  text-right pr-2 font-bold">User :</p>
+          <p className="w-[80px]  text-right pr-2 font-bold">
+            {t("userName")} :
+          </p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="text"
@@ -77,7 +81,7 @@ function Report() {
         </div>
         {/*Report date */}
         <div className="w-10/12 flex justify-center gap-1">
-          <p className="w-[80px] text-right pr-2 font-bold">Month :</p>
+          <p className="w-[80px] text-right pr-2 font-bold">{t("month")} :</p>
           <select
             className="border-b bg-amber-100 text-center w-[75px]"
             name="month"
@@ -124,8 +128,8 @@ function Report() {
           {/* header */}
           <div className="w-10/12 grid grid-cols-3 font-bold text-right">
             <div></div>
-            <div>Total</div>
-            <div>Receivable</div>
+            <div>{t("total")}</div>
+            <div>{t("receivable")}</div>
           </div>
           {result?.length ? (
             result.map((el, idx) => (

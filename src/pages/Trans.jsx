@@ -6,8 +6,10 @@ import { getTransApi } from "../apis/trans-api";
 import { NumericFormat } from "react-number-format";
 import TransDetail from "./TransDetail";
 import { SearchIcon } from "../icons/menuIcon";
+import { useTranslation } from "react-i18next";
 
 function Trans() {
+  const { t } = useTranslation();
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const [trans, setTrans] = useState(null);
   const [transRaw, setTransRaw] = useState(null);
@@ -71,7 +73,7 @@ function Trans() {
         <>
           <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-2 items-center relative">
             <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-              <p className="text-2xl font-bold py-2">Transactions</p>
+              <p className="text-2xl font-bold py-2">{t("transactions")}</p>
             </div>
             {/* search */}
             <div className="w-11/12  flex items-center gap-2">
@@ -102,7 +104,7 @@ function Trans() {
                 className="bg-orange-700 text-center w-[100px] py-1 text-white cursor-pointer"
                 onClick={() => window.location.reload()}
               >
-                Refresh
+                {t("refresh")}
               </button>
             </div>
 

@@ -8,8 +8,10 @@ import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
 import { useNavigate } from "react-router-dom";
 import { addTranMail } from "../apis/mail-api";
+import { useTranslation } from "react-i18next";
 
 function New() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -99,11 +101,13 @@ function New() {
     <div>
       <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
         <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
-          <p className="text-2xl font-bold py-2">New Transaction</p>
+          <p className="text-2xl font-bold py-2">{t("newTransaction")}</p>
         </div>
         {/* record date */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Record Date :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("recordDate")} :
+          </p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="date"
@@ -114,7 +118,9 @@ function New() {
         </div>
         {/* record time */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">Record Time :</p>
+          <p className="w-[150px] text-right pr-2 font-bold">
+            {t("recordTime")} :
+          </p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="time"
@@ -126,7 +132,7 @@ function New() {
 
         {/* paid by */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Payer :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="text"
@@ -142,7 +148,7 @@ function New() {
         </div>
         {/* type */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Type :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
           <input
             className="w-[150px] text-center border-b bg-amber-100"
             type="text"
@@ -158,7 +164,9 @@ function New() {
         </div>
         {/* amount */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">Total Amount :</p>
+          <p className="w-[150px] text-right pr-2 font-bold">
+            {t("totalAmount")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-amber-100"
             value={input.totalAmt === "" ? "" : input.totalAmt}
@@ -179,7 +187,7 @@ function New() {
         {/* My Portion */}
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">
-            Payer Portion :
+            {t("payerPortion")} :
           </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-amber-100"
@@ -201,7 +209,9 @@ function New() {
         </div>
         {/* My Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Payer Amount :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("payerAmount")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-slate-200"
             value={input.myAmt === "" ? "" : input.myAmt}
@@ -216,7 +226,9 @@ function New() {
         </div>
         {/* Other Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">Other Amount :</p>
+          <p className="w-[150px]  text-right pr-2 font-bold">
+            {t("otherAmount")} :
+          </p>
           <NumericFormat
             className="w-[150px] text-center border-b bg-slate-200"
             value={input.otherAmt === "" ? "" : input.otherAmt}
@@ -231,7 +243,7 @@ function New() {
         </div>
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-left pr-2 font-bold">Remark :</p>
+          <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
@@ -246,7 +258,7 @@ function New() {
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={hdlAddTran}
         >
-          Add
+          {t("add")}
         </button>
         {/* <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
