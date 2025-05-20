@@ -16,6 +16,7 @@ function New() {
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
   const [input, setInput] = useState({
@@ -78,12 +79,21 @@ function New() {
     try {
       const result = await addTran(token, input);
       console.log(result);
-      const mail = await addTranMail(token, {
-        to: "smt.bes@gmail.com, warittha.chtn@gmail.com",
-        subject: "[KB Expense] New record added!",
-        text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
-      });
-      console.log(mail);
+      // Determine the recipient
+      let toEmail = "";
+      if (user.userId === 1) {
+        toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+      } else if (user.userId === 2) {
+        toEmail = "smt.bes@gmail.com";
+      }
+      if (toEmail) {
+        const mail = await addTranMail(token, {
+          to: toEmail,
+          subject: "[KB Expense] New record added!",
+          text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
+        });
+        console.log(mail);
+      }
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
@@ -262,7 +272,10 @@ function New() {
         </button>
         {/* <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
-          onClick={() => console.log(input)}
+          onClick={() => {
+            console.log(input);
+            console.log(user);
+          }}
         >
           Input
         </button> */}
