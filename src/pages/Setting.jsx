@@ -134,8 +134,8 @@ function Setting() {
           </button>
         </>
       ) : (
-        <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
-          <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
+        <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-4 items-center relative  mb-[75px] mt-[60px]">
+          <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
             <p className="text-2xl font-bold py-2">{t("setting")}</p>
           </div>
           <div className=" w-10/12 flex justify-center gap-2">
@@ -167,7 +167,7 @@ function Setting() {
             {t("logout")}
           </button>
           {/* version */}
-          <p className="text-xs">V 1.2.0</p>
+          <p className="text-xs">V 1.2.1</p>
           <button
             className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
             onClick={hdlTestDB}

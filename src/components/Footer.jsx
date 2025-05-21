@@ -36,7 +36,7 @@ function MenuBox({ icon: Icon, txt }) {
 
 function Footer() {
   return (
-    <div className="bg-slate-700 w-screen h-[70px] grid grid-cols-5  text-white font-bold text-xs">
+    <div className="bg-slate-700 w-screen h-[70px] grid grid-cols-5  text-white font-bold text-xs fixed bottom-0">
       <MenuBox txt="TRANS" icon={icons.TransIcon} />
       <MenuBox txt="NEW" icon={icons.NewIcon} />
       <MenuBox txt="REPORT" icon={icons.ReportIcon} />

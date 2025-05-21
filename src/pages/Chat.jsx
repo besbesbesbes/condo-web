@@ -76,8 +76,8 @@ export default function Chat() {
 
   return (
     <div>
-      <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col items-center relative">
-        <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
+      <div className="w-screen  bg-white overflow-y-auto flex flex-col items-center relative  mb-[120px] mt-[60px]">
+        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
           <p
             className="text-2xl font-bold py-2"
             onClick={() => console.log(user)}
@@ -86,7 +86,7 @@ export default function Chat() {
           </p>
         </div>
         {/* chat area */}
-        <div className="w-full flex-1 overflow-y-auto flex flex-col p-2 gap-2">
+        <div className="w-full flex-1 overflow-y-auto flex flex-col p-2 gap-2 ">
           {msgs ? (
             msgs.map((el, idx) => (
               <div
@@ -107,7 +107,7 @@ export default function Chat() {
           {/* <button onClick={() => console.log(msgs)}>msgs</button> */}
         </div>
         {/* input area */}
-        <div className="w-full h-[60px] bg-slate-200 p-2 flex gap-2">
+        <div className="w-full h-[60px] bg-slate-200 p-2 flex gap-2 fixed bottom-[70px]">
           <input
             type="text"
             className="bg-white pl-2 flex-1"

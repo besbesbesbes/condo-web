@@ -109,8 +109,8 @@ function New() {
 
   return (
     <div>
-      <div className="w-screen h-[calc(100svh-70px)] bg-white overflow-y-auto flex flex-col gap-4 items-center relative">
-        <div className="flex justify-center w-full sticky top-[0] z-10 bg-slate-100 shadow">
+      <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
+        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
           <p className="text-2xl font-bold py-2">{t("newTransaction")}</p>
         </div>
         {/* record date */}
@@ -271,7 +271,7 @@ function New() {
           {t("add")}
         </button>
         {/* <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-10 "
           onClick={() => {
             console.log(input);
             console.log(user);
