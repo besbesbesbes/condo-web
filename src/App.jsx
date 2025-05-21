@@ -6,17 +6,17 @@ import Loading from "./components/Loading";
 import useMainStore from "./stores/main-store";
 
 function App() {
-  // axios.interceptors.request.use(
-  //   (config) => {
-  //     if (config.url.includes("localhost:8002")) {
-  //       config.url = config.url.replace("localhost:8002", "192.168.1.188:8002");
-  //     }
-  //     return config;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   }
-  // );
+  axios.interceptors.request.use(
+    (config) => {
+      if (config.url.includes("localhost:8002")) {
+        config.url = config.url.replace("localhost:8002", "192.168.1.188:8002");
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   const isLoad = useMainStore((state) => state.isLoad);
 
