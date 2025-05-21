@@ -7,6 +7,7 @@ import { getUserInfoApi } from "../apis/user-api";
 import ModalChangePassword from "../components/ModalChangePassword";
 import { testDB } from "../apis/test-api";
 import { useTranslation } from "react-i18next";
+import QrButton from "../components/QrButton";
 
 function Setting() {
   const { t } = useTranslation();
@@ -95,6 +96,8 @@ function Setting() {
           {t("testDB")}
         </button>
         {testTxt ? <p className="font-bold text-red-500">{testTxt}</p> : null}
+        {/* QR Scan */}
+        <QrButton />
       </div>
       <Footer />
       {/* modal change password */}
