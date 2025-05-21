@@ -80,20 +80,20 @@ function New() {
       const result = await addTran(token, input);
       console.log(result);
       // Email
-      // let toEmail = "";
-      // if (user.userId === 1) {
-      //   toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
-      // } else if (user.userId === 2) {
-      //   toEmail = "smt.bes@gmail.com";
-      // }
-      // if (toEmail) {
-      //   const mail = await addTranMail(token, {
-      //     to: toEmail,
-      //     subject: "[KB Expense] New record added!",
-      //     text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
-      //   });
-      //   console.log(mail);
-      // }
+      let toEmail = "";
+      if (user.userId === 1) {
+        toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+      } else if (user.userId === 2) {
+        toEmail = "smt.bes@gmail.com";
+      }
+      if (toEmail) {
+        const mail = await addTranMail(token, {
+          to: toEmail,
+          subject: "[KB Expense] New record added!",
+          text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
+        });
+        console.log(mail);
+      }
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
