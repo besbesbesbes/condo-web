@@ -30,5 +30,7 @@
   "transactionDetail": "交易详情",
   "save": "节省",
   "delete": "删除",
-  "back": "后退"
+  "back": "后退",
+  "qrScan": "二维码扫描",
+  "close": "关闭"
 }

@@ -30,5 +30,7 @@
   "transactionDetail": "取引の詳細",
   "save": "保存",
   "delete": "消去",
-  "back": "戻る"
+  "back": "戻る",
+  "qrScan": "QRスキャン",
+  "close": "近い"
 }

@@ -30,5 +30,7 @@
   "transactionDetail": "Transaction Detail",
   "save": "Save",
   "delete": "Delete",
-  "back": "Back"
+  "back": "Back",
+  "qrScan": "QR Scan",
+  "close": "Close"
 }

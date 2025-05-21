@@ -30,5 +30,7 @@
   "transactionDetail": "รายละเอียดรายการ",
   "save": "บันทึก",
   "delete": "ลบ",
-  "back": "กลับ"
+  "back": "กลับ",
+  "qrScan": "แสกนคิวอาร์",
+  "close": "ปิด"
 }
