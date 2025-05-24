@@ -170,10 +170,8 @@ function Trans() {
                       <div className="w-full flex flex-col px-2 py-1">
                         <div className="grid grid-cols-2 font-bold">
                           {/* type  */}
-                          <div className="flex gap-1">
-                            <div>{el.expenseType.expenseName}</div>
-                            {el.isHavePhoto && <div>📷</div>}
-                          </div>
+                          <div>{el.expenseType.expenseName}</div>
+
                           {/* total amt */}
                           <NumericFormat
                             className="text-right"
@@ -199,6 +197,7 @@ function Trans() {
                                 <span className="text-orange-700">
                                   {el.remark}
                                 </span>
+                                {el.isHavePhoto && <span>📷</span>}
                               </div>
                             ) : null}
                           </div>
