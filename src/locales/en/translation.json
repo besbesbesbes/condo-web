@@ -32,5 +32,6 @@
   "delete": "Delete",
   "back": "Back",
   "qrScan": "QR Scan",
-  "close": "Close"
+  "close": "Close",
+  "photo": "Photo"
 }

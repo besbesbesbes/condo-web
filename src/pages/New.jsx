@@ -9,6 +9,7 @@ import ModalPaidBy from "../components/ModalPaidBy";
 import { useNavigate } from "react-router-dom";
 import { addTranMail } from "../apis/mail-api";
 import { useTranslation } from "react-i18next";
+import { AddPhoto } from "../icons/menuIcon";
 
 function New() {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ function New() {
   const user = useUserStore((state) => state.user);
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
+  const [files, setFiles] = useState([]);
   const [input, setInput] = useState({
     recordDate: new Date().toISOString().slice(0, 10),
     recordTime: new Date().toTimeString().slice(0, 5),
@@ -77,12 +79,34 @@ function New() {
     e.preventDefault();
     setIsLoad(true);
     try {
-      const result = await addTran(token, input);
+      // validate
+      if (files.length > 10) {
+        console.log("Maximum upload 10 images per time...");
+        return;
+      }
+      const body = new FormData();
+      body.append("recordDate", input.recordDate);
+      body.append("recordTime", input.recordTime);
+      body.append("paidById", input.paidById);
+      body.append("paidBy", input.paidBy);
+      body.append("type", input.type);
+      body.append("typeId", input.typeId);
+      body.append("totalAmt", input.totalAmt);
+      body.append("myPortion", input.myPortion);
+      body.append("myAmt", input.myAmt);
+      body.append("otherAmt", input.otherAmt);
+      body.append("remark", input.remark);
+      files.forEach((file) => {
+        body.append("images", file);
+      });
+      // api
+      const result = await addTran(token, body);
       console.log(result);
       // Email
       let toEmail = "";
       if (user.userId === 1) {
         toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+        // toEmail = "smt.bes@gmail.com";
       } else if (user.userId === 2) {
         toEmail = "smt.bes@gmail.com";
       }
@@ -102,6 +126,18 @@ function New() {
     }
   };
 
+  const hdlFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    const imageFiles = selectedFiles.filter((file) =>
+      file.type.startsWith("image/")
+    );
+    setFiles((prev) => [...prev, ...imageFiles]);
+  };
+
+  const removeImage = (indexToRemove) => () => {
+    setFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
   useEffect(() => {
     setCurMenu("NEW");
     getNewTranInfo();
@@ -109,7 +145,7 @@ function New() {
 
   return (
     <div>
-      <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
+      <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
         <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
           <p className="text-2xl font-bold py-2">{t("newTransaction")}</p>
         </div>
@@ -263,6 +299,61 @@ function New() {
           name="remark"
           onChange={hdlInput}
         />
+        {/* photo */}
+        <input
+          type="file"
+          id="input-file"
+          className="opacity-0 absolute w-0"
+          multiple
+          accept="image/*"
+          onChange={hdlFileChange}
+        />
+        <div className=" w-10/12 flex justify-center gap-2">
+          <p className="w-[150px]  text-left pr-2 font-bold">{t("photo")} :</p>
+          <p className="w-[150px] text-center"></p>
+        </div>
+        <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+          {/* add photo */}
+
+          <div
+            className="w-[80px] h-[80px] border flex-shrink-0 box-border bg-amber-100 flex justify-center items-center cursor-pointer"
+            onClick={() => document.getElementById("input-file").click()}
+          >
+            <AddPhoto className="w-[40px]" />
+          </div>
+          {/* list of files */}
+          {files.map((el, idx) => (
+            <div
+              key={idx}
+              className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center relative"
+            >
+              <img
+                src={URL.createObjectURL(el)}
+                alt={`preview-${idx}`}
+                className="object-cover w-full h-full"
+              />
+              {/* remove image */}
+              <div
+                className="w-[20px] h-[20px] bg-amber-100 flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
+                onClick={removeImage(idx)}
+              >
+                X
+              </div>
+            </div>
+          ))}
+          {/* <button
+            className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center bg-red-100 text-sm cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              files.forEach((el) => {
+                console.log(URL.createObjectURL(el));
+              });
+            }}
+          >
+            List Files
+          </button> */}
+        </div>
+
         {/* button add */}
         <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
@@ -270,15 +361,15 @@ function New() {
         >
           {t("add")}
         </button>
-        {/* <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-10 "
+        <button
+          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={() => {
             console.log(input);
             console.log(user);
           }}
         >
           Input
-        </button> */}
+        </button>
       </div>
       <Footer />
       {/* modal paid by */}

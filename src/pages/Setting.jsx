@@ -113,6 +113,15 @@ function Setting() {
     }
   };
 
+  const [files, setFiles] = useState([]);
+  const hdlFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    const imageFiles = selectedFiles.filter((file) =>
+      file.type.startsWith("image/")
+    );
+    setFiles((prev) => [...prev, ...imageFiles]);
+  };
+
   useEffect(() => {
     setCurMenu("SETTING");
     getUserInfo();
@@ -167,7 +176,7 @@ function Setting() {
             {t("logout")}
           </button>
           {/* version */}
-          <p className="text-xs">V 1.2.1</p>
+          <p className="text-xs">V 1.3.0</p>
           <button
             className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
             onClick={hdlTestDB}

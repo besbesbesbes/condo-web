@@ -169,8 +169,11 @@ function Trans() {
                       </div>
                       <div className="w-full flex flex-col px-2 py-1">
                         <div className="grid grid-cols-2 font-bold">
-                          {/* type */}
-                          <div>{el.expenseType.expenseName}</div>
+                          {/* type  */}
+                          <div className="flex gap-1">
+                            <div>{el.expenseType.expenseName}</div>
+                            {el.isHavePhoto && <div>📷</div>}
+                          </div>
                           {/* total amt */}
                           <NumericFormat
                             className="text-right"

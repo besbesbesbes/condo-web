@@ -9,6 +9,7 @@ import ModalConfirmDelete from "../components/ModalConfirmDelete";
 import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
 import { useTranslation } from "react-i18next";
+import ModalPhoto from "../components/ModalPhoto";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
+  const [selPhotoUrl, setSelPhotoUrl] = useState("");
   const [input, setInput] = useState({
     tranId: "",
     recordDate: "",
@@ -260,6 +262,37 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           name="remark"
           onChange={hdlInput}
         />
+        {/* photo */}
+        {selectedTran?.isHavePhoto && (
+          <>
+            <div className=" w-10/12 flex justify-center gap-2">
+              <p className="w-[150px]  text-left pr-2 font-bold">
+                {t("photo")} :
+              </p>
+              <p className="w-[150px] text-center"></p>
+            </div>
+            <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+              {/* list of files */}
+              {selectedTran.photos?.map((el, idx) => (
+                <div
+                  key={idx}
+                  className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center relative cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelPhotoUrl(el.photoUrl);
+                    document.getElementById("photo_modal").showModal();
+                  }}
+                >
+                  <img
+                    src={el.photoUrl}
+                    alt={`preview-${el.photoUrl}`}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
         {/* button */}
         <div className="flex gap-4">
           <button
@@ -306,6 +339,10 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           setInput={setInput}
           getNewTranInfo={getNewTranInfo}
         />
+      </dialog>
+      {/* modal photo */}
+      <dialog id="photo_modal" className="modal">
+        <ModalPhoto selPhotoUrl={selPhotoUrl} setSelPhotoUrl={setSelPhotoUrl} />
       </dialog>
     </>
   );
