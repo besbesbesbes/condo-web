@@ -361,7 +361,7 @@ function New() {
         >
           {t("add")}
         </button>
-        <button
+        {/* <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={() => {
             console.log(input);
@@ -369,7 +369,7 @@ function New() {
           }}
         >
           Input
-        </button>
+        </button> */}
       </div>
       <Footer />
       {/* modal paid by */}
