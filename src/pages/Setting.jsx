@@ -8,6 +8,7 @@ import ModalChangePassword from "../components/ModalChangePassword";
 import { testDB } from "../apis/test-api";
 import { useTranslation } from "react-i18next";
 import { Html5Qrcode } from "html5-qrcode";
+import { exportReportApi } from "../apis/export-api";
 
 function Setting() {
   const { t } = useTranslation();
@@ -113,13 +114,22 @@ function Setting() {
     }
   };
 
-  const [files, setFiles] = useState([]);
-  const hdlFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    const imageFiles = selectedFiles.filter((file) =>
-      file.type.startsWith("image/")
-    );
-    setFiles((prev) => [...prev, ...imageFiles]);
+  const hdlExportReport = async () => {
+    setIsLoad(true);
+    try {
+      const result = await exportReportApi(token);
+      const url = window.URL.createObjectURL(new Blob([result.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "data.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
+    }
   };
 
   useEffect(() => {
@@ -176,7 +186,7 @@ function Setting() {
             {t("logout")}
           </button>
           {/* version */}
-          <p className="text-xs">V 1.3.1</p>
+          <p className="text-xs">V 1.4.0</p>
           <button
             className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
             onClick={hdlTestDB}
@@ -190,6 +200,13 @@ function Setting() {
             onClick={hdlQRScan}
           >
             {t("qrScan")}
+          </button>
+          {/* Export Report */}
+          <button
+            className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
+            onClick={hdlExportReport}
+          >
+            Export Report
           </button>
         </div>
       )}
