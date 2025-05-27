@@ -22,3 +22,10 @@ export const deleteTranApi = async (token, body) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const deletePhotoApi = async (token, body) =>
+  await axios.post(`${baseUrl}/trans/delete-photo`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

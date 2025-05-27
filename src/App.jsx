@@ -9,7 +9,7 @@ function App() {
   // axios.interceptors.request.use(
   //   (config) => {
   //     if (config.url.includes("localhost:8002")) {
-  //       config.url = config.url.replace("localhost:8002", "192.168.1.192:8002");
+  //       config.url = config.url.replace("localhost:8002", "192.168.1.20:8002");
   //     }
   //     return config;
   //   },

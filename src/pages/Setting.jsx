@@ -176,7 +176,7 @@ function Setting() {
             {t("logout")}
           </button>
           {/* version */}
-          <p className="text-xs">V 1.3.0</p>
+          <p className="text-xs">V 1.3.1</p>
           <button
             className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
             onClick={hdlTestDB}
