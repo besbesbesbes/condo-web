@@ -36,12 +36,12 @@ function ModalPhoto({
   };
 
   return (
-    <div className="w-[300px] h-auto bg-white shadow-xl rounded-xl fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg">
+    <div className="w-[300px] max-h-[calc(100vh-150px)] bg-white shadow-xl rounded-xl fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg overflow-auto">
       {selPhotoUrl && (
         <img
           src={selPhotoUrl}
           alt={`preview-${selPhotoUrl}`}
-          className="object-cover w-full h-full"
+          className="object-cover "
         />
       )}
 
