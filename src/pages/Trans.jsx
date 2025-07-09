@@ -7,6 +7,7 @@ import { NumericFormat } from "react-number-format";
 import TransDetail from "./TransDetail";
 import { SearchIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 function Trans() {
   const { t } = useTranslation();
@@ -20,6 +21,9 @@ function Trans() {
   const [yearInput, setYearInput] = useState(today.getFullYear());
   const [searchInput, setSearchInput] = useState("");
   const setIsLoad = useMainStore((state) => state.setIsLoad);
+  const setUser = useUserStore((state) => state.setUser);
+  const setToken = useUserStore((state) => state.setToken);
+  const navigate = useNavigate();
 
   const getTrans = async () => {
     setIsLoad(true);
@@ -29,6 +33,11 @@ function Trans() {
       setTransRaw(result.data.trans);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+      if (err?.response?.data?.msg || err.message == "invalid signature") {
+        setUser(null);
+        setToken("");
+        navigate(0);
+      }
     } finally {
       setIsLoad(false);
     }

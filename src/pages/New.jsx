@@ -33,6 +33,8 @@ function New() {
     myAmt: 0,
     otherAmt: 0,
     remark: "",
+    instPlan: 0,
+    inst: [],
   });
 
   const hdlInput = (e) => {
@@ -137,6 +139,55 @@ function New() {
   const removeImage = (indexToRemove) => () => {
     setFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
+
+  const hdlGenInstPlan = () => {
+    let planCount = Number(input.instPlan);
+    const baseAmt = Number(input.otherAmt);
+
+    if (!planCount || !baseAmt || baseAmt <= 0) return;
+
+    // Clamp planCount between 2 and 60
+    if (planCount < 2) planCount = 2;
+    if (planCount > 60) planCount = 60;
+
+    const startDate = new Date(input.recordDate);
+    const roundedAmt = +(baseAmt / planCount).toFixed(2);
+
+    const inst = Array.from({ length: planCount }).map((_, i) => {
+      const date = new Date(startDate);
+      date.setMonth(date.getMonth() + i);
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, "0");
+      const dd = String(date.getDate()).padStart(2, "0");
+      const formattedDate = `${yyyy}-${mm}-${dd}`;
+      return { date: formattedDate, amt: roundedAmt };
+    });
+
+    const adjustedInst = adjustInstAmtToMatchTotal(inst, baseAmt);
+
+    setInput((prev) => ({
+      ...prev,
+      instPlan: planCount,
+      inst: adjustedInst,
+    }));
+  };
+
+  const adjustInstAmtToMatchTotal = (instArr, totalAmt) => {
+    const sumExceptLast = instArr
+      .slice(0, -1)
+      .reduce((sum, item) => sum + Number(item.amt || 0), 0);
+    const lastAmt = (totalAmt - sumExceptLast).toFixed(2); // round to 2 decimals
+    const newInst = [...instArr];
+    newInst[newInst.length - 1].amt = Number(lastAmt);
+    return newInst;
+  };
+
+  useEffect(() => {
+    setInput((prev) => ({
+      ...prev,
+      inst: [],
+    }));
+  }, [input.instPlan]);
 
   useEffect(() => {
     setCurMenu("NEW");
@@ -287,6 +338,94 @@ function New() {
             disabled
           />
         </div>
+        {/* installment plan */}
+        <div className="w-10/12 flex justify-center gap-2">
+          <p className="w-[150px] text-right pr-2 font-bold">
+            {t("Installment Plan")} :
+          </p>
+          <NumericFormat
+            className="w-[150px] text-center border-b bg-amber-100"
+            value={input.instPlan === "" ? "" : input.instPlan}
+            name="instPlan"
+            thousandSeparator
+            decimalScale={0}
+            fixedDecimalScale
+            allowNegative={false}
+            inputMode="decimal"
+            onValueChange={(values) => {
+              setInput((prev) => ({
+                ...prev,
+                instPlan: values.floatValue ?? "", // fallback to "" when cleared
+              }));
+            }}
+          />
+        </div>
+        {typeof input.instPlan === "number" && input.instPlan > 0 && (
+          <div className="w-10/12 flex justify-center gap-2">
+            <p className="w-[150px] text-right pr-2 font-bold"></p>
+            <div
+              className="bg-orange-500 px-2 text-white font-bold hover:cursor-pointer"
+              onClick={hdlGenInstPlan}
+            >
+              Generate
+            </div>
+          </div>
+        )}
+        {/* installment list */}
+        {input.inst.map((el, idx) => (
+          <div key={idx} className="w-10/12 flex justify-center gap-2">
+            <p>{idx + 1}</p>
+            {/* Date input */}
+            <input
+              className="w-[150px] text-center border-b bg-amber-100"
+              type="date"
+              value={el.date}
+              onChange={(e) => {
+                if (idx === 0) {
+                  // Update all dates based on index 0
+                  const baseDate = new Date(e.target.value);
+                  if (isNaN(baseDate)) return;
+
+                  const updatedInst = input.inst.map((item, i) => {
+                    const newDate = new Date(baseDate);
+                    newDate.setMonth(baseDate.getMonth() + i);
+                    const yyyy = newDate.getFullYear();
+                    const mm = String(newDate.getMonth() + 1).padStart(2, "0");
+                    const dd = String(newDate.getDate()).padStart(2, "0");
+                    return {
+                      ...item,
+                      date: `${yyyy}-${mm}-${dd}`,
+                    };
+                  });
+
+                  setInput((prev) => ({ ...prev, inst: updatedInst }));
+                } else {
+                  const newInst = [...input.inst];
+                  newInst[idx].date = e.target.value;
+                  setInput((prev) => ({ ...prev, inst: newInst }));
+                }
+              }}
+            />
+            {/* Amount input */}
+            <NumericFormat
+              className="w-[150px] text-center border-b bg-slate-200"
+              value={el.amt === "" ? "" : el.amt}
+              thousandSeparator
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              inputMode="decimal"
+              onValueChange={(values) => {
+                const newInst = [...input.inst];
+                newInst[idx].amt = values.floatValue ?? "";
+                setInput((prev) => ({ ...prev, inst: newInst }));
+              }}
+              disabled
+            />
+          </div>
+        ))}
+
+        <div onClick={() => console.log(input)}>input</div>
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
