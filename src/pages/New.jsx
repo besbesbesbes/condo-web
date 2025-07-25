@@ -98,28 +98,29 @@ function New() {
       body.append("myAmt", input.myAmt);
       body.append("otherAmt", input.otherAmt);
       body.append("remark", input.remark);
+      body.append("inst", JSON.stringify(input.inst));
       files.forEach((file) => {
         body.append("images", file);
       });
       // api
       const result = await addTran(token, body);
       console.log(result);
-      // Email
-      let toEmail = "";
-      if (user.userId === 1) {
-        toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
-        // toEmail = "smt.bes@gmail.com";
-      } else if (user.userId === 2) {
-        toEmail = "smt.bes@gmail.com";
-      }
-      if (toEmail) {
-        const mail = await addTranMail(token, {
-          to: toEmail,
-          subject: "[KB Expense] New record added!",
-          text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
-        });
-        console.log(mail);
-      }
+      // // Email
+      // let toEmail = "";
+      // if (user.userId === 1) {
+      //   toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+      //   // toEmail = "smt.bes@gmail.com";
+      // } else if (user.userId === 2) {
+      //   toEmail = "smt.bes@gmail.com";
+      // }
+      // if (toEmail) {
+      //   const mail = await addTranMail(token, {
+      //     to: toEmail,
+      //     subject: "[KB Expense] New record added!",
+      //     text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
+      //   });
+      //   console.log(mail);
+      // }
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
@@ -187,7 +188,7 @@ function New() {
       ...prev,
       inst: [],
     }));
-  }, [input.instPlan]);
+  }, [input.instPlan, input.totalAmt, input.myPortion]);
 
   useEffect(() => {
     setCurMenu("NEW");
@@ -495,7 +496,7 @@ function New() {
 
         {/* button add */}
         <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px] "
           onClick={hdlAddTran}
         >
           {t("add")}
