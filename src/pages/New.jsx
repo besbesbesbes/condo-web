@@ -105,22 +105,22 @@ function New() {
       // api
       const result = await addTran(token, body);
       console.log(result);
-      // // Email
-      // let toEmail = "";
-      // if (user.userId === 1) {
-      //   toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
-      //   // toEmail = "smt.bes@gmail.com";
-      // } else if (user.userId === 2) {
-      //   toEmail = "smt.bes@gmail.com";
-      // }
-      // if (toEmail) {
-      //   const mail = await addTranMail(token, {
-      //     to: toEmail,
-      //     subject: "[KB Expense] New record added!",
-      //     text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
-      //   });
-      //   console.log(mail);
-      // }
+      // Email
+      let toEmail = "";
+      if (user.userId === 1) {
+        toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+        // toEmail = "smt.bes@gmail.com";
+      } else if (user.userId === 2) {
+        toEmail = "smt.bes@gmail.com";
+      }
+      if (toEmail) {
+        const mail = await addTranMail(token, {
+          to: toEmail,
+          subject: "[KB Expense] New record added!",
+          text: `KB Expnese\n– New record added –\n\nPaid by: ${input.paidBy}\nType : ${input.type}\nAmount : ${input.totalAmt}\nRemark : ${input.remark}\n\nHave a nice day,\nKB-Admin`,
+        });
+        console.log(mail);
+      }
       navigate("/");
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
@@ -426,7 +426,7 @@ function New() {
           </div>
         ))}
 
-        <div onClick={() => console.log(input)}>input</div>
+        {/* <div onClick={() => console.log(input)}>input</div> */}
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
