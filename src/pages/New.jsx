@@ -21,6 +21,7 @@ function New() {
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
   const [files, setFiles] = useState([]);
+  const [errMsg, setErrMsg] = useState("");
   const [input, setInput] = useState({
     recordDate: new Date().toISOString().slice(0, 10),
     recordTime: new Date().toTimeString().slice(0, 5),
@@ -123,7 +124,13 @@ function New() {
       }
       navigate("/");
     } catch (err) {
-      console.log(err?.response?.data?.msg || err.message);
+      const msg = err?.response?.data?.msg || err.message;
+      console.log(msg);
+      setErrMsg(msg);
+      setTimeout(() => {
+        setErrMsg("");
+        navigate("/");
+      }, 5000);
     } finally {
       setIsLoad(false);
     }
@@ -495,12 +502,22 @@ function New() {
         </div>
 
         {/* button add */}
-        <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px] "
-          onClick={hdlAddTran}
-        >
-          {t("add")}
-        </button>
+        {errMsg === "invalid_grant" && (
+          <p className="text-red-500 text-center mt-2 mb-[60px]">
+            Transaction added successfully but <br />
+            Email can't send, will go to TRANS in 3 sec.
+          </p>
+        )}
+
+        {!errMsg && (
+          <button
+            className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px]"
+            onClick={hdlAddTran}
+          >
+            {t("add")}
+          </button>
+        )}
+
         {/* <button
           className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
           onClick={() => {
