@@ -109,8 +109,8 @@ function New() {
       // Email
       let toEmail = "";
       if (user.userId === 1) {
-        toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
-        // toEmail = "smt.bes@gmail.com";
+        // toEmail = "smt.bes@gmail.com, warittha.chtn@gmail.com";
+        toEmail = "smt.bes@gmail.com";
       } else if (user.userId === 2) {
         toEmail = "smt.bes@gmail.com";
       }
