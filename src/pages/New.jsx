@@ -509,6 +509,13 @@ function New() {
           </p>
         )}
 
+        {errMsg === "Request failed with status code 401" && (
+          <p className="text-red-500 text-center mt-2 mb-[60px]">
+            Transaction added successfully but <br />
+            Request failed with status code 401 <br />
+            Email can't send, will go to TRANS in 3 sec.
+          </p>
+        )}
         {!errMsg && (
           <button
             className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px]"
