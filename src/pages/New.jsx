@@ -37,6 +37,53 @@ function New() {
     instPlan: 0,
     inst: [],
   });
+  const [showAmtKeypad, setShowAmtKeypad] = useState(false);
+  const [amtExpression, setAmtExpression] = useState("");
+  const [amtResult, setAmtResult] = useState("");
+
+  const evaluateAmtExpression = (expression) => {
+    const cleaned = expression.replace(/\s+/g, "");
+    if (cleaned === "") return "";
+    if (/[^0-9.+\-*/()%]/.test(cleaned)) return "";
+    const trimmed = cleaned.replace(/[+\-*/%]+$/, "");
+    if (trimmed === "") return "";
+    try {
+      const value = new Function(`return ${trimmed}`)();
+      if (typeof value !== "number" || !Number.isFinite(value)) return "";
+      return `${Math.round(value * 100) / 100}`;
+    } catch {
+      return "";
+    }
+  };
+
+  const openAmtKeypad = () => {
+    setAmtExpression(input.totalAmt !== "" ? `${input.totalAmt}` : "");
+    setAmtResult(input.totalAmt !== "" ? `${input.totalAmt}` : "");
+    setShowAmtKeypad(true);
+  };
+
+  const closeAmtKeypad = () => {
+    setShowAmtKeypad(false);
+  };
+
+  const clearAmtKeypad = () => {
+    setAmtExpression("");
+    setAmtResult("");
+  };
+
+  const appendAmtKeypad = (value) => {
+    setAmtExpression((prev) => {
+      const next = `${prev || ""}${value}`;
+      setAmtResult(evaluateAmtExpression(next));
+      return next;
+    });
+  };
+
+  const confirmAmtKeypad = () => {
+    if (amtResult === "") return;
+    setInput((prev) => ({ ...prev, totalAmt: Number(amtResult) }));
+    closeAmtKeypad();
+  };
 
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
@@ -139,7 +186,7 @@ function New() {
   const hdlFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const imageFiles = selectedFiles.filter((file) =>
-      file.type.startsWith("image/")
+      file.type.startsWith("image/"),
     );
     setFiles((prev) => [...prev, ...imageFiles]);
   };
@@ -280,13 +327,17 @@ function New() {
             decimalScale={2}
             fixedDecimalScale
             allowNegative={false}
-            inputMode="decimal"
-            onValueChange={(values) => {
-              setInput((prev) => ({
-                ...prev,
-                totalAmt: values.floatValue ?? "", // fallback to "" when cleared
-              }));
+            inputMode="none"
+            readOnly
+            onClick={(e) => {
+              e.preventDefault();
+              openAmtKeypad();
             }}
+            onFocus={(e) => {
+              e.preventDefault();
+              openAmtKeypad();
+            }}
+            autoComplete="off"
           />
         </div>
         {/* My Portion */}
@@ -535,6 +586,79 @@ function New() {
           Input
         </button> */}
       </div>
+
+      {showAmtKeypad && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 px-4 py-6 sm:items-center">
+          <div className="w-full max-w-md rounded-t-3xl bg-white p-4 shadow-2xl sm:rounded-3xl">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-500">{t("expression")}</p>
+                <p className="min-h-[28px] text-lg font-semibold break-words">
+                  {amtExpression || "0"}
+                </p>
+              </div>
+              <button
+                className="rounded-full bg-slate-200 px-3 py-2 text-sm"
+                onClick={closeAmtKeypad}
+              >
+                {t("close")}
+              </button>
+            </div>
+            <div className="mb-4 rounded-xl bg-slate-100 p-3 text-right">
+              <p className="text-xs text-slate-500">{t("result")}</p>
+              <p className="text-2xl font-bold">
+                {amtResult !== "" ? amtResult : "0"}
+              </p>
+            </div>
+            <div className="grid grid-cols-4 gap-2 text-lg">
+              {[
+                "7",
+                "8",
+                "9",
+                "/",
+                "4",
+                "5",
+                "6",
+                "*",
+                "1",
+                "2",
+                "3",
+                "-",
+                "0",
+                "00",
+                ".",
+                "+",
+              ].map((key) => (
+                <button
+                  key={key}
+                  className="rounded-2xl bg-slate-200 py-4 font-semibold hover:bg-slate-300"
+                  onClick={() => appendAmtKeypad(key)}
+                  type="button"
+                >
+                  {key}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button
+                className="flex-1 rounded-2xl bg-slate-200 py-3 font-semibold hover:bg-slate-300"
+                type="button"
+                onClick={clearAmtKeypad}
+              >
+                {t("clearAll")}
+              </button>
+              <button
+                className="flex-1 rounded-2xl bg-orange-600 py-3 font-semibold text-white hover:bg-orange-700"
+                type="button"
+                onClick={confirmAmtKeypad}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
       {/* modal paid by */}
       <dialog id="paid_by_modal" className="modal">
