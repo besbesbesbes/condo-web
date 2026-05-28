@@ -68,7 +68,7 @@ function New() {
 
   const clearAmtKeypad = () => {
     setAmtExpression("");
-    setAmtResult("");
+    setAmtResult("0");
   };
 
   const appendAmtKeypad = (value) => {
@@ -80,8 +80,8 @@ function New() {
   };
 
   const confirmAmtKeypad = () => {
-    if (amtResult === "") return;
-    setInput((prev) => ({ ...prev, totalAmt: Number(amtResult) }));
+    const resultValue = amtResult === "" ? "0" : amtResult;
+    setInput((prev) => ({ ...prev, totalAmt: Number(resultValue) }));
     closeAmtKeypad();
   };
 
