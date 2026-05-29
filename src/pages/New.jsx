@@ -588,8 +588,8 @@ function New() {
       </div>
 
       {showAmtKeypad && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 px-4 py-6 sm:items-center">
-          <div className="w-full max-w-md rounded-t-3xl bg-white p-4 shadow-2xl sm:rounded-3xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 ">
+          <div className="w-5/6 max-w-md rounded-t-3xl bg-white p-4 shadow-2xl rounded-3xl">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-500">{t("expression")}</p>
@@ -628,16 +628,20 @@ function New() {
                 "00",
                 ".",
                 "+",
-              ].map((key) => (
-                <button
-                  key={key}
-                  className="rounded-2xl bg-slate-200 py-4 font-semibold hover:bg-slate-300"
-                  onClick={() => appendAmtKeypad(key)}
-                  type="button"
-                >
-                  {key}
-                </button>
-              ))}
+              ].map((key) => {
+                const displayMap = { "*": "×", "/": "÷" };
+                const display = displayMap[key] || key;
+                return (
+                  <button
+                    key={key}
+                    className="rounded-2xl bg-slate-200 py-4 font-semibold hover:bg-slate-300"
+                    onClick={() => appendAmtKeypad(key)}
+                    type="button"
+                  >
+                    {display}
+                  </button>
+                );
+              })}
             </div>
             <div className="mt-4 flex gap-2">
               <button
