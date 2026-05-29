@@ -2,11 +2,11 @@ import React from "react";
 
 function Loading() {
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/30">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-overlay">
       <div role="status">
         <svg
           aria-hidden="true"
-          className="w-20 h-20 animate-spin text-slate-700 fill-orange-700"
+          className="w-20 h-20 animate-spin text-surface-muted fill-accent"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

@@ -74,7 +74,7 @@ function Setting() {
         },
         (error) => {
           // Optional: console.log("QR scan error", error);
-        }
+        },
       )
       .catch((err) => {
         console.error("Camera start failed", err);
@@ -143,31 +143,30 @@ function Setting() {
         <>
           <div
             id="qr-reader"
-            className="fixed inset-0 z-[9999] w-screen h-[calc(100svh-70px)] bg-black flex items-center justify-center"
+            className="fixed inset-0 z-[9999] w-screen h-[calc(100svh-70px)] bg-overlay flex items-center justify-center"
           ></div>
           <button
             onClick={handleStopScan}
-            className="absolute z-[9999] top-4 right-4 px-4 py-2 bg-red-600 text-white rounded shadow cursor-pointer"
+            className="btn btn-accent absolute z-[9999] top-4 right-4"
           >
             {t("close")}
           </button>
         </>
       ) : (
-        <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-4 items-center relative  mb-[75px] mt-[60px]">
-          <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
+        <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
+          <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
             <p className="text-2xl font-bold py-2">{t("setting")}</p>
           </div>
           <div className=" w-10/12 flex justify-center gap-2">
-            <p className="w-[100px]  text-right pr-2 font-bold">
-              {" "}
+            <p className="w-[100px] text-right pr-2 font-bold">
               {t("userName")} :
             </p>
-            <p className="w-[150px] text-center border-b bg-slate-200">
+            <p className="w-[150px] text-center input-field bg-surface-soft">
               {userInfo.userName}
             </p>
           </div>
           <button
-            className="w-[150px] border-1 bg-orange-500 text-white cursor-pointer py-1 "
+            className="btn btn-primary w-[150px]"
             onClick={(e) => {
               e.stopPropagation();
               document.getElementById("change_password_modal").showModal();
@@ -176,7 +175,7 @@ function Setting() {
             {t("changePassword")}
           </button>
           <button
-            className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+            className="btn btn-accent w-[150px]"
             onClick={() => {
               setUser(null);
               setToken("");
@@ -186,26 +185,17 @@ function Setting() {
             {t("logout")}
           </button>
           {/* version */}
-          <p className="text-xs">V 1.5.1</p>
-          <button
-            className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
-            onClick={hdlTestDB}
-          >
+          <p className="text-xs">V 1.6.0</p>
+          <button className="btn-secondary w-[150px]" onClick={hdlTestDB}>
             {t("testDB")}
           </button>
-          {testTxt ? <p className="font-bold text-red-500">{testTxt}</p> : null}
+          {testTxt ? <p className="font-bold text-error">{testTxt}</p> : null}
           {/* QR Scan */}
-          <button
-            className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
-            onClick={hdlQRScan}
-          >
+          <button className="btn-secondary w-[150px]" onClick={hdlQRScan}>
             {t("qrScan")}
           </button>
           {/* Export Report */}
-          <button
-            className="w-[150px] border-1 bg-slate-700 text-white cursor-pointer py-1 "
-            onClick={hdlExportReport}
-          >
+          <button className="btn-secondary w-[150px]" onClick={hdlExportReport}>
             Export Report
           </button>
         </div>

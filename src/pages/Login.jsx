@@ -54,14 +54,14 @@ function Login() {
   };
 
   return (
-    <div className="bg-slate-500 w-screen h-svh flex items-center justify-center text-sm">
+    <div className="bg-app w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
-      <div className="bg-slate-100 w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 rounded-xl shadow-xl -translate-y-[50px]">
+      <div className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 rounded-xl shadow-xl border border-surface-soft -translate-y-[50px]">
         <p className="font-bold">{t("welcome")}</p>
         <div className=" w-full flex justify-center">
           <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
           <input
-            className="w-[120px] border border-gray-400 pl-2"
+            className="input-field w-[120px]"
             type="text"
             name="inputUser"
             value={input.inputUser}
@@ -71,29 +71,24 @@ function Login() {
         <div className=" w-full flex justify-center">
           <p className="w-[100px] text-right pr-5">{t("password")} :</p>
           <input
-            className="w-[120px] border border-gray-400 pl-2"
+            className="input-field w-[120px]"
             type="password"
             name="inputPassword"
             value={input.inputPassword}
             onChange={hdlInput}
           />
         </div>
-        <hr className="w-10/12 mt-2" />
-        <button
-          className="w-[130px] border-1 bg-slate-500 text-white cursor-pointer py-1 "
-          onClick={hdlLogin}
-        >
+        <hr className="w-10/12 mt-2 border-surface" />
+        <button className="btn btn-primary w-[130px]" onClick={hdlLogin}>
           {t("login")}
         </button>
         {/* error message */}
-        {isShowErrMsg && (
-          <p className="font-bold text-red-500">{errMsg}</p>
-        )}{" "}
+        {isShowErrMsg && <p className="font-bold text-error">{errMsg}</p>}
         <div className="self-end flex gap-2">
           <p>{t("language")}</p>
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
-            className="rounded border"
+            className="input-field"
             value={i18n.language}
           >
             <option value="en">English</option>

@@ -36,18 +36,18 @@ function ModalPhoto({
   };
 
   return (
-    <div className="w-[300px] max-h-[calc(100vh-150px)] bg-white shadow-xl rounded-xl fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg overflow-auto">
+    <div className="w-[300px] max-h-[calc(100vh-150px)] bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg overflow-auto">
       {selPhotoUrl && (
         <img
           src={selPhotoUrl}
           alt={`preview-${selPhotoUrl}`}
-          className="object-cover "
+          className="object-cover"
         />
       )}
 
       {/* close button */}
       <button
-        className="w-[30px] h-[30px] font-bold rounded-full bg-slate-100 flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
+        className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
         onClick={(e) => {
           setSelPhotoUrl("");
           setShowConfirmDelete(false);
@@ -59,7 +59,7 @@ function ModalPhoto({
       {/* delete button */}
       {showConfirmDelete ? (
         <button
-          className="w-auto h-[30px] font-bold rounded-full bg-orange-200 flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2 px-2"
+          className="btn btn-accent w-auto h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2 px-2"
           onClick={hdlDeltePhoto}
         >
           <BinIcon className="w-[20px] h-[20px]" />
@@ -67,7 +67,7 @@ function ModalPhoto({
         </button>
       ) : (
         <button
-          className="w-[30px] h-[30px] font-bold rounded-full bg-orange-200 flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2"
+          className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2"
           onClick={() => {
             setShowConfirmDelete(true);
           }}

@@ -36,11 +36,11 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   }, []);
 
   return (
-    <div className="w-[300px] h-auto bg-white shadow-xl rounded-xl fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg">
+    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg">
       <p className="font-bold">Select Type</p>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div
-        className="border-1 w-10/12 h-[300px] flex flex-col overflow-auto p-2 items-center gap-2"
+        className="w-10/12 h-[300px] flex flex-col overflow-auto p-2 items-center gap-2 border border-surface-soft rounded-xl"
         id="main-box"
         tabIndex={-1}
       >
@@ -66,7 +66,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
                   {el.expenseName}
                 </div>
                 <div
-                  className="w-[20px] h-[20px] bg-slate-200 flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
+                  className="w-[20px] h-[20px] bg-surface-soft flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedType(el);
@@ -85,22 +85,19 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
       <div className="w-10/12 flex gap-2">
         <input
           type="text"
-          className="w-10/12 border-1 pl-2"
+          className="input-field w-10/12"
           value={newType}
           tabIndex={-1}
           autoFocus={false}
           onChange={(e) => setNewType(e.target.value)}
         />
-        <button
-          className="w-2/6 font-bold bg-orange-700 px-2 text-sm text-white"
-          onClick={hdlAddNewType}
-        >
+        <button className="btn btn-primary w-2/6" onClick={hdlAddNewType}>
           Add
         </button>
       </div>
       {/* close button */}
       <button
-        className="w-[30px] h-[30px] font-bold rounded-full bg-slate-100 flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
+        className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
         onClick={(e) => {
           e.target.closest("dialog").close();
         }}

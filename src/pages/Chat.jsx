@@ -76,8 +76,8 @@ export default function Chat() {
 
   return (
     <div>
-      <div className="w-screen  bg-white overflow-y-auto flex flex-col items-center relative  mb-[120px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
+      <div className="w-screen bg-app overflow-y-auto flex flex-col items-center relative mb-[120px] mt-[60px]">
+        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
           <p
             className="text-2xl font-bold py-2"
             onClick={() => console.log(user)}
@@ -91,10 +91,10 @@ export default function Chat() {
             msgs.map((el, idx) => (
               <div
                 key={idx}
-                className={`py-3  w-fit px-4 rounded-xl ${
+                className={`py-3 w-fit px-4 rounded-xl ${
                   user.userId === el.userId
-                    ? "self-end bg-orange-200 text-right"
-                    : "bg-slate-200"
+                    ? "self-end bg-accent text-right"
+                    : "bg-surface-soft"
                 }`}
               >
                 {el.txt}
@@ -107,19 +107,16 @@ export default function Chat() {
           {/* <button onClick={() => console.log(msgs)}>msgs</button> */}
         </div>
         {/* input area */}
-        <div className="w-full h-[60px] bg-slate-200 p-2 flex gap-2 fixed bottom-[70px]">
+        <div className="w-full h-[60px] bg-surface-soft p-2 flex gap-2 fixed bottom-[70px] border-t border-surface">
           <input
             type="text"
-            className="bg-white pl-2 flex-1"
+            className="input-field flex-1"
             value={input.txt}
             onChange={(e) =>
               setInput((prev) => ({ ...prev, txt: e.target.value }))
             }
           />
-          <button
-            className="bg-orange-500 w-[100px] font-bold text-white cursor-pointer"
-            onClick={hdlSendMsg}
-          >
+          <button className="btn btn-accent w-[100px]" onClick={hdlSendMsg}>
             {t("send")}
           </button>
         </div>

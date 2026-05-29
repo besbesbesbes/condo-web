@@ -57,8 +57,8 @@ function Report() {
 
   return (
     <div>
-      <div className="w-screen bg-white overflow-y-auto flex flex-col gap-2 items-center relative  mb-[75px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
+      <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
+        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
           <p className="text-2xl font-bold py-2">{t("report")}</p>
         </div>
         {/* User select */}
@@ -67,7 +67,7 @@ function Report() {
             {t("userName")} :
           </p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="input-field w-[150px]"
             type="text"
             value={input.userName}
             name="user"
@@ -83,7 +83,7 @@ function Report() {
         <div className="w-10/12 flex justify-center gap-1">
           <p className="w-[80px] text-right pr-2 font-bold">{t("month")} :</p>
           <select
-            className="border-b bg-amber-100 text-center w-[75px]"
+            className="input-field text-center w-[75px]"
             name="month"
             value={input.month}
             onChange={hdlInput}
@@ -108,7 +108,7 @@ function Report() {
             ))}
           </select>
           <select
-            className="border-b bg-amber-100 text-center w-[75px]"
+            className="input-field text-center w-[75px]"
             name="year"
             value={input.year}
             onChange={hdlInput}
@@ -122,7 +122,7 @@ function Report() {
         </div>
         {/* report list */}
         <div className="w-full flex items-center flex-col gap-2 mt-5">
-          <div className="w-10/12 font-bold text-center bg-orange-50">
+          <div className="w-10/12 font-bold text-center bg-surface-soft text-primary">
             {body?.userName}
           </div>
           {/* header */}
@@ -160,7 +160,7 @@ function Report() {
           <div className="w-10/12 grid grid-cols-3 font-bold">
             <div></div>
             <NumericFormat
-              className="text-right  border-b border-black"
+              className="text-right border-b border-surface"
               value={resultSum?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -168,7 +168,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b border-black"
+              className="text-right border-b border-surface"
               value={resultSum?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","
@@ -185,7 +185,7 @@ function Report() {
               <p className="text-right pr-1">(Minus) Other</p>
             </div>
             <NumericFormat
-              className="text-right border-b border-black"
+              className="text-right border-b border-surface"
               value={resultSumOther?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -193,7 +193,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b border-black"
+              className="text-right border-b border-surface"
               value={resultSumOther?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","
@@ -204,7 +204,7 @@ function Report() {
           <div className="w-10/12 grid grid-cols-3 font-bold">
             <div></div>
             <NumericFormat
-              className="text-right border-b-4 border-double border-black"
+              className="text-right border-b-4 border-double border-surface"
               value={resultSum?.sumTotalAmt - resultSumOther?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -212,7 +212,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b-4 border-double border-black"
+              className="text-right border-b-4 border-double border-surface"
               value={resultSum?.sumOtherAmt - resultSumOther?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","

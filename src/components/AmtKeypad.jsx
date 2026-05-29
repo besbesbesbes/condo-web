@@ -51,25 +51,27 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
-      <div className="w-5/6 max-w-md rounded-t-3xl bg-white p-4 shadow-2xl rounded-3xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4 py-6">
+      <div className="w-5/6 max-w-md rounded-t-3xl bg-surface p-4 shadow-2xl rounded-3xl border border-surface-soft">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <p className="text-sm text-slate-500">{translate("expression")}</p>
+            <p className="text-sm text-surface-muted">
+              {translate("expression")}
+            </p>
             <p className="min-h-[28px] text-lg font-semibold break-words">
               {expression || "0"}
             </p>
           </div>
           <button
-            className="rounded-full bg-slate-200 px-3 py-2 text-sm"
+            className="btn-secondary rounded-full px-3 py-2 text-sm"
             onClick={onClose}
             type="button"
           >
             {translate("close")}
           </button>
         </div>
-        <div className="mb-4 rounded-xl bg-slate-100 p-3 text-right">
-          <p className="text-xs text-slate-500">{translate("result")}</p>
+        <div className="mb-4 rounded-xl bg-surface-soft p-3 text-right">
+          <p className="text-xs text-surface-muted">{translate("result")}</p>
           <p className="text-2xl font-bold">{result !== "" ? result : "0"}</p>
         </div>
         <div className="grid grid-cols-4 gap-2 text-lg">
@@ -96,7 +98,7 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
             return (
               <button
                 key={key}
-                className="rounded-2xl bg-slate-200 py-4 font-semibold hover:bg-slate-300"
+                className="rounded-2xl bg-surface-soft py-4 font-semibold hover:bg-surface"
                 onClick={() => appendKey(key)}
                 type="button"
               >
@@ -107,14 +109,14 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
         </div>
         <div className="mt-4 flex gap-2">
           <button
-            className="flex-1 rounded-2xl bg-slate-200 py-3 font-semibold hover:bg-slate-300"
+            className="flex-1 btn-secondary py-3 font-semibold"
             type="button"
             onClick={clearAll}
           >
             {translate("clearAll")}
           </button>
           <button
-            className="flex-1 rounded-2xl bg-orange-600 py-3 font-semibold text-white hover:bg-orange-700"
+            className="flex-1 btn btn-accent py-3"
             type="button"
             onClick={confirm}
           >

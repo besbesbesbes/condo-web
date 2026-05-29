@@ -80,25 +80,25 @@ function Trans() {
         />
       ) : (
         <>
-          <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
-            <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
+          <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
+            <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
               <p className="text-2xl font-bold py-2">{t("transactions")}</p>
             </div>
             {/* search */}
             <div className="w-11/12  flex items-center gap-2">
-              <div className="flex w-full py-1 gap-1 border px-1 rounded-xl">
+              <div className="flex w-full py-1 gap-1 border px-1 rounded-xl bg-surface">
                 <input
-                  className="bg-white w-full outline-none focus:outline-none focus:ring-0"
+                  className="input-field w-full"
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                 />
-                <div className="px-2 text-black flex justify-center items-center">
+                <div className="px-2 text-primary flex justify-center items-center">
                   <SearchIcon className="w-[15px]" />
                 </div>
               </div>
               <select
-                className=" bg-amber-100 text-center w-[100px] py-1 rounded-xl"
+                className="input-field text-center w-[100px]"
                 name="year"
                 value={yearInput}
                 onChange={(e) => setYearInput(e.target.value)}
@@ -110,7 +110,7 @@ function Trans() {
                 ))}
               </select>
               <button
-                className="bg-orange-700 text-center w-[100px] py-1 text-white cursor-pointer rounded-xl font-bold"
+                className="btn btn-accent"
                 onClick={() => window.location.reload()}
               >
                 {t("refresh")}
@@ -145,8 +145,8 @@ function Trans() {
                       </div>
                     )}
                     <div
-                      className={`flex w-11/12 items-center gap-2 cursor-pointer bg-orange-50  rounded-xl shadow ${
-                        el.userId === user.userId ? "bg-slate-50" : null
+                      className={`flex w-11/12 items-center gap-2 cursor-pointer bg-surface-soft rounded-xl shadow ${
+                        el.userId === user.userId ? "bg-surface" : ""
                       }`}
                       onClick={(e) => hdlSelectedTran(e, el)}
                     >
@@ -164,7 +164,7 @@ function Trans() {
                       </div>
                       <div className="w-[50px] flex flex-col">
                         {/* date */}
-                        <div className=" text-center text-xs border-b border-slate-400">
+                        <div className=" text-center text-xs border-b border-main">
                           {new Date(el.recordDate).getDate()}
                         </div>
 
@@ -203,7 +203,7 @@ function Trans() {
                             {el.remark ? (
                               <div className="">
                                 |{" "}
-                                <span className="text-orange-700">
+                                <span className="text-primary">
                                   {el.remark}
                                 </span>
                                 {el.isHavePhoto && <span>📷</span>}

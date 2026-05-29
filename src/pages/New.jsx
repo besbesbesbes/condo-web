@@ -213,8 +213,8 @@ function New() {
 
   return (
     <div>
-      <div className="w-screen  bg-white overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-slate-100 shadow">
+      <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
+        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
           <p className="text-2xl font-bold py-2">{t("newTransaction")}</p>
         </div>
         {/* record date */}
@@ -223,7 +223,7 @@ function New() {
             {t("recordDate")} :
           </p>
           <input
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             type="date"
             value={input.recordDate}
             name="recordDate"
@@ -236,7 +236,7 @@ function New() {
             {t("recordTime")} :
           </p>
           <input
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             type="time"
             value={input.recordTime}
             name="recordTime"
@@ -248,7 +248,7 @@ function New() {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
           <input
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             type="text"
             value={input.paidBy}
             name="paidBy"
@@ -264,7 +264,7 @@ function New() {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
           <input
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             type="text"
             value={input.type}
             name="type"
@@ -282,7 +282,7 @@ function New() {
             {t("totalAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             value={input.totalAmt === "" ? "" : input.totalAmt}
             name="totalAmt"
             thousandSeparator
@@ -308,7 +308,7 @@ function New() {
             {t("payerPortion")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             value={input.myPortion === "" ? 0 : input.myPortion * 100}
             name="myPortion"
             suffix="%"
@@ -331,7 +331,7 @@ function New() {
             {t("payerAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center bg-slate-200 rounded-xl px-2"
+            className="input-field w-[150px]"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -348,7 +348,7 @@ function New() {
             {t("otherAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center bg-slate-200 rounded-xl px-2"
+            className="input-field w-[150px]"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -365,7 +365,7 @@ function New() {
             {t("Installment Plan")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
+            className="input-field w-[150px]"
             value={input.instPlan === "" ? "" : input.instPlan}
             name="instPlan"
             thousandSeparator
@@ -384,10 +384,7 @@ function New() {
         {typeof input.instPlan === "number" && input.instPlan > 0 && (
           <div className="w-10/12 flex justify-center gap-2">
             <p className="w-[150px] text-right pr-2 font-bold"></p>
-            <div
-              className="bg-orange-500 px-2 text-white font-bold hover:cursor-pointer rounded-xl"
-              onClick={hdlGenInstPlan}
-            >
+            <div className="btn btn-accent" onClick={hdlGenInstPlan}>
               Generate
             </div>
           </div>
@@ -398,7 +395,7 @@ function New() {
             <p>{idx + 1}</p>
             {/* Date input */}
             <input
-              className="w-[150px] text-center border-b bg-amber-100"
+              className="w-[150px] text-center border-b border-surface"
               type="date"
               value={el.date}
               onChange={(e) => {
@@ -429,7 +426,7 @@ function New() {
             />
             {/* Amount input */}
             <NumericFormat
-              className="w-[150px] text-center border-b bg-slate-200"
+              className="w-[150px] text-center border-b border-surface"
               value={el.amt === "" ? "" : el.amt}
               thousandSeparator
               decimalScale={2}
@@ -453,7 +450,7 @@ function New() {
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="w-10/12 text-left pl-2 h-[35px] bg-amber-100 rounded-xl px-2"
+          className="input-field w-10/12 h-[35px]"
           type="text"
           value={input.remark}
           name="remark"
@@ -476,7 +473,7 @@ function New() {
           {/* add photo */}
 
           <div
-            className="w-[80px] h-[80px] border flex-shrink-0 box-border bg-amber-100 flex justify-center items-center cursor-pointer"
+            className="w-[80px] h-[80px] border border-surface rounded-2xl flex-shrink-0 box-border bg-surface-soft flex justify-center items-center cursor-pointer"
             onClick={() => document.getElementById("input-file").click()}
           >
             <AddPhoto className="w-[40px]" />
@@ -494,7 +491,7 @@ function New() {
               />
               {/* remove image */}
               <div
-                className="w-[20px] h-[20px] bg-amber-100 flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
+                className="w-[20px] h-[20px] bg-error-soft flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
                 onClick={removeImage(idx)}
               >
                 X
@@ -502,7 +499,7 @@ function New() {
             </div>
           ))}
           {/* <button
-            className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center bg-red-100 text-sm cursor-pointer"
+            className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center bg-error-soft text-sm cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               files.forEach((el) => {
@@ -516,30 +513,27 @@ function New() {
 
         {/* button add */}
         {errMsg === "invalid_grant" && (
-          <p className="text-red-500 text-center mt-2 mb-[60px]">
+          <p className="text-error text-center mt-2 mb-[60px]">
             Transaction added successfully but <br />
             Email can't send, will go to TRANS in 3 sec.
           </p>
         )}
 
         {errMsg === "Request failed with status code 401" && (
-          <p className="text-red-500 text-center mt-2 mb-[60px]">
+          <p className="text-error text-center mt-2 mb-[60px]">
             Transaction added successfully but <br />
             Request failed with status code 401 <br />
             Email can't send, will go to TRANS in 3 sec.
           </p>
         )}
         {!errMsg && (
-          <button
-            className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px] rounded-xl"
-            onClick={hdlAddTran}
-          >
+          <button className="btn btn-primary mb-[50px]" onClick={hdlAddTran}>
             {t("add")}
           </button>
         )}
 
         {/* <button
-          className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+          className="btn btn-primary"
           onClick={() => {
             console.log(input);
             console.log(user);
