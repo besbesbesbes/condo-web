@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { addTranMail } from "../apis/mail-api";
 import { useTranslation } from "react-i18next";
 import { AddPhoto } from "../icons/menuIcon";
+import AmtKeypad from "../components/AmtKeypad";
 
 function New() {
   const { t } = useTranslation();
@@ -38,53 +39,14 @@ function New() {
     inst: [],
   });
   const [showAmtKeypad, setShowAmtKeypad] = useState(false);
-  const [amtExpression, setAmtExpression] = useState("");
-  const [amtResult, setAmtResult] = useState("");
-
-  const evaluateAmtExpression = (expression) => {
-    const cleaned = expression.replace(/\s+/g, "");
-    if (cleaned === "") return "";
-    if (/[^0-9.+\-*/()%]/.test(cleaned)) return "";
-    const trimmed = cleaned.replace(/[+\-*/%]+$/, "");
-    if (trimmed === "") return "";
-    try {
-      const value = new Function(`return ${trimmed}`)();
-      if (typeof value !== "number" || !Number.isFinite(value)) return "";
-      return `${Math.round(value * 100) / 100}`;
-    } catch {
-      return "";
-    }
-  };
 
   const openAmtKeypad = () => {
-    setAmtExpression(input.totalAmt !== "" ? `${input.totalAmt}` : "");
-    setAmtResult(input.totalAmt !== "" ? `${input.totalAmt}` : "");
     setShowAmtKeypad(true);
   };
 
   const closeAmtKeypad = () => {
     setShowAmtKeypad(false);
   };
-
-  const clearAmtKeypad = () => {
-    setAmtExpression("");
-    setAmtResult("0");
-  };
-
-  const appendAmtKeypad = (value) => {
-    setAmtExpression((prev) => {
-      const next = `${prev || ""}${value}`;
-      setAmtResult(evaluateAmtExpression(next));
-      return next;
-    });
-  };
-
-  const confirmAmtKeypad = () => {
-    const resultValue = amtResult === "" ? "0" : amtResult;
-    setInput((prev) => ({ ...prev, totalAmt: Number(resultValue) }));
-    closeAmtKeypad();
-  };
-
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
   };
@@ -261,7 +223,7 @@ function New() {
             {t("recordDate")} :
           </p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             type="date"
             value={input.recordDate}
             name="recordDate"
@@ -274,7 +236,7 @@ function New() {
             {t("recordTime")} :
           </p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             type="time"
             value={input.recordTime}
             name="recordTime"
@@ -286,7 +248,7 @@ function New() {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             type="text"
             value={input.paidBy}
             name="paidBy"
@@ -302,7 +264,7 @@ function New() {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             type="text"
             value={input.type}
             name="type"
@@ -320,7 +282,7 @@ function New() {
             {t("totalAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             value={input.totalAmt === "" ? "" : input.totalAmt}
             name="totalAmt"
             thousandSeparator
@@ -346,7 +308,7 @@ function New() {
             {t("payerPortion")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             value={input.myPortion === "" ? 0 : input.myPortion * 100}
             name="myPortion"
             suffix="%"
@@ -369,7 +331,7 @@ function New() {
             {t("payerAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-slate-200"
+            className="w-[150px] text-center bg-slate-200 rounded-xl px-2"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -386,7 +348,7 @@ function New() {
             {t("otherAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-slate-200"
+            className="w-[150px] text-center bg-slate-200 rounded-xl px-2"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -403,7 +365,7 @@ function New() {
             {t("Installment Plan")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             value={input.instPlan === "" ? "" : input.instPlan}
             name="instPlan"
             thousandSeparator
@@ -423,7 +385,7 @@ function New() {
           <div className="w-10/12 flex justify-center gap-2">
             <p className="w-[150px] text-right pr-2 font-bold"></p>
             <div
-              className="bg-orange-500 px-2 text-white font-bold hover:cursor-pointer"
+              className="bg-orange-500 px-2 text-white font-bold hover:cursor-pointer rounded-xl"
               onClick={hdlGenInstPlan}
             >
               Generate
@@ -486,12 +448,12 @@ function New() {
 
         {/* <div onClick={() => console.log(input)}>input</div> */}
         {/* remark */}
-        <div className=" w-10/12 flex justify-center gap-2">
+        <div className=" w-10/12 flex justify-center gap-2 ">
           <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="w-10/12 text-left pl-2 border-b bg-amber-100"
+          className="w-10/12 text-left pl-2 h-[35px] bg-amber-100 rounded-xl px-2"
           type="text"
           value={input.remark}
           name="remark"
@@ -569,7 +531,7 @@ function New() {
         )}
         {!errMsg && (
           <button
-            className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px]"
+            className="w-[150px] border-1 bg-orange-700 text-white cursor-pointer py-1 mb-[50px] rounded-xl"
             onClick={hdlAddTran}
           >
             {t("add")}
@@ -587,81 +549,16 @@ function New() {
         </button> */}
       </div>
 
-      {showAmtKeypad && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 ">
-          <div className="w-5/6 max-w-md rounded-t-3xl bg-white p-4 shadow-2xl rounded-3xl">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-500">{t("expression")}</p>
-                <p className="min-h-[28px] text-lg font-semibold break-words">
-                  {amtExpression || "0"}
-                </p>
-              </div>
-              <button
-                className="rounded-full bg-slate-200 px-3 py-2 text-sm"
-                onClick={closeAmtKeypad}
-              >
-                {t("close")}
-              </button>
-            </div>
-            <div className="mb-4 rounded-xl bg-slate-100 p-3 text-right">
-              <p className="text-xs text-slate-500">{t("result")}</p>
-              <p className="text-2xl font-bold">
-                {amtResult !== "" ? amtResult : "0"}
-              </p>
-            </div>
-            <div className="grid grid-cols-4 gap-2 text-lg">
-              {[
-                "7",
-                "8",
-                "9",
-                "/",
-                "4",
-                "5",
-                "6",
-                "*",
-                "1",
-                "2",
-                "3",
-                "-",
-                "0",
-                "00",
-                ".",
-                "+",
-              ].map((key) => {
-                const displayMap = { "*": "×", "/": "÷" };
-                const display = displayMap[key] || key;
-                return (
-                  <button
-                    key={key}
-                    className="rounded-2xl bg-slate-200 py-4 font-semibold hover:bg-slate-300"
-                    onClick={() => appendAmtKeypad(key)}
-                    type="button"
-                  >
-                    {display}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mt-4 flex gap-2">
-              <button
-                className="flex-1 rounded-2xl bg-slate-200 py-3 font-semibold hover:bg-slate-300"
-                type="button"
-                onClick={clearAmtKeypad}
-              >
-                {t("clearAll")}
-              </button>
-              <button
-                className="flex-1 rounded-2xl bg-orange-600 py-3 font-semibold text-white hover:bg-orange-700"
-                type="button"
-                onClick={confirmAmtKeypad}
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AmtKeypad
+        show={showAmtKeypad}
+        initialValue={input.totalAmt}
+        onClose={closeAmtKeypad}
+        onConfirm={(resultValue) => {
+          setInput((prev) => ({ ...prev, totalAmt: Number(resultValue) }));
+          closeAmtKeypad();
+        }}
+        t={t}
+      />
 
       <Footer />
       {/* modal paid by */}

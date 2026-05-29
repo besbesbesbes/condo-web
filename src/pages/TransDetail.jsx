@@ -10,6 +10,7 @@ import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
 import { useTranslation } from "react-i18next";
 import ModalPhoto from "../components/ModalPhoto";
+import AmtKeypad from "../components/AmtKeypad";
 import { AddPhoto } from "../icons/menuIcon";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
@@ -20,6 +21,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const [types, setTypes] = useState({});
   const [selPhotoUrl, setSelPhotoUrl] = useState("");
   const [files, setFiles] = useState([]);
+  const [showAmtKeypad, setShowAmtKeypad] = useState(false);
   const [input, setInput] = useState({
     tranId: "",
     recordDate: "",
@@ -34,6 +36,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
     otherAmt: 0,
     remark: "",
   });
+
+  const openAmtKeypad = () => setShowAmtKeypad(true);
+  const closeAmtKeypad = () => setShowAmtKeypad(false);
 
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
@@ -94,7 +99,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const hdlFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const imageFiles = selectedFiles.filter((file) =>
-      file.type.startsWith("image/")
+      file.type.startsWith("image/"),
     );
     setFiles((prev) => [...prev, ...imageFiles]);
   };
@@ -153,7 +158,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("recordDate")} :
           </p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center bg-amber-100 rounded-xl px-2"
             type="date"
             value={input.recordDate}
             name="recordDate"
@@ -166,7 +171,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("recordTime")} :
           </p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             type="time"
             value={input.recordTime}
             name="recordTime"
@@ -178,7 +183,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             type="text"
             value={input.paidBy}
             name="paidBy"
@@ -194,7 +199,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         <div className=" w-10/12 flex justify-center gap-2">
           <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
           <input
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             type="text"
             value={input.type}
             name="type"
@@ -212,20 +217,24 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("totalAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             value={input.totalAmt === "" ? "" : input.totalAmt}
             name="totalAmt"
             thousandSeparator
             decimalScale={2}
             fixedDecimalScale
             allowNegative={false}
-            inputMode="decimal"
-            onValueChange={(values) => {
-              setInput((prev) => ({
-                ...prev,
-                totalAmt: values.floatValue ?? "", // fallback to "" when cleared
-              }));
+            inputMode="none"
+            readOnly
+            onClick={(e) => {
+              e.preventDefault();
+              openAmtKeypad();
             }}
+            onFocus={(e) => {
+              e.preventDefault();
+              openAmtKeypad();
+            }}
+            autoComplete="off"
           />
         </div>
         {/* My Portion */}
@@ -234,7 +243,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("payerPortion")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-amber-100"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             value={input.myPortion === "" ? "" : input.myPortion * 100}
             name="myPortion"
             suffix="%"
@@ -257,7 +266,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("payerPortion")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-slate-200"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -274,7 +283,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("otherAmount")} :
           </p>
           <NumericFormat
-            className="w-[150px] text-center border-b bg-slate-200"
+            className="w-[150px] text-center  bg-amber-100  rounded-xl px-2"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -291,7 +300,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="w-10/12 text-left pl-2 border-b bg-amber-100"
+          className="w-10/12 text-left pl-2 h-[35px] bg-amber-100  rounded-xl px-2"
           type="text"
           value={input.remark}
           name="remark"
@@ -300,18 +309,18 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {/* photo */}
         {selectedTran?.isHavePhoto && (
           <>
-            <div className=" w-10/12 flex justify-center gap-2">
+            <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
               <p className="w-[150px]  text-left pr-2 font-bold">
                 {t("photo")} :
               </p>
               <p className="w-[150px] text-center"></p>
             </div>
-            <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+            <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
               {/* list of files */}
               {selectedTran.photos?.map((el, idx) => (
                 <div
                   key={idx}
-                  className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center relative cursor-pointer"
+                  className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center relative cursor-pointer rounded-xl"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelPhotoUrl(el.photoUrl);
@@ -332,22 +341,22 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         <input
           type="file"
           id="input-file"
-          className="opacity-0 absolute w-0"
+          className="opacity-0 absolute w-0 rounded-xl"
           multiple
           accept="image/*"
           onChange={hdlFileChange}
         />
-        <div className=" w-10/12 flex justify-center gap-2">
+        <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
           <p className="w-[150px]  text-left pr-2 font-bold">
             {t("addPhoto")} :
           </p>
           <p className="w-[150px] text-center"></p>
         </div>
-        <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+        <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
           {/* add photo */}
 
           <div
-            className="w-[80px] h-[80px] border flex-shrink-0 box-border bg-amber-100 flex justify-center items-center cursor-pointer"
+            className="w-[80px] h-[80px] border flex-shrink-0 box-border bg-amber-100 flex justify-center rounded-xl items-center cursor-pointer"
             onClick={() => document.getElementById("input-file").click()}
           >
             <AddPhoto className="w-[40px]" />
@@ -376,13 +385,13 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {/* button */}
         <div className="flex gap-4">
           <button
-            className="w-[100px] border-1 bg-orange-500 text-white cursor-pointer py-1 "
+            className="w-[100px] border-1 bg-orange-500 text-white cursor-pointer py-1 rounded-xl"
             onClick={hdlEditTran}
           >
             {t("save")}
           </button>
           <button
-            className="w-[100px] border-1 bg-orange-700 text-white cursor-pointer py-1 "
+            className="w-[100px] border-1 bg-orange-700 text-white cursor-pointer py-1 rounded-xl"
             onClick={(e) => {
               e.stopPropagation();
               document.getElementById("confirm-delete-modal").showModal();
@@ -393,12 +402,22 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* <button onClick={() => console.log(input)}>Input</button> */}
         <button
-          className="w-[150px] border-1 bg-slate-500 text-white cursor-pointer py-1 mt-auto mb-10"
+          className="w-[150px] border-1 bg-slate-500 text-white cursor-pointer py-1 mt-auto mb-10 rounded-xl"
           onClick={() => setSelectedTran(null)}
         >
           {t("back")}
         </button>
       </div>
+      <AmtKeypad
+        show={showAmtKeypad}
+        initialValue={input.totalAmt}
+        onClose={closeAmtKeypad}
+        onConfirm={(resultValue) => {
+          setInput((prev) => ({ ...prev, totalAmt: Number(resultValue) }));
+          closeAmtKeypad();
+        }}
+        t={t}
+      />
       <Footer />
       {/* modal confirm delete */}
       <dialog id="confirm-delete-modal" className="modal">

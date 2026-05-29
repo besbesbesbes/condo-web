@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import useMainStore from "../stores/main-store";
 import useUserStore from "../stores/user-store";
@@ -25,7 +25,7 @@ function Trans() {
   const setToken = useUserStore((state) => state.setToken);
   const navigate = useNavigate();
 
-  const getTrans = async () => {
+  const getTrans = useCallback(async () => {
     setIsLoad(true);
     try {
       const result = await getTransApi(token, { yearInput });
@@ -41,7 +41,7 @@ function Trans() {
     } finally {
       setIsLoad(false);
     }
-  };
+  }, [token, yearInput, setIsLoad, setUser, setToken, navigate]);
 
   const hdlSelectedTran = (e, el) => {
     setSelectedTran(el);
@@ -68,7 +68,7 @@ function Trans() {
     setCurMenu("TRANS");
     getTrans();
     setSelectedTran(null);
-  }, [yearInput]);
+  }, [yearInput, getTrans, setCurMenu]);
 
   return (
     <div>
@@ -86,9 +86,9 @@ function Trans() {
             </div>
             {/* search */}
             <div className="w-11/12  flex items-center gap-2">
-              <div className="flex w-full py-1 gap-1 border px-1">
+              <div className="flex w-full py-1 gap-1 border px-1 rounded-xl">
                 <input
-                  className="bg-white w-full"
+                  className="bg-white w-full outline-none focus:outline-none focus:ring-0"
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
@@ -98,7 +98,7 @@ function Trans() {
                 </div>
               </div>
               <select
-                className="border-b bg-amber-100 text-center w-[100px] py-1"
+                className=" bg-amber-100 text-center w-[100px] py-1 rounded-xl"
                 name="year"
                 value={yearInput}
                 onChange={(e) => setYearInput(e.target.value)}
@@ -110,7 +110,7 @@ function Trans() {
                 ))}
               </select>
               <button
-                className="bg-orange-700 text-center w-[100px] py-1 text-white cursor-pointer"
+                className="bg-orange-700 text-center w-[100px] py-1 text-white cursor-pointer rounded-xl font-bold"
                 onClick={() => window.location.reload()}
               >
                 {t("refresh")}
@@ -131,7 +131,7 @@ function Trans() {
                         {
                           year: "numeric",
                           month: "long",
-                        }
+                        },
                       )
                     : null;
                 const showDateHeader = curDate !== prevDate;
@@ -145,7 +145,7 @@ function Trans() {
                       </div>
                     )}
                     <div
-                      className={`flex w-11/12 items-center gap-1 cursor-pointer bg-orange-50 shadow ${
+                      className={`flex w-11/12 items-center gap-2 cursor-pointer bg-orange-50  rounded-xl shadow ${
                         el.userId === user.userId ? "bg-slate-50" : null
                       }`}
                       onClick={(e) => hdlSelectedTran(e, el)}
