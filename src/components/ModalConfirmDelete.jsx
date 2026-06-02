@@ -23,7 +23,7 @@ function ModalConfirmDelete({ selectedTran, setSelectedTran, getTrans }) {
   };
 
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center">
+    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
       <p className="font-bold" id="text-edit-type" tabIndex={-1}>
         Confirm Delete
       </p>

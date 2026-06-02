@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Footer from "../components/Footer";
+import ThemeToggle from "../components/ThemeToggle";
 import useMainStore from "../stores/main-store";
 import useUserStore from "../stores/user-store";
 import { useNavigate } from "react-router-dom";
@@ -165,6 +166,7 @@ function Setting() {
               {userInfo.userName}
             </p>
           </div>
+          <ThemeToggle />
           <button
             className="btn btn-primary w-[150px]"
             onClick={(e) => {

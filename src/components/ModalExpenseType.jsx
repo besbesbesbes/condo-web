@@ -36,7 +36,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   }, []);
 
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg">
+    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text">
       <p className="font-bold">Select Type</p>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div
