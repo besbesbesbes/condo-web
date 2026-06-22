@@ -112,9 +112,9 @@ function Trans() {
                   <SearchIcon className="w-[15px]" />
                 </div>
               </div>
-              <div className="w-full flex justify-end items-center gap-1">
+              <div className="w-full flex justify-end items-center gap-2">
                 <select
-                  className="input-field text-center w-[100px] h-[32px] convex bg-surface"
+                  className="input-field pl-4 w-[100px] h-[32px] convex bg-surface"
                   name="year"
                   value={yearInput}
                   onChange={(e) => setYearInput(e.target.value)}
@@ -126,7 +126,7 @@ function Trans() {
                   ))}
                 </select>
                 <button
-                  className="btn convex bg-surface"
+                  className="btn btn-primary text-text-reverse convex bg-surface"
                   onClick={() => window.location.reload()}
                 >
                   {t("refresh")}
