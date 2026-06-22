@@ -11,11 +11,18 @@ import ModalPaidBy from "../components/ModalPaidBy";
 import { useTranslation } from "react-i18next";
 import ModalPhoto from "../components/ModalPhoto";
 import AmtKeypad from "../components/AmtKeypad";
-import { AddPhoto } from "../icons/menuIcon";
+import {
+  AddPhoto,
+  AppIcon,
+  TransIcon,
+  TypeIcon,
+  UserIcon,
+} from "../icons/menuIcon";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const { t } = useTranslation();
   const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [users, setUsers] = useState({});
   const [types, setTypes] = useState({});
@@ -148,17 +155,28 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   return (
     <>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative pb-[75px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <p className="text-2xl font-bold py-2">{t("transactionDetail")}</p>
+        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-0 z-50 bg-surface shadow">
+          <div className="flex items-center">
+            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
+              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div>
+            <TransIcon className="w-[30px] h-[20px]" />
+            <p className="text-xl py-2">{t("transactionDetail")}</p>
+          </div>
+          <div
+            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+          >
+            <p className="text-text-reverse">
+              {user.userName?.[0]?.toUpperCase()}
+            </p>
+          </div>
         </div>
 
         {/* record date */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("recordDate")} :
-          </p>
+        <div className=" w-10/12 flex justify-center gap-2 mt-4 items-center">
+          <p className="w-[150px]  text-right pr-2">{t("recordDate")} :</p>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             type="date"
             value={input.recordDate}
             name="recordDate"
@@ -166,12 +184,10 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           />
         </div>
         {/* record time */}
-        <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">
-            {t("recordTime")} :
-          </p>
+        <div className="w-10/12 flex justify-center gap-2 itmes-center">
+          <p className="w-[150px] text-right pr-2">{t("recordTime")} :</p>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             type="time"
             value={input.recordTime}
             name="recordTime"
@@ -180,10 +196,13 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
 
         {/* paid by */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
+        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
+          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+            <UserIcon className="w-[20px] h-[20px]" />
+            <p>{t("payer")} :</p>
+          </div>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             type="text"
             value={input.paidBy}
             name="paidBy"
@@ -196,10 +215,13 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           />
         </div>
         {/* type */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
+        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
+          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+            <TypeIcon className="w-[20px] h-[20px]" />
+            <p>{t("type")} :</p>
+          </div>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4 -translate-y-1"
             type="text"
             value={input.type}
             name="type"
@@ -212,12 +234,10 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           />
         </div>
         {/* amount */}
-        <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">
-            {t("totalAmount")} :
-          </p>
+        <div className="w-10/12 flex justify-center gap-2 itmes-center">
+          <p className="w-[150px] text-right pr-2">{t("totalAmount")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             value={input.totalAmt === "" ? "" : input.totalAmt}
             name="totalAmt"
             thousandSeparator
@@ -238,12 +258,10 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           />
         </div>
         {/* My Portion */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("payerPortion")} :
-          </p>
+        <div className=" w-10/12 flex justify-center gap-2 items-center ">
+          <p className="w-[150px]  text-right pr-2">{t("payerPortion")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2 h-[30px] convex bg-surface pl-4"
             value={input.myPortion === "" ? "" : input.myPortion * 100}
             name="myPortion"
             suffix="%"
@@ -262,11 +280,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* My Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("payerPortion")} :
-          </p>
+          <p className="w-[150px]  text-right pr-2 ">{t("payerPortion")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -279,11 +295,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* Other Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("otherAmount")} :
-          </p>
+          <p className="w-[150px]  text-right pr-2">{t("otherAmount")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -296,11 +310,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
+          <p className="w-[150px]  text-left pr-2">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="input-field w-10/12 h-[35px]"
+          className="input-field w-10/12 h-[35px] concave pl-4 bg-surface"
           type="text"
           value={input.remark}
           name="remark"
@@ -310,9 +324,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {selectedTran?.isHavePhoto && (
           <>
             <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
-              <p className="w-[150px]  text-left pr-2 font-bold">
-                {t("photo")} :
-              </p>
+              <p className="w-[150px]  text-left pr-2">{t("photo")} :</p>
               <p className="w-[150px] text-center"></p>
             </div>
             <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
@@ -320,7 +332,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               {selectedTran.photos?.map((el, idx) => (
                 <div
                   key={idx}
-                  className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center relative cursor-pointer rounded-xl"
+                  className="w-[80px] h-[80px]  flex-shrink-0 concave flex justify-center items-center relative cursor-pointer rounded-xl overflow-hidden"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelPhotoUrl(el.photoUrl);
@@ -341,22 +353,20 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         <input
           type="file"
           id="input-file"
-          className="opacity-0 absolute w-0 rounded-xl"
+          className="opacity-0 absolute w-0 rounded-xl convex"
           multiple
           accept="image/*"
           onChange={hdlFileChange}
         />
         <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
-          <p className="w-[150px]  text-left pr-2 font-bold">
-            {t("addPhoto")} :
-          </p>
+          <p className="w-[150px]  text-left pr-2">{t("addPhoto")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
           {/* add photo */}
 
           <div
-            className="w-[80px] h-[80px] border border-surface rounded-xl flex-shrink-0 box-border bg-surface-soft flex justify-center items-center cursor-pointer"
+            className="w-[80px] h-[80px] rounded-xl flex-shrink-0 box-border flex justify-center items-center cursor-pointer convex bg-surface"
             onClick={() => document.getElementById("input-file").click()}
           >
             <AddPhoto className="w-[40px]" />
@@ -384,11 +394,20 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         </div>
         {/* button */}
         <div className="flex gap-4">
-          <button className="btn btn-primary w-[100px]" onClick={hdlEditTran}>
+          <button
+            className="btn w-[100px] h-[30px] mt-auto mb-10 convex font-bold bg-surface"
+            onClick={() => setSelectedTran(null)}
+          >
+            {t("back")}
+          </button>
+          <button
+            className="btn btn-primary w-[100px]  text-text-reverse"
+            onClick={hdlEditTran}
+          >
             {t("save")}
           </button>
           <button
-            className="btn btn-accent w-[100px]"
+            className="btn btn-accent w-[100px]   text-text-reverse"
             onClick={(e) => {
               e.stopPropagation();
               document.getElementById("confirm-delete-modal").showModal();
@@ -397,13 +416,6 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {t("delete")}
           </button>
         </div>
-        {/* <button onClick={() => console.log(input)}>Input</button> */}
-        <button
-          className="btn-secondary w-[150px] mt-auto mb-10"
-          onClick={() => setSelectedTran(null)}
-        >
-          {t("back")}
-        </button>
       </div>
       <AmtKeypad
         show={showAmtKeypad}

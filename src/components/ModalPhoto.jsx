@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BinIcon } from "../icons/menuIcon";
+import { BinIcon, CloseIcon } from "../icons/menuIcon";
 import { deletePhotoApi } from "../apis/trans-api";
 import useUserStore from "../stores/user-store";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ function ModalPhoto({
   };
 
   return (
-    <div className="w-[300px] max-h-[calc(100vh-150px)] bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg overflow-auto">
+    <div className="w-[300px] max-h-[calc(100vh-150px)] bg-surface shadow-xl rounded-xl concave fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg overflow-auto">
       {selPhotoUrl && (
         <img
           src={selPhotoUrl}
@@ -46,20 +46,21 @@ function ModalPhoto({
       )}
 
       {/* close button */}
+
       <button
-        className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
+        className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
         onClick={(e) => {
           setSelPhotoUrl("");
           setShowConfirmDelete(false);
           e.target.closest("dialog").close();
         }}
       >
-        X
+        <CloseIcon className="p-1" />
       </button>
       {/* delete button */}
       {showConfirmDelete ? (
         <button
-          className="btn btn-accent w-auto h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2 px-2"
+          className="btn btn-accent w-auto h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2 px-2 text-text-reverse"
           onClick={hdlDeltePhoto}
         >
           <BinIcon className="w-[20px] h-[20px]" />
@@ -67,12 +68,12 @@ function ModalPhoto({
         </button>
       ) : (
         <button
-          className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 left-0 translate-x-2 gap-2"
+          className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 left-0 translate-x-2 text-text-reverse bg-accent"
           onClick={() => {
             setShowConfirmDelete(true);
           }}
         >
-          <BinIcon className="w-[20px] h-[20px]" />
+          <BinIcon className="p-1" />
         </button>
       )}
     </div>

@@ -5,6 +5,7 @@ import { getChatInfoApi, addNewMsg } from "../apis/chat-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
+import { AppIcon, ChatIcon } from "../icons/menuIcon";
 
 export default function Chat() {
   const { t } = useTranslation();
@@ -77,24 +78,32 @@ export default function Chat() {
   return (
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col items-center relative mb-[120px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <p
-            className="text-2xl font-bold py-2"
-            onClick={() => console.log(user)}
+        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
+          <div className="flex items-center">
+            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
+              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div>
+            <ChatIcon className="w-[30px] h-[20px]" />
+            <p className="text-xl py-2">{t("chat")}</p>
+          </div>
+          <div
+            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
           >
-            {t("chat")}
-          </p>
+            <p className="text-text-reverse">
+              {user.userName?.[0]?.toUpperCase()}
+            </p>
+          </div>
         </div>
         {/* chat area */}
-        <div className="w-full flex-1 overflow-y-auto flex flex-col p-2 gap-2 ">
+        <div className="w-full px-4 flex-1 overflow-y-auto flex flex-col p-2 gap-2 ">
           {msgs ? (
             msgs.map((el, idx) => (
               <div
                 key={idx}
-                className={`py-3 w-fit px-4 rounded-xl ${
+                className={`py-3 w-fit px-4 concave text-text-reverse ${
                   user.userId === el.userId
-                    ? "self-end bg-accent text-right"
-                    : "bg-surface-soft"
+                    ? "self-end bg-primary text-right"
+                    : "bg-accent "
                 }`}
               >
                 {el.txt}
@@ -107,16 +116,19 @@ export default function Chat() {
           {/* <button onClick={() => console.log(msgs)}>msgs</button> */}
         </div>
         {/* input area */}
-        <div className="w-full h-[60px] bg-surface-soft p-2 flex gap-2 fixed bottom-[70px] border-t border-surface">
+        <div className="w-11/12 h-[60px] flex gap-2 fixed bottom-[55px]">
           <input
             type="text"
-            className="input-field flex-1"
+            className="input-field flex-1 concave bg-surface pl-4"
             value={input.txt}
             onChange={(e) =>
               setInput((prev) => ({ ...prev, txt: e.target.value }))
             }
           />
-          <button className="btn btn-accent w-[100px]" onClick={hdlSendMsg}>
+          <button
+            className="btn btn-primary text-text-reverse w-[100px]"
+            onClick={hdlSendMsg}
+          >
             {t("send")}
           </button>
         </div>

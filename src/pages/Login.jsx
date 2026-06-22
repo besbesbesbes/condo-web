@@ -4,6 +4,7 @@ import { login } from "../apis/auth-api";
 import { useNavigate } from "react-router-dom";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
+import { AppIcon } from "../icons/menuIcon";
 
 function Login() {
   const { t, i18n } = useTranslation();
@@ -56,39 +57,44 @@ function Login() {
   return (
     <div className="bg-app w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
-      <div className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 rounded-xl shadow-xl border border-surface-soft -translate-y-[50px]">
-        <p className="font-bold">{t("welcome")}</p>
-        <div className=" w-full flex justify-center">
+      <div className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 convex -translate-y-[50px]">
+        <div className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1">
+          <AppIcon className="p-4 text-text-reverse bg-primary" />
+        </div>
+        <div className=" w-full flex justify-center items-center">
           <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
           <input
-            className="input-field w-[120px]"
+            className="input-field w-[120px] h-[30px] concave pl-3 text-lg"
             type="text"
             name="inputUser"
             value={input.inputUser}
             onChange={hdlInput}
           />
         </div>
-        <div className=" w-full flex justify-center">
+        <div className=" w-full flex justify-center items-center">
           <p className="w-[100px] text-right pr-5">{t("password")} :</p>
           <input
-            className="input-field w-[120px]"
+            className="input-field w-[120px] h-[30px] concave pl-3  text-lg"
             type="password"
             name="inputPassword"
             value={input.inputPassword}
             onChange={hdlInput}
           />
         </div>
-        <hr className="w-10/12 mt-2 border-surface" />
-        <button className="btn btn-primary w-[130px]" onClick={hdlLogin}>
+        {/* <hr className="w-10/12 mt-2 border-surface" /> */}
+        <button
+          className="btn h-[30px] w-[130px] convex bg-primary font-bold"
+          onClick={hdlLogin}
+        >
           {t("login")}
         </button>
         {/* error message */}
         {isShowErrMsg && <p className="font-bold text-error">{errMsg}</p>}
         <div className="self-end flex gap-2">
-          <p>{t("language")}</p>
+          {/* <p>{t("language")}</p> */}
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
-            className="input-field"
+            className="input-field convex h-[30px] px-2"
             value={i18n.language}
           >
             <option value="en">English</option>

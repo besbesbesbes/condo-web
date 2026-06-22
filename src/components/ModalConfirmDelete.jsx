@@ -2,6 +2,7 @@ import React from "react";
 import { deleteTranApi } from "../apis/trans-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
+import { CloseIcon } from "../icons/menuIcon";
 
 function ModalConfirmDelete({ selectedTran, setSelectedTran, getTrans }) {
   const token = useUserStore((state) => state.token);
@@ -23,31 +24,34 @@ function ModalConfirmDelete({ selectedTran, setSelectedTran, getTrans }) {
   };
 
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
-      <p className="font-bold" id="text-edit-type" tabIndex={-1}>
+    <div className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
+      <p className="text-lg" id="text-edit-type" tabIndex={-1}>
         Confirm Delete
       </p>
-      <div className="flex gap-4">
+      <div className="flex gap-4 my-2 text-base">
         <button
-          className="btn-secondary w-[100px]"
+          className="btn btn-primary w-[100px] text-text-reverse"
           onClick={(e) => {
             e.target.closest("dialog").close();
           }}
         >
           Cancel
         </button>
-        <button className="btn btn-accent w-[100px]" onClick={hdlDeleteTran}>
+        <button
+          className="btn btn-accent w-[100px] text-text-reverse"
+          onClick={hdlDeleteTran}
+        >
           Delete
         </button>
       </div>
       {/* close button */}
       <button
-        className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
+        className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
         onClick={(e) => {
           e.target.closest("dialog").close();
         }}
       >
-        X
+        <CloseIcon className="p-1" />
       </button>
     </div>
   );

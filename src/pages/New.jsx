@@ -9,7 +9,13 @@ import ModalPaidBy from "../components/ModalPaidBy";
 import { useNavigate } from "react-router-dom";
 import { addTranMail } from "../apis/mail-api";
 import { useTranslation } from "react-i18next";
-import { AddPhoto } from "../icons/menuIcon";
+import {
+  AddPhoto,
+  AppIcon,
+  NewIcon,
+  TypeIcon,
+  UserIcon,
+} from "../icons/menuIcon";
 import AmtKeypad from "../components/AmtKeypad";
 
 function New() {
@@ -135,11 +141,12 @@ function New() {
     } catch (err) {
       const msg = err?.response?.data?.msg || err.message;
       console.log(msg);
-      setErrMsg(msg);
-      setTimeout(() => {
-        setErrMsg("");
-        navigate("/");
-      }, 5000);
+      // setErrMsg(msg);
+      // setTimeout(() => {
+      //   setErrMsg("");
+      //   navigate("/");
+      // }, 5000);
+      navigate("/");
     } finally {
       setIsLoad(false);
     }
@@ -213,17 +220,28 @@ function New() {
 
   return (
     <div>
-      <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <p className="text-2xl font-bold py-2">{t("newTransaction")}</p>
+      <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
+        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
+          <div className="flex items-center">
+            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
+              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div>
+            <NewIcon className="w-[30px] h-[20px]" />
+            <p className="text-xl py-2">{t("newTransaction")}</p>
+          </div>
+          <div
+            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+          >
+            <p className="text-text-reverse">
+              {user.userName?.[0]?.toUpperCase()}
+            </p>
+          </div>
         </div>
         {/* record date */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("recordDate")} :
-          </p>
+        <div className=" w-10/12 flex justify-center gap-2 mt-4 items-center">
+          <p className="w-[150px]  text-right pr-2">{t("recordDate")} :</p>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px]  convex px-2 h-[30px] bg-surface pl-4"
             type="date"
             value={input.recordDate}
             name="recordDate"
@@ -231,12 +249,10 @@ function New() {
           />
         </div>
         {/* record time */}
-        <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">
-            {t("recordTime")} :
-          </p>
+        <div className="w-10/12 flex justify-center gap-2 itmes-center">
+          <p className="w-[150px] text-right pr-2">{t("recordTime")} :</p>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             type="time"
             value={input.recordTime}
             name="recordTime"
@@ -245,11 +261,13 @@ function New() {
         </div>
 
         {/* paid by */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">{t("payer")} :</p>
+        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
+          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+            <UserIcon className="w-[20px] h-[20px]" />
+            <p>{t("payer")} :</p>
+          </div>
           <input
-            className="input-field w-[150px]"
-            type="text"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             value={input.paidBy}
             name="paidBy"
             onChange={hdlInput}
@@ -261,10 +279,13 @@ function New() {
           />
         </div>
         {/* type */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">{t("type")} :</p>
+        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
+          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+            <TypeIcon className="w-[20px] h-[20px]" />
+            <p>{t("type")} :</p>
+          </div>
           <input
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4 -translate-y-1"
             type="text"
             value={input.type}
             name="type"
@@ -277,12 +298,10 @@ function New() {
           />
         </div>
         {/* amount */}
-        <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">
-            {t("totalAmount")} :
-          </p>
+        <div className="w-10/12 flex justify-center gap-2 itmes-center">
+          <p className="w-[150px] text-right pr-2">{t("totalAmount")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
             value={input.totalAmt === "" ? "" : input.totalAmt}
             name="totalAmt"
             thousandSeparator
@@ -303,12 +322,10 @@ function New() {
           />
         </div>
         {/* My Portion */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("payerPortion")} :
-          </p>
+        <div className=" w-10/12 flex justify-center gap-2 items-center ">
+          <p className="w-[150px]  text-right pr-2">{t("payerPortion")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2 h-[30px] convex bg-surface pl-4"
             value={input.myPortion === "" ? 0 : input.myPortion * 100}
             name="myPortion"
             suffix="%"
@@ -327,11 +344,9 @@ function New() {
         </div>
         {/* My Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("payerAmount")} :
-          </p>
+          <p className="w-[150px]  text-right pr-2 ">{t("payerPortion")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -344,11 +359,9 @@ function New() {
         </div>
         {/* Other Amount */}
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 font-bold">
-            {t("otherAmount")} :
-          </p>
+          <p className="w-[150px]  text-right pr-2">{t("otherAmount")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -361,11 +374,9 @@ function New() {
         </div>
         {/* installment plan */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2 font-bold">
-            {t("Installment Plan")} :
-          </p>
+          <p className="w-[150px] text-right pr-2">{t("Installment Plan")} :</p>
           <NumericFormat
-            className="input-field w-[150px]"
+            className="input-field w-[150px] px-2 h-[30px] convex bg-surface pl-4"
             value={input.instPlan === "" ? "" : input.instPlan}
             name="instPlan"
             thousandSeparator
@@ -384,7 +395,10 @@ function New() {
         {typeof input.instPlan === "number" && input.instPlan > 0 && (
           <div className="w-10/12 flex justify-center gap-2">
             <p className="w-[150px] text-right pr-2 font-bold"></p>
-            <div className="btn btn-accent" onClick={hdlGenInstPlan}>
+            <div
+              className="btn btn-primary text-text-reverse"
+              onClick={hdlGenInstPlan}
+            >
               Generate
             </div>
           </div>
@@ -392,10 +406,12 @@ function New() {
         {/* installment list */}
         {input.inst.map((el, idx) => (
           <div key={idx} className="w-10/12 flex justify-center gap-2">
-            <p>{idx + 1}</p>
+            <div className="flex-none h-[30px] w-[30px] flex justify-center items-center">
+              {idx + 1}
+            </div>
             {/* Date input */}
             <input
-              className="w-[150px] text-center border-b border-surface"
+              className="w-[150px] text-center bg-surface convex px-2"
               type="date"
               value={el.date}
               onChange={(e) => {
@@ -426,7 +442,7 @@ function New() {
             />
             {/* Amount input */}
             <NumericFormat
-              className="w-[150px] text-center border-b border-surface"
+              className="w-[150px] text-center"
               value={el.amt === "" ? "" : el.amt}
               thousandSeparator
               decimalScale={2}
@@ -446,11 +462,11 @@ function New() {
         {/* <div onClick={() => console.log(input)}>input</div> */}
         {/* remark */}
         <div className=" w-10/12 flex justify-center gap-2 ">
-          <p className="w-[150px]  text-left pr-2 font-bold">{t("remark")} :</p>
+          <p className="w-[150px]  text-left pr-2">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="input-field w-10/12 h-[35px]"
+          className="input-field w-10/12 h-[35px] concave bg-surface pl-3"
           type="text"
           value={input.remark}
           name="remark"
@@ -466,14 +482,14 @@ function New() {
           onChange={hdlFileChange}
         />
         <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-left pr-2 font-bold">{t("photo")} :</p>
+          <p className="w-[150px]  text-left pr-2">{t("photo")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
           {/* add photo */}
 
           <div
-            className="w-[80px] h-[80px] border border-surface rounded-2xl flex-shrink-0 box-border bg-surface-soft flex justify-center items-center cursor-pointer"
+            className="w-[80px] h-[80px]  rounded-2xl flex-shrink-0 bg-surface convex flex justify-center items-center cursor-pointer"
             onClick={() => document.getElementById("input-file").click()}
           >
             <AddPhoto className="w-[40px]" />
@@ -527,7 +543,10 @@ function New() {
           </p>
         )}
         {!errMsg && (
-          <button className="btn btn-primary mb-[50px]" onClick={hdlAddTran}>
+          <button
+            className="btn btn-primary text-text-reverse mb-[10px]"
+            onClick={hdlAddTran}
+          >
             {t("add")}
           </button>
         )}

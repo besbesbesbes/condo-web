@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { changePasswordApi } from "../apis/user-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
+import { CloseIcon, TypeIcon, PasswordIcon } from "../icons/menuIcon";
 
 function ModalChangePassword() {
   const navigate = useNavigate();
@@ -58,32 +59,35 @@ function ModalChangePassword() {
   };
 
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl border border-surface-soft fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
-      <p className="text-lg font-bold">Change Password</p>
-      <div className=" w-full flex justify-center">
+    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
+      <div className="w-full flex justify-center items-center gap-1 mb-3">
+        <PasswordIcon className="w-[20px] h-[20px]" />
+        <p className="text-lg">Change Password</p>
+      </div>
+      <div className=" w-full flex justify-center items-center">
         <p className="w-[130px] text-right pr-5">Current Password :</p>
         <input
-          className="input-field w-[130px]"
+          className="input-field w-[130px] concave pl-4"
           type="password"
           name="curPass"
           value={input.curPass}
           onChange={hdlInput}
         />
       </div>
-      <div className=" w-full flex justify-center">
+      <div className=" w-full flex justify-center items-center">
         <p className="w-[130px] text-right pr-5">New Password :</p>
         <input
-          className="input-field w-[130px]"
+          className="input-field w-[130px] concave pl-4"
           type="password"
           name="newPass"
           value={input.newPass}
           onChange={hdlInput}
         />
       </div>
-      <div className=" w-full flex justify-center">
+      <div className=" w-full flex justify-center items-center">
         <p className="w-[130px] text-right pr-5">Confirm Password :</p>
         <input
-          className="input-field w-[130px]"
+          className="input-field w-[130px] concave pl-4"
           type="password"
           name="conPass"
           value={input.conPass}
@@ -91,7 +95,7 @@ function ModalChangePassword() {
         />
       </div>
       <button
-        className="btn btn-primary w-[130px] mt-2"
+        className="btn btn-primary w-[130px] mt-2 text-text-reverse  text-base"
         onClick={hdlChangePass}
       >
         Confirm
@@ -105,8 +109,9 @@ function ModalChangePassword() {
         input
       </button> */}
       {/* close button */}
+
       <button
-        className="btn-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer py-1 mt-2 absolute top-0 right-0 -translate-x-2"
+        className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
         onClick={(e) => {
           setInput({
             curPass: "",
@@ -117,7 +122,7 @@ function ModalChangePassword() {
           navigate(0);
         }}
       >
-        X
+        <CloseIcon className="p-1" />
       </button>
     </div>
   );

@@ -6,6 +6,7 @@ import { getReportInfoApi } from "../apis/report-api";
 import useUserStore from "../stores/user-store";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
+import { AppIcon, ReportIcon } from "../icons/menuIcon";
 
 function Report() {
   const { t } = useTranslation();
@@ -58,16 +59,27 @@ function Report() {
   return (
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
-        <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <p className="text-2xl font-bold py-2">{t("report")}</p>
+        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
+          <div className="flex items-center">
+            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
+              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div>
+            <ReportIcon className="w-[30px] h-[20px]" />
+            <p className="text-xl py-2">{t("report")}</p>
+          </div>
+          <div
+            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+          >
+            <p className="text-text-reverse">{userName?.[0]?.toUpperCase()}</p>
+          </div>
         </div>
         {/* User select */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[80px]  text-right pr-2 font-bold">
+        <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
+          <p className="w-[100px] flex-none text-right pr-2">
             {t("userName")} :
           </p>
           <input
-            className="input-field w-[150px]"
+            className="input-field convex flex w-[150px] text-center bg-surface"
             type="text"
             value={input.userName}
             name="user"
@@ -80,10 +92,10 @@ function Report() {
           />
         </div>
         {/*Report date */}
-        <div className="w-10/12 flex justify-center gap-1">
-          <p className="w-[80px] text-right pr-2 font-bold">{t("month")} :</p>
+        <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
+          <p className="w-[100px] flex-none text-right pr-2 ">{t("month")} :</p>
           <select
-            className="input-field text-center w-[75px]"
+            className="input-field convex bg-surface text-center w-[75px]"
             name="month"
             value={input.month}
             onChange={hdlInput}
@@ -108,7 +120,7 @@ function Report() {
             ))}
           </select>
           <select
-            className="input-field text-center w-[75px]"
+            className="input-field text-center w-[75px]  convex bg-surface"
             name="year"
             value={input.year}
             onChange={hdlInput}

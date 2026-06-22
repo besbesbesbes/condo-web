@@ -10,6 +10,7 @@ import { testDB } from "../apis/test-api";
 import { useTranslation } from "react-i18next";
 import { Html5Qrcode } from "html5-qrcode";
 import { exportReportApi } from "../apis/export-api";
+import { AppIcon, SettingIcon } from "../icons/menuIcon";
 
 function Setting() {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ function Setting() {
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
   const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({});
   const [testTxt, setTestTxt] = useState("");
@@ -154,52 +156,88 @@ function Setting() {
           </button>
         </>
       ) : (
-        <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
-          <div className="flex justify-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-            <p className="text-2xl font-bold py-2">{t("setting")}</p>
+        <div className="w-screen bg-app overflow-y-auto flex flex-col gap-7 items-center relative mb-[75px] mt-[60px]">
+          <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
+            <div className="flex items-center">
+              <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
+                <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
+              </div>
+              <SettingIcon className="w-[30px] h-[20px]" />
+              <p className="text-xl py-2">{t("setting")}</p>
+            </div>
+            <div
+              className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+            >
+              <p className="text-text-reverse">
+                {user.userName?.[0]?.toUpperCase()}
+              </p>
+            </div>
           </div>
-          <div className=" w-10/12 flex justify-center gap-2">
+          <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
             <p className="w-[100px] text-right pr-2 font-bold">
               {t("userName")} :
             </p>
-            <p className="w-[150px] text-center input-field bg-surface-soft">
-              {userInfo.userName}
-            </p>
+            <div className="flex items-center gap-2">
+              <div
+                className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+              >
+                <p className="text-text-reverse">
+                  {user.userName?.[0]?.toUpperCase()}
+                </p>
+              </div>
+              <p className="">{userInfo.userName}</p>
+            </div>
           </div>
+          {/* switch theme */}
           <ThemeToggle />
-          <button
-            className="btn btn-primary w-[150px]"
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById("change_password_modal").showModal();
-            }}
-          >
-            {t("changePassword")}
-          </button>
-          <button
-            className="btn btn-accent w-[150px]"
-            onClick={() => {
-              setUser(null);
-              setToken("");
-              navigate(0);
-            }}
-          >
-            {t("logout")}
-          </button>
+          {/* change password */}
+          <div className="w-9/11 flex items-center justify-between rounded-2xl">
+            <div>
+              <p className="font-bold">Password</p>
+              <p className="text-sm text-muted">Change password</p>
+            </div>
+            <button
+              className="btn btn-primary w-[150px] text-text-reverse"
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById("change_password_modal").showModal();
+              }}
+            >
+              {t("changePassword")}
+            </button>
+          </div>
+          {/* logout */}
+          <div className="w-9/11 flex items-center justify-between rounded-2xl">
+            <div>
+              <p className="font-bold">Logout</p>
+              <p className="text-sm text-muted"></p>
+            </div>
+            <button
+              className="btn btn-primary text-text-reverse w-[150px]"
+              onClick={() => {
+                setUser(null);
+                setToken("");
+                navigate(0);
+              }}
+            >
+              {t("logout")}
+            </button>
+          </div>
+
           {/* version */}
-          <p className="text-xs">V 1.6.0</p>
-          <button className="btn-secondary w-[150px]" onClick={hdlTestDB}>
+          <p className="text-xs">V 1.7.0</p>
+          {/* <button className="btn-secondary w-[150px]" onClick={hdlTestDB}>
             {t("testDB")}
-          </button>
-          {testTxt ? <p className="font-bold text-error">{testTxt}</p> : null}
+          </button> */}
+          {/* {testTxt ? <p className="font-bold text-error">{testTxt}</p> : null} */}
           {/* QR Scan */}
-          <button className="btn-secondary w-[150px]" onClick={hdlQRScan}>
+          {/* <button className="btn-secondary w-[150px]" onClick={hdlQRScan}>
             {t("qrScan")}
-          </button>
+          </button> */}
           {/* Export Report */}
-          <button className="btn-secondary w-[150px]" onClick={hdlExportReport}>
+          {/* <button className="btn-secondary w-[150px]" onClick={hdlExportReport}>
             Export Report
-          </button>
+          </button> */}
         </div>
       )}
 

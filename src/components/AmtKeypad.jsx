@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { CloseIcon } from "../icons/menuIcon";
 
 function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
   const [expression, setExpression] = useState("");
@@ -51,30 +52,30 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4 py-6">
-      <div className="w-5/6 max-w-md rounded-t-3xl bg-surface p-4 shadow-2xl rounded-3xl border border-surface-soft">
-        <div className="mb-4 flex items-center justify-between">
+    <div className="bg-app fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4 py-6">
+      <div className="w-5/6 max-w-md rounded-t-3xl bg-app p-4 shadow-2xl convex">
+        <div className=" flex items-center justify-between relative">
           <div>
-            <p className="text-sm text-surface-muted">
-              {translate("expression")}
-            </p>
+            <p className="text-sm">{translate("Expression")}</p>
             <p className="min-h-[28px] text-lg font-semibold break-words">
               {expression || "0"}
             </p>
           </div>
+
           <button
-            className="btn-secondary rounded-full px-3 py-2 text-sm"
+            className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0  text-text-reverse bg-accent -translate-y-1"
             onClick={onClose}
-            type="button"
           >
-            {translate("close")}
+            <CloseIcon className="p-1" />
           </button>
         </div>
-        <div className="mb-4 rounded-xl bg-surface-soft p-3 text-right">
-          <p className="text-xs text-surface-muted">{translate("result")}</p>
-          <p className="text-2xl font-bold">{result !== "" ? result : "0"}</p>
+        <div className="rounded-xl bg-surface-soft p-3 text-right">
+          <p className="text-xs text-surface-muted">{translate("Result")}</p>
+          <p className="text-3xl font-bold text-primary">
+            {result !== "" ? result : "0"}
+          </p>
         </div>
-        <div className="grid grid-cols-4 gap-2 text-lg">
+        <div className="grid grid-cols-4 gap-2 text-2xl">
           {[
             "7",
             "8",
@@ -98,7 +99,7 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
             return (
               <button
                 key={key}
-                className="rounded-2xl bg-surface-soft py-4 font-semibold hover:bg-surface"
+                className="bg-surface p-3 font-semibold convex"
                 onClick={() => appendKey(key)}
                 type="button"
               >
@@ -107,16 +108,16 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
             );
           })}
         </div>
-        <div className="mt-4 flex gap-2">
+        <div className="mt-5 my-1 flex gap-2">
           <button
-            className="flex-1 btn-secondary py-3 font-semibold"
+            className="flex-1 btn btn-accent py-3 concave text-text-reverse"
             type="button"
             onClick={clearAll}
           >
-            {translate("clearAll")}
+            Clear
           </button>
           <button
-            className="flex-1 btn btn-accent py-3"
+            className="flex-1 btn btn-primary py-3 concave text-text-reverse"
             type="button"
             onClick={confirm}
           >

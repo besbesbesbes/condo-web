@@ -15,20 +15,18 @@ function MenuBox({ icon: Icon, txt }) {
 
   return (
     <div
-      className={`flex justify-center items-start py-1 cursor-pointer ${
-        txt === curMenu ? "bg-surface-soft" : ""
+      className={`flex justify-center items-center m-[6px] cursor-pointer convex ${
+        txt === curMenu ? "bg-primary" : ""
       }`}
       onClick={(e) => {
         hdlNavigate(e, txt);
       }}
     >
       <div
-        className={`flex flex-col items-center ${
-          txt === curMenu ? "text-primary" : ""
-        }`}
+        className={`flex flex-col items-center ${txt === curMenu ? "text-text-reverse" : ""}`}
       >
-        <Icon className="w-[30px] h-[30px]" />
-        <p className="mt-1">{txt}</p>
+        <Icon className="w-[22px] h-[22px] translate-y-[2px]" />
+        <p className="mt-1 text-[10px]">{txt}</p>
       </div>
     </div>
   );
@@ -36,7 +34,7 @@ function MenuBox({ icon: Icon, txt }) {
 
 function Footer() {
   return (
-    <div className="bg-surface w-screen h-[70px] grid grid-cols-5 text-white font-bold text-xs fixed bottom-0 border-t border-surface-soft text-text">
+    <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5 bg-surface text-text text-xs font-bold rounded-2xl convex">
       <MenuBox txt="TRANS" icon={icons.TransIcon} />
       <MenuBox txt="NEW" icon={icons.NewIcon} />
       <MenuBox txt="REPORT" icon={icons.ReportIcon} />
