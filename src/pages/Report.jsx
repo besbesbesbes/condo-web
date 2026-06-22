@@ -95,7 +95,7 @@ function Report() {
         <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
           <p className="w-[100px] flex-none text-right pr-2 ">{t("month")} :</p>
           <select
-            className="input-field convex bg-surface text-center w-[75px]"
+            className="input-field convex bg-surface pl-4 w-[75px]"
             name="month"
             value={input.month}
             onChange={hdlInput}
@@ -120,7 +120,7 @@ function Report() {
             ))}
           </select>
           <select
-            className="input-field text-center w-[75px]  convex bg-surface"
+            className="input-field w-[75px]  convex  pl-4 bg-surface"
             name="year"
             value={input.year}
             onChange={hdlInput}

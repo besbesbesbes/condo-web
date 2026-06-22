@@ -15,7 +15,7 @@ function MenuBox({ icon: Icon, txt }) {
 
   return (
     <div
-      className={`flex justify-center items-center m-[6px] cursor-pointer convex ${
+      className={`flex justify-center bg-surface items-center m-[6px] cursor-pointer convex ${
         txt === curMenu ? "bg-primary" : ""
       }`}
       onClick={(e) => {
@@ -34,7 +34,7 @@ function MenuBox({ icon: Icon, txt }) {
 
 function Footer() {
   return (
-    <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5 bg-surface text-text text-xs font-bold rounded-2xl convex">
+    <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5  text-text text-xs font-bold rounded-2xl bg-surface convex">
       <MenuBox txt="TRANS" icon={icons.TransIcon} />
       <MenuBox txt="NEW" icon={icons.NewIcon} />
       <MenuBox txt="REPORT" icon={icons.ReportIcon} />
