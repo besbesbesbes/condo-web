@@ -58,8 +58,22 @@ function Login() {
     <div className="bg-app w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
       <div className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 convex -translate-y-[50px]">
-        <div className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1">
-          <AppIcon className="p-4 text-text-reverse bg-primary" />
+        <div className="flex items-end-safe gap-2">
+          <div className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1">
+            <AppIcon className="p-4 text-text-reverse bg-primary" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p
+              className={`font-bold text-primary ${i18n.language === "en" ? "text-3xl" : "text-2xl"}`}
+            >
+              {t("stang")}
+            </p>
+            <p
+              className={`italic -translate-y-1  ${i18n.language === "en" ? "text-base" : "text-sm"}`}
+            >
+              {t("everyStangMatters")}.
+            </p>
+          </div>
         </div>
         <div className=" w-full flex justify-center items-center">
           <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
@@ -81,7 +95,6 @@ function Login() {
             onChange={hdlInput}
           />
         </div>
-        {/* <hr className="w-10/12 mt-2 border-surface" /> */}
         <button
           className="btn h-[30px] w-[130px] convex bg-primary font-bold"
           onClick={hdlLogin}
@@ -89,8 +102,8 @@ function Login() {
           {t("login")}
         </button>
         {/* error message */}
-        {isShowErrMsg && <p className="font-bold text-error">{errMsg}</p>}
-        <div className="self-end flex gap-2">
+        {isShowErrMsg && <p className="font-bold">{errMsg}</p>}
+        <div className="self-end flex gap-2 items-center">
           {/* <p>{t("language")}</p> */}
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -99,12 +112,11 @@ function Login() {
           >
             <option value="en">English</option>
             <option value="th">ภาษาไทย</option>
-            <option value="cn">中国人</option>
-            <option value="jp">日语</option>
+            {/* <option value="cn">中国人</option> */}
+            {/* <option value="jp">日语</option> */}
           </select>
         </div>
       </div>
-      {/* language */}
     </div>
   );
 }

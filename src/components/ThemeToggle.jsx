@@ -1,15 +1,17 @@
 import useThemeStore from "../stores/theme-store";
+import { useTranslation } from "react-i18next";
 
 function ThemeToggle() {
+  const { t } = useTranslation();
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   return (
     <div className="w-9/11 flex items-center justify-between rounded-2xl">
       <div>
-        <p className="font-bold">Theme</p>
-        <p className="text-sm text-muted">
-          {theme === "dark" ? "Dark theme is active" : "Light theme is active"}
+        <p className="font-bold">{t("theme")}</p>
+        <p className="text-sm">
+          {theme === "dark" ? t("darkThemeIsActive") : t("lightThemeIsActive")}
         </p>
       </div>
       <button
@@ -17,7 +19,7 @@ function ThemeToggle() {
         className="btn btn-primary text-text-reverse  w-[150px]"
         onClick={toggleTheme}
       >
-        Switch to {theme === "dark" ? "Light" : "Dark"}
+        {t("switchTo")} {theme === t("dark") ? t("light") : t("dark")}
       </button>
     </div>
   );

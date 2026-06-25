@@ -91,43 +91,14 @@ body {
   background: var(--color-surface);
 }
 
-.bg-surface-soft {
-  background: var(--color-surface-soft);
-}
-
-.bg-surface-muted {
-  background: var(--color-surface-muted);
-}
-
 .bg-primary {
   background: var(--color-primary);
   color: var(--color-bg);
 }
 
-.bg-primary-soft {
-  background: rgba(246, 212, 63, 0.16);
-}
-
 .bg-accent {
   background: var(--color-accent);
   color: var(--color-bg);
-}
-
-.bg-accent-soft {
-  background: rgba(244, 109, 26, 0.16);
-}
-
-.bg-error {
-  background: var(--color-error);
-  color: var(--color-bg);
-}
-
-.bg-error-soft {
-  background: rgba(248, 113, 113, 0.18);
-}
-
-.bg-overlay {
-  background: rgba(0, 0, 0, 0.5);
 }
 
 .text-primary {
@@ -138,32 +109,12 @@ body {
   color: var(--color-accent);
 }
 
-.text-muted {
-  color: var(--color-text-muted);
-}
-
 .text-text {
   color: var(--color-text);
 }
 
 .text-text-reverse {
   color: var(--color-text-reverse);
-}
-
-.text-inverse {
-  color: var(--color-bg);
-}
-
-.text-error {
-  color: var(--color-error);
-}
-
-.border-surface {
-  border-color: var(--color-border);
-}
-
-.border-soft {
-  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .btn {
@@ -181,10 +132,6 @@ body {
   padding: 0 1rem;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
-}
-
 .btn-primary {
   background: var(--color-primary);
 }
@@ -193,41 +140,7 @@ body {
   background: var(--color-accent);
 }
 
-.btn-ghost {
-  background: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-}
-
 .input-field {
   height: 32px;
   outline: none;
-}
-
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.16);
-}
-
-.card-soft {
-  background: var(--color-surface-soft);
-  border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-}
-
-.modal-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
-}
-
-.text-link {
-  color: var(--color-primary);
-}
-
-.text-link:hover {
-  color: var(--color-accent);
 }

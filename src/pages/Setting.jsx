@@ -13,7 +13,7 @@ import { exportReportApi } from "../apis/export-api";
 import { AppIcon, SettingIcon } from "../icons/menuIcon";
 
 function Setting() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
@@ -193,8 +193,8 @@ function Setting() {
           {/* change password */}
           <div className="w-9/11 flex items-center justify-between rounded-2xl">
             <div>
-              <p className="font-bold">Password</p>
-              <p className="text-sm text-muted">Change password</p>
+              <p className="font-bold">{t("password")}</p>
+              <p className="text-sm">{t("changePassword")}</p>
             </div>
             <button
               className="btn btn-primary w-[150px] text-text-reverse"
@@ -206,10 +206,31 @@ function Setting() {
               {t("changePassword")}
             </button>
           </div>
+          {/* change language */}
+          <div className="w-9/11 flex items-center justify-between rounded-2xl">
+            <div>
+              <p className="font-bold">{t("changeLanguage")}</p>
+              <p className="text-sm text-muted"></p>
+            </div>
+            <select
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="input-field convex h-[30px] w-[150px] px-2 bg-primary text-text-reverse"
+              value={i18n.language}
+            >
+              <option className="text-center" value="en">
+                English
+              </option>
+              <option className="text-center" value="th">
+                ภาษาไทย
+              </option>
+              {/* <option value="cn">中国人</option> */}
+              {/* <option value="jp">日语</option> */}
+            </select>
+          </div>
           {/* logout */}
           <div className="w-9/11 flex items-center justify-between rounded-2xl">
             <div>
-              <p className="font-bold">Logout</p>
+              <p className="font-bold">{t("logout")}</p>
               <p className="text-sm text-muted"></p>
             </div>
             <button
@@ -225,7 +246,7 @@ function Setting() {
           </div>
 
           {/* version */}
-          <p className="text-xs">V 1.7.0</p>
+          <p className="text-xs">V 1.7.1</p>
           {/* <button className="btn-secondary w-[150px]" onClick={hdlTestDB}>
             {t("testDB")}
           </button> */}

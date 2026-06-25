@@ -6,7 +6,7 @@ import { getReportInfoApi } from "../apis/report-api";
 import useUserStore from "../stores/user-store";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
-import { AppIcon, ReportIcon } from "../icons/menuIcon";
+import { AppIcon, ReportIcon, NoTrans } from "../icons/menuIcon";
 
 function Report() {
   const { t } = useTranslation();
@@ -134,7 +134,7 @@ function Report() {
         </div>
         {/* report list */}
         <div className="w-full flex items-center flex-col gap-2 mt-5">
-          <div className="w-10/12 font-bold text-center bg-surface-soft text-primary">
+          <div className="w-10/12 font-bold text-center text-primary">
             {body?.userName}
           </div>
           {/* header */}
@@ -166,13 +166,16 @@ function Report() {
               </div>
             ))
           ) : (
-            <p>No Record Found</p>
+            <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
+              <NoTrans className="w-[40px] h-[40px]" />
+              <p className="text-center">{t("noRecordFound")}</p>
+            </div>
           )}
           {/* total amt */}
           <div className="w-10/12 grid grid-cols-3 font-bold">
             <div></div>
             <NumericFormat
-              className="text-right border-b border-surface"
+              className="text-right border-b"
               value={resultSum?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -180,7 +183,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b border-surface"
+              className="text-right border-b"
               value={resultSum?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","
@@ -197,7 +200,7 @@ function Report() {
               <p className="text-right pr-1">(Minus) Other</p>
             </div>
             <NumericFormat
-              className="text-right border-b border-surface"
+              className="text-right border-b"
               value={resultSumOther?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -205,7 +208,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b border-surface"
+              className="text-right border-b"
               value={resultSumOther?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","
@@ -216,7 +219,7 @@ function Report() {
           <div className="w-10/12 grid grid-cols-3 font-bold">
             <div></div>
             <NumericFormat
-              className="text-right border-b-4 border-double border-surface"
+              className="text-right border-b-4 border-double"
               value={resultSum?.sumTotalAmt - resultSumOther?.sumTotalAmt}
               displayType="text"
               thousandSeparator=","
@@ -224,7 +227,7 @@ function Report() {
               fixedDecimalScale
             />
             <NumericFormat
-              className="text-right border-b-4 border-double border-surface"
+              className="text-right border-b-4 border-double"
               value={resultSum?.sumOtherAmt - resultSumOther?.sumOtherAmt}
               displayType="text"
               thousandSeparator=","

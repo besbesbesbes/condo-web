@@ -384,7 +384,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               />
               {/* remove image */}
               <div
-                className="w-[20px] h-[20px] bg-error-soft flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
+                className="w-[20px] h-[20px] flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
                 onClick={removeImage(idx)}
               >
                 X

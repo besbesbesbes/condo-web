@@ -3,8 +3,10 @@ import { deleteType, editType } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
 import { CloseIcon, TypeIcon } from "../icons/menuIcon";
+import { useTranslation } from "react-i18next";
 
 function ModalEditType({ selectedType, getNewTranInfo }) {
+  const { t } = useTranslation();
   const [typeTxt, setTypeTxt] = useState("");
   const token = useUserStore((state) => state.token);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
@@ -49,7 +51,7 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
     <div className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-3 pb-4 pt-6 items-center text-lg">
       <div className="flex gap-1 items-center">
         <TypeIcon className="w-[20px] h-[20px]" />
-        <p className="">Edit Type</p>
+        <p className="">{t("editType")}</p>
       </div>
 
       <input
@@ -64,13 +66,13 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
           className="btn btn-primary w-[100px] h-[30px] text-text-reverse"
           onClick={hdlEditType}
         >
-          Rename
+          {t("update")}
         </button>
         <button
           className="btn btn-accent w-[100px] h-[30px] text-text-reverse"
           onClick={hdlDeleteType}
         >
-          Delete
+          {t("delete")}
         </button>
       </div>
       {/* close button */}

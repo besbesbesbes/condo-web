@@ -1,12 +1,14 @@
 import React from "react";
 import { CloseIcon, UserIcon } from "../icons/menuIcon";
+import { useTranslation } from "react-i18next";
 
 function ModalPaidBy({ users, setInput, headerTxt }) {
+  const { t } = useTranslation();
   return (
     <div className="w-[300px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text">
       <div className="flex gap-1 items-center">
         <UserIcon className="w-[20px] h-[20px]" />
-        <p className="">{headerTxt ? headerTxt : "Select Paid by"}</p>
+        <p className="">{headerTxt ? headerTxt : t("selectPaidBy")}</p>
       </div>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div className="w-10/12 h-[150px] flex flex-col overflow-auto gap-4 justify-center items-center">

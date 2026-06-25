@@ -4,12 +4,14 @@ import { addNewType } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import ModalEditType from "./ModalEditType";
 import useMainStore from "../stores/main-store";
+import { useTranslation } from "react-i18next";
 
 function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   const [newType, setNewType] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const token = useUserStore((state) => state.token);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
+  const { t } = useTranslation();
 
   const hdlAddNewType = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
     <div className="w-[300px] h-auto bg-app shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-4 pb-4 pt-6 items-center text-lg text-text text-text">
       <div className="flex gap-1 items-center">
         <TypeIcon className="w-[20px] h-[20px]" />
-        <p className="">Select Type</p>
+        <p className="">{t("selectType")}</p>
       </div>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div
@@ -69,7 +71,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
                   {el.expenseName}
                 </div>
                 <div
-                  className="w-[20px] h-[20px] bg-surface-soft flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
+                  className="w-[20px] h-[20px] flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedType(el);
@@ -100,7 +102,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
           className="btn convex bg-primary text-text-reverse w-2/6"
           onClick={hdlAddNewType}
         >
-          Add
+          {t("add")}
         </button>
       </div>
       {/* close button */}

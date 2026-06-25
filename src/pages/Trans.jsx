@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 function Trans() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const [trans, setTrans] = useState(null);
   const [transRaw, setTransRaw] = useState(null);
@@ -181,9 +181,12 @@ function Trans() {
                           </div>
                           {/* Month */}
                           <div className="text-[12px] font-bold text-center">
-                            {new Date(el.recordDate).toLocaleString("en-US", {
-                              month: "short",
-                            })}
+                            {new Date(el.recordDate).toLocaleString(
+                              i18n.language === "en" ? "en-US" : "th-TH",
+                              {
+                                month: "short",
+                              },
+                            )}
                           </div>
                         </div>
                         <div className="w-[50px] flex flex-col">
@@ -269,7 +272,7 @@ function Trans() {
               ) : (
                 <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
                   <NoTrans className="w-[40px] h-[40px]" />
-                  <p className="text-center">No Trans</p>
+                  <p className="text-center">{t("noRecordFound")}</p>
                 </div>
               )}
             </div>

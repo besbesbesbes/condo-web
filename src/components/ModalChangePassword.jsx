@@ -101,7 +101,7 @@ function ModalChangePassword() {
         Confirm
       </button>
       {/* error message */}
-      {isShowErrMsg && <p className="font-bold text-error">{errMsg}</p>}
+      {isShowErrMsg && <p className="font-bold">{errMsg}</p>}
       {/* <button
         className="btn btn-primary w-[130px] mt-2"
         onClick={() => console.log(input)}

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CloseIcon } from "../icons/menuIcon";
+import { useTranslation } from "react-i18next";
 
-function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
+function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
+  const { t } = useTranslation();
   const [expression, setExpression] = useState("");
   const [result, setResult] = useState("0");
-
-  const translate = (key) => (t ? t(key) : key);
-
   const evaluateAmtExpression = (expressionValue) => {
     const cleaned = expressionValue.replace(/\s+/g, "");
     if (cleaned === "") return "";
@@ -52,11 +51,11 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
   if (!show) return null;
 
   return (
-    <div className="bg-app fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4 py-6">
+    <div className="bg-black/20 fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
       <div className="w-5/6 max-w-md rounded-t-3xl bg-app p-4 shadow-2xl convex">
         <div className=" flex items-center justify-between relative">
           <div>
-            <p className="text-sm">{translate("Expression")}</p>
+            <p className="text-sm">{t("expression")}</p>
             <p className="min-h-[28px] text-lg font-semibold break-words">
               {expression || "0"}
             </p>
@@ -70,8 +69,8 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
           </button>
         </div>
         <div className="rounded-xl bg-surface-soft p-3 text-right">
-          <p className="text-xs text-surface-muted">{translate("Result")}</p>
-          <p className="text-3xl font-bold text-primary">
+          <p className="text-xs text-surface-muted">{t("result")}</p>
+          <p className="text-4xl font-bold text-primary">
             {result !== "" ? result : "0"}
           </p>
         </div>
@@ -114,14 +113,14 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm, t }) {
             type="button"
             onClick={clearAll}
           >
-            Clear
+            {t("clear")}
           </button>
           <button
             className="flex-1 btn btn-primary py-3 concave text-text-reverse"
             type="button"
             onClick={confirm}
           >
-            OK
+            {t("ok")}
           </button>
         </div>
       </div>

@@ -374,7 +374,7 @@ function New() {
         </div>
         {/* installment plan */}
         <div className="w-10/12 flex justify-center gap-2">
-          <p className="w-[150px] text-right pr-2">{t("Installment Plan")} :</p>
+          <p className="w-[150px] text-right pr-2">{t("installmentPlan")} :</p>
           <NumericFormat
             className="input-field w-[150px] px-2 h-[30px] convex bg-surface pl-4"
             value={input.instPlan === "" ? "" : input.instPlan}
@@ -399,7 +399,7 @@ function New() {
               className="btn btn-primary text-text-reverse"
               onClick={hdlGenInstPlan}
             >
-              Generate
+              {t("generate")}
             </div>
           </div>
         )}
@@ -507,36 +507,25 @@ function New() {
               />
               {/* remove image */}
               <div
-                className="w-[20px] h-[20px] bg-error-soft flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
+                className="w-[20px] h-[20px] flex-shrink-0 absolute flex justify-center items-center font-bold rounded-full top-0 right-0 cursor-pointer"
                 onClick={removeImage(idx)}
               >
                 X
               </div>
             </div>
           ))}
-          {/* <button
-            className="w-[80px] h-[80px] border flex-shrink-0 box-border flex justify-center items-center bg-error-soft text-sm cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              files.forEach((el) => {
-                console.log(URL.createObjectURL(el));
-              });
-            }}
-          >
-            List Files
-          </button> */}
         </div>
 
         {/* button add */}
         {errMsg === "invalid_grant" && (
-          <p className="text-error text-center mt-2 mb-[60px]">
+          <p className="text-center mt-2 mb-[60px]">
             Transaction added successfully but <br />
             Email can't send, will go to TRANS in 3 sec.
           </p>
         )}
 
         {errMsg === "Request failed with status code 401" && (
-          <p className="text-error text-center mt-2 mb-[60px]">
+          <p className="text-center mt-2 mb-[60px]">
             Transaction added successfully but <br />
             Request failed with status code 401 <br />
             Email can't send, will go to TRANS in 3 sec.
