@@ -19,7 +19,8 @@ function ThemeToggle() {
         className="btn btn-primary text-text-reverse  w-[150px]"
         onClick={toggleTheme}
       >
-        {t("switchTo")} {theme === t("dark") ? t("light") : t("dark")}
+        {/* {t("switchTo")}  */}
+        {theme === "dark" ? t("darkTheme") : t("lightTheme")}
       </button>
     </div>
   );

@@ -65,6 +65,7 @@ html,
 body,
 #root {
   min-height: 100%;
+  outline: none;
 }
 
 body {
@@ -143,4 +144,22 @@ body {
 .input-field {
   height: 32px;
   outline: none;
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647; /* max possible */
+}
+
+.loading-dialog {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  background-color: transparent;
+}
+
+.loading-dialog::backdrop {
+  background: transparent;
+  background-color: transparent;
 }

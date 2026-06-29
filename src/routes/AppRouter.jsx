@@ -10,6 +10,8 @@ import New from "../pages/New";
 import Report from "../pages/Report";
 import Setting from "../pages/Setting";
 import Chat from "../pages/Chat";
+import Calendar from "../pages/Calendar";
+import Memo from "../pages/Memo";
 
 const guestRouter = createBrowserRouter([
   { path: "/", element: <Login /> },
@@ -19,9 +21,10 @@ const guestRouter = createBrowserRouter([
 const userRouter = createBrowserRouter([
   { path: "/", element: <Trans /> },
   { path: "/trans", element: <Trans /> },
-  { path: "/new", element: <New /> },
+  { path: "/add", element: <New /> },
   { path: "/report", element: <Report /> },
-  { path: "/chat", element: <Chat /> },
+  { path: "/calendar", element: <Calendar /> },
+  { path: "/memo", element: <Memo /> },
   { path: "/setting", element: <Setting /> },
   { path: "*", element: <Navigate to="/trans" /> },
 ]);

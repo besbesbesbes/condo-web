@@ -17,6 +17,7 @@ import {
   UserIcon,
 } from "../icons/menuIcon";
 import AmtKeypad from "../components/AmtKeypad";
+import Header from "../components/Header";
 
 function New() {
   const { t } = useTranslation();
@@ -214,29 +215,15 @@ function New() {
   }, [input.instPlan, input.totalAmt, input.myPortion]);
 
   useEffect(() => {
-    setCurMenu("NEW");
+    setCurMenu("add");
     getNewTranInfo();
   }, []);
 
   return (
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative mb-[75px] mt-[60px]">
-        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <div className="flex items-center">
-            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
-              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
-            </div>
-            <NewIcon className="w-[30px] h-[20px]" />
-            <p className="text-xl py-2">{t("newTransaction")}</p>
-          </div>
-          <div
-            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
-          >
-            <p className="text-text-reverse">
-              {user.userName?.[0]?.toUpperCase()}
-            </p>
-          </div>
-        </div>
+        {/* header */}
+        <Header />
         {/* record date */}
         <div className=" w-10/12 flex justify-center gap-2 mt-4 items-center">
           <p className="w-[150px]  text-right pr-2">{t("recordDate")} :</p>
@@ -461,12 +448,12 @@ function New() {
 
         {/* <div onClick={() => console.log(input)}>input</div> */}
         {/* remark */}
-        <div className=" w-10/12 flex justify-center gap-2 ">
+        <div className=" w-10/12  flex justify-center gap-2 ">
           <p className="w-[150px]  text-left pr-2">{t("remark")} :</p>
           <p className="w-[150px] text-center"></p>
         </div>
         <input
-          className="input-field w-10/12 h-[35px] concave bg-surface pl-3"
+          className="input-field w-10/12 max-w-[350px] h-[35px] concave bg-surface pl-3"
           type="text"
           value={input.remark}
           name="remark"

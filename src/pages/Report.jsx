@@ -7,6 +7,7 @@ import useUserStore from "../stores/user-store";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
 import { AppIcon, ReportIcon, NoTrans } from "../icons/menuIcon";
+import Header from "../components/Header";
 
 function Report() {
   const { t } = useTranslation();
@@ -52,27 +53,15 @@ function Report() {
 
   useEffect(() => {
     console.log("Use effect");
-    setCurMenu("REPORT");
+    setCurMenu("report");
     getReportInfo();
   }, [input.userName, input.month, input.year]);
 
   return (
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
-        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <div className="flex items-center">
-            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
-              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
-            </div>
-            <ReportIcon className="w-[30px] h-[20px]" />
-            <p className="text-xl py-2">{t("report")}</p>
-          </div>
-          <div
-            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
-          >
-            <p className="text-text-reverse">{userName?.[0]?.toUpperCase()}</p>
-          </div>
-        </div>
+        {/* header */}
+        <Header />
         {/* User select */}
         <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
           <p className="w-[100px] flex-none text-right pr-2">

@@ -6,6 +6,7 @@ import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
 import { AppIcon, ChatIcon } from "../icons/menuIcon";
+import Header from "../components/Header";
 
 export default function Chat() {
   const { t } = useTranslation();
@@ -59,7 +60,7 @@ export default function Chat() {
   }, [msgs]);
 
   useEffect(() => {
-    setCurMenu("CHAT");
+    setCurMenu("chat");
     getChatInfo();
 
     // Socket newMessage
@@ -78,22 +79,8 @@ export default function Chat() {
   return (
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col items-center relative mb-[120px] mt-[60px]">
-        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-[0] z-10 bg-surface shadow">
-          <div className="flex items-center">
-            <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
-              <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
-            </div>
-            <ChatIcon className="w-[30px] h-[20px]" />
-            <p className="text-xl py-2">{t("chat")}</p>
-          </div>
-          <div
-            className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
-          >
-            <p className="text-text-reverse">
-              {user.userName?.[0]?.toUpperCase()}
-            </p>
-          </div>
-        </div>
+        {/* header */}
+        <Header />
         {/* chat area */}
         <div className="w-full px-4 flex-1 overflow-y-auto flex flex-col p-2 gap-2 ">
           {msgs ? (

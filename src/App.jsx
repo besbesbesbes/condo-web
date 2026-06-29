@@ -29,8 +29,7 @@ function App() {
   return (
     <div className="relative min-h-svh">
       <AppRouter />
-      {isLoad ? <Loading /> : null}
-      {/* <Loading /> */}
+      {isLoad && <Loading />}
     </div>
   );
 }
