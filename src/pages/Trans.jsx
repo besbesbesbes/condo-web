@@ -86,21 +86,21 @@ function Trans() {
             <Header />
             {/* search */}
             <div className="w-11/12  flex flex-col items-center gap-3 my-1 mt-[14px]">
-              <div className=" flex w-full items-center gap-1 concave bg-surface">
-                <input
-                  className="input-field w-full h-[32px] pl-3"
-                  type="text"
-                  value={searchInput}
-                  placeholder={t("searchField")}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                />
-                <div className="flex-none w-[32px] h-[32px] flex justify-center items-center">
-                  <SearchIcon className="w-[15px]" />
+              <div className="w-full flex gap-2">
+                <div className=" flex w-full flex-1 items-center gap-1 concave bg-surface">
+                  <input
+                    className="input-field w-full h-[32px] pl-3"
+                    type="text"
+                    value={searchInput}
+                    placeholder={t("searchField")}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                  />
+                  <div className="flex-none w-[32px] h-[32px] flex justify-center items-center">
+                    <SearchIcon className="w-[15px]" />
+                  </div>
                 </div>
-              </div>
-              <div className="w-full flex justify-end items-center gap-2">
                 <select
-                  className="input-field pl-4 w-[100px] h-[32px] convex bg-surface"
+                  className="input-field flex-none pl-4 w-[100px] h-[32px] convex bg-surface"
                   name="year"
                   value={yearInput}
                   onChange={(e) => setYearInput(e.target.value)}
@@ -111,15 +111,18 @@ function Trans() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* <div className="w-full flex justify-end items-center gap-2">
                 <button
                   className="btn btn-primary text-text-reverse convex bg-surface"
                   onClick={() => window.location.reload()}
                 >
                   {t("refresh")}
                 </button>
-              </div>
+              </div> */}
             </div>
-            <div className="w-11/12  flex flex-col gap-1">
+            <div className="w-11/12  flex flex-col gap-4">
               {trans?.length ? (
                 trans.map((el, idx) => {
                   const rawDate = new Date(el.recordDate);
@@ -137,12 +140,12 @@ function Trans() {
                           },
                         )
                       : null;
-                  const showDateHeader = curDate !== prevDate;
-                  const formattedDate = curDate.replace(" ", "-");
+                  // const showDateHeader = curDate !== prevDate;
+                  // const formattedDate = curDate.replace(" ", "-");
 
                   return (
                     <div
-                      className="w-full flex flex-col items-center gap-2 py-1"
+                      className="w-full flex flex-col items-center convex bg-surface relative"
                       key={idx}
                     >
                       {/* {showDateHeader && (
@@ -151,7 +154,7 @@ function Trans() {
                         </div>
                       )} */}
                       <div
-                        className={`flex w-full items-center convex cursor-pointer bg-surface rounded-xl py-3 px-2 gap-2 ${
+                        className={`flex w-full items-center cursor-pointer rounded-xl py-3 px-2 gap-2 ${
                           el.userId === user.userId ? "bg-surface" : ""
                         }`}
                         onClick={(e) => hdlSelectedTran(e, el)}
@@ -190,13 +193,15 @@ function Trans() {
                           </div>
                         </div>
                         <div className="w-full flex flex-col px-2 py-1 gap-2">
-                          <div className="grid grid-cols-2 font-bold">
+                          <div className="grid grid-cols-2 font-bold items-center">
                             {/* type  */}
-                            <div>{el.expenseType.expenseName}</div>
+                            <div className="self-center">
+                              {el.expenseType.expenseName}
+                            </div>
 
                             {/* total amt */}
                             <NumericFormat
-                              className="text-right"
+                              className="text-right text-[24px]"
                               value={el.totalAmt}
                               displayType="text"
                               thousandSeparator=","
@@ -251,6 +256,16 @@ function Trans() {
                             </div>
                           </div>
                         </div>
+                      </div>
+                      <div className="w-10/11 flex justify-end pb-2 items-center gap-1 translate-x-2">
+                        {el?.tagTrans.map((el, idx) => (
+                          <div
+                            key={idx}
+                            className="px-2 py-1 convex text-[13px] bg-accent text-text-reverse border "
+                          >
+                            {el?.tag?.tagTxt}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   );

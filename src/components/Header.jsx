@@ -51,10 +51,10 @@ function Header() {
         </div>
         {/* setting */}
         <div
-          className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center"
+          className="w-[30px] h-[30px] convex-full bg-surface flex justify-center items-center"
           onClick={() => navigate("/setting")}
         >
-          <SettingIcon className="w-[20px] h-[20px] text-text-reverse" />
+          <SettingIcon className="w-[20px] h-[20px]" />
         </div>
       </div>
     </div>

@@ -12,6 +12,12 @@ function MenuBox({ icon: Icon, txt, label }) {
   const hdlNavigate = (e, desPage) => {
     e.preventDefault();
     setCurMenu(desPage);
+    const path = `/${desPage}`;
+    if (location.pathname === path) {
+      window.location.reload(); // refresh the current page
+      return;
+    }
+
     navigate(`/${desPage}`);
   };
 

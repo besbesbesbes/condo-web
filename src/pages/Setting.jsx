@@ -232,7 +232,7 @@ function Setting() {
             </button>
           </div>
           {/* version */}
-          <p className="text-xs">V 1.7.1</p>
+          <p className="text-xs">V 1.8.0</p>
           {/* <button className="btn-secondary w-[150px]" onClick={hdlTestDB}>
             {t("testDB")}
           </button> */}

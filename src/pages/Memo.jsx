@@ -14,6 +14,7 @@ import {
   SearchIcon,
   SortNewIcon,
   SortOldIcon,
+  ToTopIcon,
   UnHideIcon,
 } from "../icons/menuIcon";
 import useUserStore from "../stores/user-store";
@@ -37,6 +38,7 @@ function Memo() {
     hidden: false,
   });
   const [sort, setSort] = useState("new");
+  const [showToTop, setShowToTop] = useState(false);
 
   const hdlGetMemo = async () => {
     setIsLoad(true);
@@ -89,6 +91,14 @@ function Memo() {
     setFilteredMemos(filtered);
   };
 
+  const hdlScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setShowToTop(false);
+  };
+
   useEffect(() => {
     const timmer = setTimeout(() => {
       setDebouncedSearch(searchText);
@@ -110,6 +120,21 @@ function Memo() {
       document.getElementById("edit_memo_modal")?.showModal();
     }
   }, [selectedMemo]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 50) {
+        setShowToTop(true);
+      } else {
+        setShowToTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[50px] pb-12">
       {/* header */}
@@ -270,6 +295,16 @@ function Memo() {
           {t("add")}
         </div>
       </button>
+      {/* to top */}
+      {showToTop && (
+        <div
+          className="w-[30px] h-[30px] fixed bottom-18 right-4 my-2 bg-primary convex text-text-reverse flex justify-center items-center"
+          onClick={hdlScrollToTop}
+        >
+          <ToTopIcon className="w-[20px] h-[20px]" />
+        </div>
+      )}
+
       {/* modal add memo */}
       <dialog id="add_memo_modal" className="modal">
         <ModalAddMemo refreshMemo={hdlGetMemo} />

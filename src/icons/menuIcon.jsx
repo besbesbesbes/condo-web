@@ -454,6 +454,82 @@ export function SortOldIcon(props) {
   );
 }
 
+export function ToTopIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M17 18l-5-5-5 5m10-7l-5-5-5 5"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function PrevIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M19 12H5m0 0l7 7m-7-7l7-7"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function NextIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M4 12h16m0 0l-6-6m6 6l-6 6"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function TagIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      transform="scale(-1 1)"
+      {...props}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.678 11.422a2.5 2.5 0 000 3.536l6.364 6.364a2.5 2.5 0 003.536 0l7.69-7.69A2.5 2.5 0 0021 11.864V4.5A1.5 1.5 0 0019.5 3h-7.365a2.5 2.5 0 00-1.768.732l-7.69 7.69zM14.988 7C13.878 7 13 7.832 13 8.988c0 1.157.878 2.012 1.988 2.012C16.121 11 17 10.145 17 8.988 17 7.832 16.12 7 14.988 7z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export const icons = {
   TransIcon,
   NewIcon,
@@ -480,4 +556,8 @@ export const icons = {
   DeleteIcon,
   SortNewIcon,
   SortOldIcon,
+  ToTopIcon,
+  PrevIcon,
+  NextIcon,
+  TagIcon,
 };

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Footer from "../components/Footer";
 import { NumericFormat } from "react-number-format";
 import { editTranApi } from "../apis/trans-api";
 import { getNewTranInfoApi } from "../apis/new-api";
+import { getTagApi } from "../apis/tag-api";
 import useMainStore from "../stores/main-store";
 import useUserStore from "../stores/user-store";
 import ModalConfirmDelete from "../components/ModalConfirmDelete";
@@ -14,10 +15,12 @@ import AmtKeypad from "../components/AmtKeypad";
 import {
   AddPhoto,
   AppIcon,
+  TagIcon,
   TransIcon,
   TypeIcon,
   UserIcon,
 } from "../icons/menuIcon";
+import Header from "../components/Header";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const { t } = useTranslation();
@@ -29,6 +32,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const [selPhotoUrl, setSelPhotoUrl] = useState("");
   const [files, setFiles] = useState([]);
   const [showAmtKeypad, setShowAmtKeypad] = useState(false);
+  const [tagList, setTagList] = useState([]);
+  const [tagInput, setTagInput] = useState("");
+  const [tagSuggest, setTagSuggest] = useState([]);
+  const [showSuggest, setShowSuggest] = useState(false);
+  const tagBoxRef = useRef(null);
   const [input, setInput] = useState({
     tranId: "",
     recordDate: "",
@@ -42,6 +50,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
     myAmt: 0,
     otherAmt: 0,
     remark: "",
+    tags: [],
   });
 
   const openAmtKeypad = () => setShowAmtKeypad(true);
@@ -72,9 +81,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       body.append("myAmt", input.myAmt);
       body.append("otherAmt", input.otherAmt);
       body.append("remark", input.remark);
+      body.append("tags", JSON.stringify(input.tags));
       files.forEach((file) => {
         body.append("images", file);
       });
+
       // api
       const result = await editTranApi(token, body);
       console.log(result);
@@ -103,6 +114,15 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
     }
   };
 
+  const getTagList = async () => {
+    try {
+      const result = await getTagApi(token);
+      setTagList(result.data.tags);
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
+  };
+
   const hdlFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const imageFiles = selectedFiles.filter((file) =>
@@ -114,6 +134,91 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const removeImage = (indexToRemove) => () => {
     setFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
+
+  const hdlTagKeyDown = (e) => {
+    if (e.key !== " " && e.key !== ",") return;
+
+    e.preventDefault();
+
+    const newTag = tagInput.trim();
+
+    if (!newTag) return;
+
+    // Find existing tag (case-insensitive)
+    const existTag = tagList.find(
+      (tag) => tag.tagTxt.toLowerCase() === newTag.toLowerCase(),
+    );
+
+    setInput((prev) => {
+      // Prevent duplicate
+      if (
+        prev.tags.some((t) => t.tagTxt.toLowerCase() === newTag.toLowerCase())
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        tags: [
+          ...prev.tags,
+          existTag
+            ? {
+                tagId: existTag.tagId,
+                tagTxt: existTag.tagTxt,
+                isNew: false,
+              }
+            : {
+                tagId: null,
+                tagTxt: newTag,
+                isNew: true,
+              },
+        ],
+      };
+    });
+
+    setTagInput("");
+    setTagSuggest([]);
+    setShowSuggest(false);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const keyword = tagInput.trim().toLowerCase();
+
+      if (keyword === "") {
+        setTagSuggest([]);
+        setShowSuggest(false);
+        return;
+      }
+
+      const result = tagList.filter((tag) => {
+        const matched = tag.tagTxt.toLowerCase().includes(keyword);
+
+        const selected = input.tags.some((t) => t.tagId === tag.tagId);
+
+        return matched && !selected;
+      });
+
+      setTagSuggest(result);
+      setShowSuggest(result.length > 0);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [tagInput, tagList]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tagBoxRef.current && !tagBoxRef.current.contains(event.target)) {
+        setShowSuggest(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -149,13 +254,23 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
       myAmt: selectedTran.myAmt,
       otherAmt: selectedTran.otherAmt,
       remark: selectedTran.remark,
+      tags:
+        selectedTran.tagTrans?.map((tagTran) => ({
+          tagId: tagTran.tag.tagId,
+          tagTxt: tagTran.tag.tagTxt,
+          isNew: false,
+        })) || [],
     }));
     getNewTranInfo();
+    getTagList();
   }, []);
+
   return (
     <>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-4 items-center relative pb-[75px] mt-[60px]">
-        <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-0 z-50 bg-surface shadow">
+        {/* header */}
+        <Header />
+        {/* <div className="flex justify-between px-3 items-center w-full fixed h-[50px] top-0 z-50 bg-surface shadow">
           <div className="flex items-center">
             <div className="w-[30px] h-[30px] convex-full bg-primary flex justify-center items-center">
               <AppIcon className="w-[20px] h-[20px] text-text-reverse" />
@@ -170,119 +285,196 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               {user.userName?.[0]?.toUpperCase()}
             </p>
           </div>
-        </div>
-
+        </div> */}
         {/* record date */}
-        <div className=" w-10/12 flex justify-center gap-2 mt-4 items-center">
-          <p className="w-[150px]  text-right pr-2">{t("recordDate")} :</p>
-          <input
-            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
-            type="date"
-            value={input.recordDate}
-            name="recordDate"
-            onChange={hdlInput}
-          />
+        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+          <p className="w-[100px] flex-none text-right pr-2">
+            {t("recordDate")} :
+          </p>
+          <div className="w-full flex items-center px-4">
+            <input
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              type="date"
+              value={input.recordDate}
+              name="recordDate"
+              onChange={hdlInput}
+            />
+          </div>
         </div>
         {/* record time */}
-        <div className="w-10/12 flex justify-center gap-2 itmes-center">
-          <p className="w-[150px] text-right pr-2">{t("recordTime")} :</p>
-          <input
-            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
-            type="time"
-            value={input.recordTime}
-            name="recordTime"
-            onChange={hdlInput}
-          />
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <p className="w-[100px] flex-none text-right pr-2">
+            {t("recordTime")} :
+          </p>
+          <div className="w-full flex items-center px-4">
+            <input
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              type="time"
+              value={input.recordTime}
+              name="recordTime"
+              onChange={hdlInput}
+            />
+          </div>
         </div>
-
         {/* paid by */}
-        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
-          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <UserIcon className="w-[20px] h-[20px]" />
             <p>{t("payer")} :</p>
+          </div>{" "}
+          <div className="w-full flex items-center px-4">
+            <input
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              type="text"
+              value={input.paidBy}
+              name="paidBy"
+              onChange={hdlInput}
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById("paid_by_modal").showModal();
+              }}
+              readOnly
+            />
           </div>
-          <input
-            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
-            type="text"
-            value={input.paidBy}
-            name="paidBy"
-            onChange={hdlInput}
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById("paid_by_modal").showModal();
-            }}
-            readOnly
-          />
         </div>
         {/* type */}
-        <div className=" w-10/12 flex justify-center gap-2 itmes-center">
-          <div className="w-[150px]  text-right pr-2 flex justify-end gap-1">
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <TypeIcon className="w-[20px] h-[20px]" />
             <p>{t("type")} :</p>
           </div>
-          <input
-            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4 -translate-y-1"
-            type="text"
-            value={input.type}
-            name="type"
-            onChange={hdlInput}
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById("expense_type_modal").showModal();
-            }}
-            readOnly
-          />
+          <div className="w-full flex items-center px-4">
+            <input
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              type="text"
+              value={input.type}
+              name="type"
+              onChange={hdlInput}
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById("expense_type_modal").showModal();
+              }}
+              readOnly
+            />
+          </div>
         </div>
         {/* amount */}
-        <div className="w-10/12 flex justify-center gap-2 itmes-center">
-          <p className="w-[150px] text-right pr-2">{t("totalAmount")} :</p>
-          <NumericFormat
-            className="input-field w-[150px] convex px-2 h-[30px] bg-surface pl-4"
-            value={input.totalAmt === "" ? "" : input.totalAmt}
-            name="totalAmt"
-            thousandSeparator
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            inputMode="none"
-            readOnly
-            onClick={(e) => {
-              e.preventDefault();
-              openAmtKeypad();
-            }}
-            onFocus={(e) => {
-              e.preventDefault();
-              openAmtKeypad();
-            }}
-            autoComplete="off"
-          />
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
+            {t("totalAmount")} :
+          </p>
+          <div className="w-full flex items-center px-4">
+            <NumericFormat
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              value={input.totalAmt === "" ? "" : input.totalAmt}
+              name="totalAmt"
+              thousandSeparator
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              inputMode="none"
+              readOnly
+              onClick={(e) => {
+                e.preventDefault();
+                openAmtKeypad();
+              }}
+              onFocus={(e) => {
+                e.preventDefault();
+                openAmtKeypad();
+              }}
+              autoComplete="off"
+            />
+          </div>
         </div>
         {/* My Portion */}
-        <div className=" w-10/12 flex justify-center gap-2 items-center ">
-          <p className="w-[150px]  text-right pr-2">{t("payerPortion")} :</p>
-          <NumericFormat
-            className="input-field w-[150px] px-2 h-[30px] convex bg-surface pl-4"
-            value={input.myPortion === "" ? "" : input.myPortion * 100}
-            name="myPortion"
-            suffix="%"
-            thousandSeparator
-            decimalScale={0}
-            fixedDecimalScale
-            allowNegative={false}
-            inputMode="numeric"
-            onValueChange={(values) => {
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
+            {t("payerPortion")} :
+          </p>
+          <div className="w-full flex items-center px-4">
+            <NumericFormat
+              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+              value={input.myPortion === "" ? "" : input.myPortion * 100}
+              name="myPortion"
+              suffix="%"
+              thousandSeparator
+              decimalScale={0}
+              fixedDecimalScale
+              allowNegative={false}
+              inputMode="numeric"
+              onValueChange={(values) => {
+                setInput((prev) => ({
+                  ...prev,
+                  myPortion: values.floatValue ? values.floatValue / 100 : 0, // store as decimal (e.g., 0.25)
+                }));
+              }}
+            />
+          </div>
+        </div>{" "}
+        <div className=" w-9/11 flex justify-end pr-4 gap-2 items-center">
+          <div
+            className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0 ? "text-text-reverse bg-primary" : "bg-surface"}`}
+            onClick={() => {
               setInput((prev) => ({
                 ...prev,
-                myPortion: values.floatValue ? values.floatValue / 100 : "", // store as decimal (e.g., 0.25)
+                myPortion: 0,
               }));
             }}
-          />
+          >
+            0%
+          </div>{" "}
+          <div
+            className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0.25 ? "text-text-reverse bg-primary" : "bg-surface"}`}
+            onClick={() => {
+              setInput((prev) => ({
+                ...prev,
+                myPortion: 0.25,
+              }));
+            }}
+          >
+            25%
+          </div>
+          <div
+            className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0.5 ? "text-text-reverse bg-primary" : "bg-surface"}`}
+            onClick={() => {
+              setInput((prev) => ({
+                ...prev,
+                myPortion: 0.5,
+              }));
+            }}
+          >
+            50%
+          </div>
+          <div
+            className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0.75 ? "text-text-reverse bg-primary" : "bg-surface"}`}
+            onClick={() => {
+              setInput((prev) => ({
+                ...prev,
+                myPortion: 0.75,
+              }));
+            }}
+          >
+            75%
+          </div>
+          <div
+            className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 1 ? "text-text-reverse bg-primary" : "bg-surface"}`}
+            onClick={() => {
+              setInput((prev) => ({
+                ...prev,
+                myPortion: 1,
+              }));
+            }}
+          >
+            100%
+          </div>
         </div>
         {/* My Amount */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2 ">{t("payerPortion")} :</p>
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <p className="w-[150px] flex-none text-right">
+            {t("payerOtherAmount")} :
+          </p>
           <NumericFormat
-            className="input-field w-[150px] px-2"
+            className="input-field w-full px-2"
             value={input.myAmt === "" ? "" : input.myAmt}
             name="myAmt"
             thousandSeparator
@@ -292,12 +484,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             inputMode="decimal"
             disabled
           />
-        </div>
-        {/* Other Amount */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-right pr-2">{t("otherAmount")} :</p>
+          <p> / </p>
           <NumericFormat
-            className="input-field w-[150px] px-2"
+            className="input-field w-full px-2"
             value={input.otherAmt === "" ? "" : input.otherAmt}
             name="otherAmt"
             thousandSeparator
@@ -308,13 +497,94 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             disabled
           />
         </div>
+        {/* tag */}
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
+            <TagIcon className="w-[20px] h-[20px]" />
+            <p>{t("tag")} :</p>
+          </div>{" "}
+          <div className="w-full flex items-center px-4"></div>
+        </div>
+        <div ref={tagBoxRef} className="relative w-9/11 max-w-[350px]">
+          <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2">
+            {input.tags.map((tag, idx) => (
+              <div
+                key={idx}
+                className="bg-primary text-text-reverse rounded-full px-3 flex items-center gap-2"
+              >
+                <span>{tag.tagTxt}</span>
+
+                <span
+                  className="cursor-pointer font-bold"
+                  onClick={() => {
+                    setInput((prev) => ({
+                      ...prev,
+                      tags: prev.tags.filter((_, i) => i !== idx),
+                    }));
+                  }}
+                >
+                  ×
+                </span>
+              </div>
+            ))}
+
+            <input
+              className="flex-1 min-w-[100px] outline-none bg-transparent"
+              type="text"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={hdlTagKeyDown}
+            />
+          </div>
+
+          {showSuggest && (
+            <div className="absolute left-0 right-0 top-[40px] bg-surface rounded-2xl shadow-lg border z-50 max-h-[200px] overflow-y-auto">
+              {tagSuggest.map((tag) => (
+                <div
+                  key={tag.tagId}
+                  className="px-3 py-2 hover:bg-base-200 cursor-pointer"
+                  onClick={() => {
+                    setInput((prev) => {
+                      if (
+                        prev.tags.some(
+                          (t) =>
+                            t.tagTxt.toLowerCase() === tag.tagTxt.toLowerCase(),
+                        )
+                      ) {
+                        return prev;
+                      }
+
+                      return {
+                        ...prev,
+                        tags: [
+                          ...prev.tags,
+                          {
+                            tagId: tag.tagId,
+                            tagTxt: tag.tagTxt,
+                            isNew: false,
+                          },
+                        ],
+                      };
+                    });
+
+                    setTagInput("");
+                    setTagSuggest([]);
+                    setShowSuggest(false);
+                  }}
+                >
+                  {tag.tagTxt}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {/* remark */}
-        <div className=" w-10/12 flex justify-center gap-2">
-          <p className="w-[150px]  text-left pr-2">{t("remark")} :</p>
-          <p className="w-[150px] text-center"></p>
+        <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <p className="w-[100px] flex-none text-right pr-2">{t("remark")} :</p>
+          <div className="w-full flex items-center px-4"></div>
         </div>
         <input
-          className="input-field w-10/12 h-[35px] concave pl-4 bg-surface"
+          className="input-field w-9/11 max-w-[350px] min-h-[40px] concave bg-surface pl-3"
           type="text"
           value={input.remark}
           name="remark"
@@ -323,9 +593,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {/* photo */}
         {selectedTran?.isHavePhoto && (
           <>
-            <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
-              <p className="w-[150px]  text-left pr-2">{t("photo")} :</p>
-              <p className="w-[150px] text-center"></p>
+            <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+              <p className="w-[100px] flex-none text-right pr-2">
+                {t("photo")} :
+              </p>
+              <div className="w-full flex items-center px-4"></div>
             </div>
             <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
               {/* list of files */}
@@ -358,9 +630,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           accept="image/*"
           onChange={hdlFileChange}
         />
-        <div className=" w-10/12 flex justify-center gap-2 rounded-xl">
-          <p className="w-[150px]  text-left pr-2">{t("addPhoto")} :</p>
-          <p className="w-[150px] text-center"></p>
+        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+          <p className="w-[100px] flex-none text-right pr-2">
+            {t("addPhoto")} :
+          </p>
+          <div className="w-full flex items-center px-4"></div>
         </div>
         <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
           {/* add photo */}
