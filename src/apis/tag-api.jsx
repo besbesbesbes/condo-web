@@ -15,3 +15,10 @@ export const getTagApi = async (token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const editTagTranApi = async (token, body) =>
+  await axios.post(`${baseUrl}/tag/edit-tag-tran`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

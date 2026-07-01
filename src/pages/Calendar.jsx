@@ -5,7 +5,8 @@ import useMainStore from "../stores/main-store";
 import { NextIcon, PrevIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
-import { getTagTranApi } from "../apis/tag-api";
+import { editTagTranApi, getTagApi, getTagTranApi } from "../apis/tag-api";
+import ModalEditTag from "../components/ModalEditTag";
 
 function Calendar() {
   const { t } = useTranslation();
@@ -16,7 +17,9 @@ function Calendar() {
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tagList, setTagList] = useState([]);
+  const [tagListAll, setTagListAll] = useState([]);
   const [calendarDays, setCalendarDays] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(null);
   const [activeTags, setActiveTags] = useState([]);
 
   const year = currentDate.getFullYear();
@@ -122,7 +125,6 @@ function Calendar() {
 
   const getTagTran = async () => {
     setIsLoad(true);
-
     try {
       const result = await getTagTranApi(token, {
         startDate: days[0].date,
@@ -176,6 +178,53 @@ function Calendar() {
       setIsLoad(false);
     }
   };
+
+  const openEditTag = (day) => {
+    setSelectedDay(day);
+    document.getElementById("edit_tag_modal").showModal();
+  };
+
+  const handleSaveTags = async (date, tagList, diff) => {
+    console.log("SAVE TO API:", diff);
+
+    try {
+      setIsLoad(true);
+
+      const payload = {
+        date,
+        add: diff.add.map((t) => ({
+          tagId: t.tagId ?? null,
+          tagTxt: t.tagTxt,
+          isNew: t.isNew,
+        })),
+        delete: diff.delete.map((t) => ({
+          tagTranId: t.tagTranId,
+          tagId: t.tagId,
+        })),
+      };
+
+      const result = await editTagTranApi(token, payload);
+
+      console.log(result.data);
+
+      // refresh tags from the server so tagTranId metadata is preserved
+      await getTagTran();
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    } finally {
+      setIsLoad(false);
+    }
+  };
+
+  const getTagList = async () => {
+    try {
+      const result = await getTagApi(token);
+      setTagListAll(result.data.tags || []);
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
+  };
+
   useEffect(() => {
     setCurMenu("calendar");
   }, [setCurMenu]);
@@ -183,6 +232,12 @@ function Calendar() {
   useEffect(() => {
     getTagTran();
   }, [year, month]);
+
+  useEffect(() => {
+    if (token) {
+      getTagList();
+    }
+  }, [token]);
 
   return (
     <div className="w-screen bg-app overflow-y-auto flex flex-col items-center relative mb-[75px] mt-[50px]">
@@ -215,6 +270,7 @@ function Calendar() {
               ? "bg-surface"
               : "bg-surface text-gray-300"
         }`}
+              onClick={() => openEditTag(item)}
             >
               {item.day}
               {/* pins area */}
@@ -305,8 +361,16 @@ function Calendar() {
           })}
         </div>
       </div>
-
       <Footer />
+      {/* modal edit tag */}
+      <dialog id="edit_tag_modal" className="modal">
+        <ModalEditTag
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+          tagListAll={tagListAll}
+          onSaveTags={handleSaveTags}
+        />
+      </dialog>
     </div>
   );
 }

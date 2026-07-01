@@ -96,5 +96,7 @@
   "November": "พฤศจิกายน",
   "December": "ธันวาคม",
   "tag": "แท็ก",
-  "payerOtherAmount": "ของผู้จ่าย/ของคนอื่น"
+  "payerOtherAmount": "ของผู้จ่าย/ของคนอื่น",
+  "editTag": "แก้ไขแท็ก",
+  "noTag": "ไม่มีแท็ก"
 }

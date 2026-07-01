@@ -15,6 +15,9 @@ import AmtKeypad from "../components/AmtKeypad";
 import {
   AddPhoto,
   AppIcon,
+  BackIcon,
+  DeleteIcon,
+  SaveIcon,
   TagIcon,
   TransIcon,
   TypeIcon,
@@ -510,7 +513,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             {input.tags.map((tag, idx) => (
               <div
                 key={idx}
-                className="bg-primary text-text-reverse rounded-full px-3 flex items-center gap-2"
+                className="bg-accent text-text-reverse rounded-full px-3 flex items-center gap-2"
               >
                 <span>{tag.tagTxt}</span>
 
@@ -669,24 +672,27 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
         {/* button */}
         <div className="flex gap-4">
           <button
-            className="btn w-[100px] h-[30px] mt-auto mb-10 convex font-bold bg-surface"
+            className="btn w-[100px] h-[30px] mt-auto mb-10 convex font-bold bg-surface flex gap-1"
             onClick={() => setSelectedTran(null)}
           >
+            <BackIcon className="w-[20px] h-[20px]" />
             {t("back")}
           </button>
           <button
-            className="btn btn-primary w-[100px]  text-text-reverse"
+            className="btn btn-primary w-[100px]  text-text-reverse  flex gap-1"
             onClick={hdlEditTran}
           >
+            <SaveIcon className="w-[20px] h-[20px]" />
             {t("save")}
           </button>
           <button
-            className="btn btn-accent w-[100px]   text-text-reverse"
+            className="btn btn-accent w-[100px]   text-text-reverse  flex gap-1"
             onClick={(e) => {
               e.stopPropagation();
               document.getElementById("confirm-delete-modal").showModal();
             }}
           >
+            <DeleteIcon className="w-[20px] h-[20px]" />
             {t("delete")}
           </button>
         </div>

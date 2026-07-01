@@ -96,5 +96,7 @@
   "November": "November",
   "December": "December",
   "tag": "Tag",
-  "payerOtherAmount": "Payer/Other Amount"
+  "payerOtherAmount": "Payer/Other Amount",
+  "editTag": "Edit Tag",
+  "noTag": "No Tag"
 }

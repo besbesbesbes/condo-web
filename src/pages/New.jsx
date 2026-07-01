@@ -642,7 +642,7 @@ function New() {
             {input.tags.map((tag, idx) => (
               <div
                 key={idx}
-                className="bg-primary text-text-reverse rounded-full px-3 flex items-center gap-2"
+                className="bg-accent text-text-reverse rounded-full px-3 flex items-center gap-2"
               >
                 <span>{tag.tagTxt}</span>
 
