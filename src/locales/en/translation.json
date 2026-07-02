@@ -98,5 +98,10 @@
   "tag": "Tag",
   "payerOtherAmount": "Payer/Other Amount",
   "editTag": "Edit Tag",
-  "noTag": "No Tag"
+  "noTag": "No Tag",
+  "buddy": "Buddy",
+  "registerBuddy": "Register Buddy",
+  "waitBuddyMatchWithYou": "Wait buddy match with you.",
+  "youHaveBuddyNow": "You have buddy now.",
+  "by": "by"
 }

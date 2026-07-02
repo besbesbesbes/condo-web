@@ -10,7 +10,12 @@ import { testDB } from "../apis/test-api";
 import { useTranslation } from "react-i18next";
 import { Html5Qrcode } from "html5-qrcode";
 import { exportReportApi } from "../apis/export-api";
-import { AppIcon, SettingIcon } from "../icons/menuIcon";
+import {
+  AppIcon,
+  PendingBuddyIcon,
+  SettingIcon,
+  BuddyIcon,
+} from "../icons/menuIcon";
 import Header from "../components/Header";
 
 function Setting() {
@@ -166,14 +171,30 @@ function Setting() {
             </p>
             <div className="flex items-center gap-2">
               <div
-                className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+                className={`h-[30px] flex justify-center items-center convex bg-accent px-3`}
               >
-                <p className="text-text-reverse">
-                  {user.userName?.[0]?.toUpperCase()}
-                </p>
+                <p className="text-text-reverse">{user.userName}</p>
               </div>
-              <p className="">{userInfo.userName}</p>
             </div>
+          </div>
+          {/* buddy */}
+          <div className="w-9/11 flex items-center justify-between rounded-2xl relative">
+            <div>
+              <p className="font-bold">{t("buddy")}</p>
+              <p className="text-sm">{t("registerBuddy")}</p>
+            </div>
+            <input
+              className="input-field  w-[150px]  concave px-2 h-[30px] bg-surface pl-4"
+              type="text"
+              name="recordDate"
+            />
+            {/* friend status */}
+            <div className="w-[26px] h-[26px] convex bg-accent absolute right-1 flex justify-center items-center">
+              <PendingBuddyIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div>
+            {/* <div className="w-[26px] h-[26px] convex bg-friend absolute right-1 flex justify-center items-center">
+              <BuddyIcon className="w-[20px] h-[20px] text-text-reverse" />
+            </div> */}
           </div>
           {/* switch theme */}
           <ThemeToggle />

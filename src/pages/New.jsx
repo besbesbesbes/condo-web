@@ -638,11 +638,11 @@ function New() {
           <div className="w-full flex items-center px-4"></div>
         </div>
         <div ref={tagBoxRef} className="relative w-9/11 max-w-[350px]">
-          <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2">
+          <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2 pl-4">
             {input.tags.map((tag, idx) => (
               <div
                 key={idx}
-                className="bg-accent text-text-reverse rounded-full px-3 flex items-center gap-2"
+                className="bg-tag text-text-reverse rounded-full px-3 flex items-center gap-2"
               >
                 <span>{tag.tagTxt}</span>
 
@@ -716,7 +716,7 @@ function New() {
           <div className="w-full flex items-center px-4"></div>
         </div>
         <input
-          className="input-field w-9/11 max-w-[350px] min-h-[40px] concave bg-surface pl-3"
+          className="input-field w-9/11 max-w-[350px] min-h-[40px] concave bg-surface pl-4"
           type="text"
           value={input.remark}
           name="remark"

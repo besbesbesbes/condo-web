@@ -43,18 +43,16 @@ function Header() {
       <div className="flex justify-center items-center gap-1">
         {/* <p>{user.userName}</p> */}
         <div
-          className={`w-[30px] h-[30px] flex justify-center items-center convex bg-primary ${user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+          className={`h-[30px] flex justify-center items-center convex bg-accent px-2`}
         >
-          <p className="text-text-reverse">
-            {user.userName?.[0]?.toUpperCase()}
-          </p>
+          <p className="text-text-reverse">{user.userName}</p>
         </div>
         {/* setting */}
         <div
-          className="w-[30px] h-[30px] convex-full bg-surface flex justify-center items-center"
+          className="w-[30px] h-[30px] convex-full bg-primary text-text-reverse flex justify-center items-center"
           onClick={() => navigate("/setting")}
         >
-          <SettingIcon className="w-[20px] h-[20px]" />
+          <SettingIcon className="w-[18px] h-[18px]" />
         </div>
       </div>
     </div>

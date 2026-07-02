@@ -98,5 +98,10 @@
   "tag": "แท็ก",
   "payerOtherAmount": "ของผู้จ่าย/ของคนอื่น",
   "editTag": "แก้ไขแท็ก",
-  "noTag": "ไม่มีแท็ก"
+  "noTag": "ไม่มีแท็ก",
+  "buddy": "คู่หู",
+  "registerBuddy": "ลงทะเบียนคู่หู",
+  "waitBuddyMatchWithYou": "รอคู่หูจับคู่กับคุณ",
+  "youHaveBuddyNow": "คูณมีคู่หูแล้ว",
+  "by": "โดย"
 }

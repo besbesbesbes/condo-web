@@ -5,10 +5,28 @@ import useUserStore from "../stores/user-store";
 import { getTransApi } from "../apis/trans-api";
 import { NumericFormat } from "react-number-format";
 import TransDetail from "./TransDetail";
-import { AppIcon, NoTrans, SearchIcon, TransIcon } from "../icons/menuIcon";
+import {
+  AppIcon,
+  CameraIcon,
+  NoTrans,
+  SearchIcon,
+  TransIcon,
+} from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+
+function formatDateTime(date, lang = "en") {
+  const d = new Date(date);
+
+  const day = d.getDate();
+  const month = d.toLocaleString(lang, { month: "short" });
+  const year = d.getFullYear().toString().slice(-2);
+  const hour = String(d.getHours()).padStart(2, "0");
+  const minute = String(d.getMinutes()).padStart(2, "0");
+
+  return `${day}-${month}-${year} | ${hour}:${minute}`;
+}
 
 function Trans() {
   const { t, i18n } = useTranslation();
@@ -112,15 +130,6 @@ function Trans() {
                   ))}
                 </select>
               </div>
-
-              {/* <div className="w-full flex justify-end items-center gap-2">
-                <button
-                  className="btn btn-primary text-text-reverse convex bg-surface"
-                  onClick={() => window.location.reload()}
-                >
-                  {t("refresh")}
-                </button>
-              </div> */}
             </div>
             <div className="w-11/12  flex flex-col gap-4">
               {trans?.length ? (
@@ -140,132 +149,101 @@ function Trans() {
                           },
                         )
                       : null;
-                  // const showDateHeader = curDate !== prevDate;
-                  // const formattedDate = curDate.replace(" ", "-");
-
                   return (
                     <div
-                      className="w-full flex flex-col items-center convex bg-surface relative"
                       key={idx}
+                      className="w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1  items-center"
+                      onClick={(e) => hdlSelectedTran(e, el)}
                     >
-                      {/* {showDateHeader && (
-                        <div className="w-11/12 h-[20px] text-center text-[12px] convex flex items-center justify-center font-bold">
-                          {formattedDate}
+                      <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">
+                        {/* type */}
+                        <p className="flex-1 text-[19px]">
+                          {el.expenseType?.expenseName}
+                        </p>
+                        {/* totalAmt */}
+                        <NumericFormat
+                          className="flex-none w-[120px]  text-right text-[26px]"
+                          value={el.totalAmt}
+                          displayType="text"
+                          thousandSeparator=","
+                          decimalScale={2}
+                          fixedDecimalScale
+                        />
+                      </div>
+                      <div className="w-full px-1 flex gap-1 justify-between items-center">
+                        {/* paidUser & remark */}
+                        <div className="flex gap-1 items-center">
+                          <div
+                            className={`convex h-[22px] px-2 flex justify-center items-center text-[12px] text-text-reverse ${user.userId === el.paidUserId ? "bg-accent" : "bg-friend"} `}
+                            onClick={() => console.log(user)}
+                          >
+                            {el.paidUser?.userName}
+                          </div>
+                          {el.isHavePhoto && (
+                            <CameraIcon className="w-[16px] h-[16px]" />
+                          )}
+                          {el.remark && (
+                            <p className="text-[14px]">
+                              {" | "}{" "}
+                              <span className="italic">{el.remark}</span>
+                            </p>
+                          )}
                         </div>
-                      )} */}
-                      <div
-                        className={`flex w-full items-center cursor-pointer rounded-xl py-3 px-2 gap-2 ${
-                          el.userId === user.userId ? "bg-surface" : ""
-                        }`}
-                        onClick={(e) => hdlSelectedTran(e, el)}
-                      >
-                        <div className="w-[50px] gap-2 flex flex-col justify-between items-center">
-                          {/* create user */}
-                          <div className="font-bold text-center">
-                            <div
-                              className={`w-[24px] h-[24px] flex justify-center items-center convex text-[12px]  text-text-reverse ${el.user.userName.charAt(0) === "K" ? "bg-primary" : "bg-accent"}`}
-                            >
-                              {el.user.userName.charAt(0)}
-                            </div>
-                          </div>
-                          {/* Month */}
-                          <div className="text-[12px] font-bold text-center">
-                            {new Date(el.recordDate).toLocaleString(
-                              i18n.language === "en" ? "en-US" : "th-TH",
-                              {
-                                month: "short",
-                              },
-                            )}
-                          </div>
-                        </div>
-                        <div className="w-[50px] flex flex-col">
-                          {/* date */}
-                          <div className=" text-center text-[12px] font-bold border-b border-main">
-                            {new Date(el.recordDate).getDate()}
-                          </div>
-
-                          {/* time */}
-                          <div className="text-[12px] text-center">
-                            {new Date(el.recordDate).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </div>
-                        </div>
-                        <div className="w-full flex flex-col px-2 py-1 gap-2">
-                          <div className="grid grid-cols-2 font-bold items-center">
-                            {/* type  */}
-                            <div className="self-center">
-                              {el.expenseType.expenseName}
-                            </div>
-
-                            {/* total amt */}
-                            <NumericFormat
-                              className="text-right text-[24px]"
-                              value={el.totalAmt}
-                              displayType="text"
-                              thousandSeparator=","
-                              decimalScale={2}
-                              fixedDecimalScale
-                            />
-                          </div>
-
-                          <div className="flex justify-between text-xs">
-                            <div className="flex gap-1">
-                              {/* paid by */}
-
-                              <div
-                                className={`w-[16px] h-[16px] flex-none flex justify-center items-center convex text-[10px]  text-text-reverse ${el.paidUser.userName.charAt(0) === "K" ? "bg-primary" : "bg-accent"}`}
-                              >
-                                {el.paidUser.userName.charAt(0)}
-                              </div>
-
-                              {/* remark */}
-                              {el.remark ? (
-                                <div className="">
-                                  |{" "}
-                                  <span className="text-accent">
-                                    {el.remark}
-                                  </span>
-                                  {el.isHavePhoto && <span>📷</span>}
-                                </div>
-                              ) : null}
-                            </div>
-                            <div className="flex gap-1 items-center">
-                              <div className="flex items-center gap-0.5">
-                                <span>(</span>
-                                <NumericFormat
-                                  className="text-center"
-                                  value={el.myPortion * 100}
-                                  displayType="text"
-                                  thousandSeparator=","
-                                  decimalScale={0}
-                                  fixedDecimalScale
-                                  suffix="%"
-                                />
-                                <span>)</span>
-                              </div>
-                              <NumericFormat
-                                className="text-right"
-                                value={el.myAmt}
-                                displayType="text"
-                                thousandSeparator=","
-                                decimalScale={2}
-                                fixedDecimalScale
-                              />
-                            </div>
-                          </div>
+                        {/* myProtion and myAmt */}
+                        <div className="flex items-center gap-1 text-[15px]">
+                          <span>(</span>
+                          <NumericFormat
+                            className="text-center"
+                            value={
+                              user.userId === el.paidUserId
+                                ? el.myPortion * 100
+                                : (1 - Number(el.myPortion)) * 100
+                            }
+                            displayType="text"
+                            thousandSeparator=","
+                            decimalScale={0}
+                            fixedDecimalScale
+                            suffix="%"
+                          />
+                          <span>)</span>
+                          <NumericFormat
+                            className="text-right"
+                            value={
+                              user.userId === el.paidUserId
+                                ? el.myAmt
+                                : el.otherAmt
+                            }
+                            displayType="text"
+                            thousandSeparator=","
+                            decimalScale={2}
+                            fixedDecimalScale
+                          />
                         </div>
                       </div>
-                      <div className="w-10/11 flex justify-end pb-2 items-center gap-1 translate-x-2">
-                        {el?.tagTrans.map((el, idx) => (
+                      <div className="w-full px-1 flex gap-1 justify-between items-center mt-1 relative">
+                        {/* date time */}
+                        <div className="w-[150px] flex-none  flex items-center gap-1">
+                          <p className="text-text-50 text-[12px]">{t("by")}</p>
                           <div
-                            key={idx}
-                            className="px-2 py-1 convex text-[13px] bg-accent text-text-reverse border "
+                            className={`text-[12px] w-[18px] h-[18px] flex-none convex px-1 flex justify-center items-center ${el.user?.userName === user.userName ? "bg-accent" : "bg-friend"}`}
                           >
-                            {el?.tag?.tagTxt}
+                            {el.user?.userName.charAt(0)}
                           </div>
-                        ))}
+                          <p className="text-[12px] ml-1 text-text-50">
+                            {formatDateTime(el.recordDate, i18n.language)}
+                          </p>
+                        </div>
+                        {/* tags */}
+                        <div className="flex-1 flex gap-[2px] justify-end translate-x-1 flex-wrap">
+                          {el.tagTrans.map((el, idx) => (
+                            <div
+                              key={idx}
+                              className="px-2 py-1 convex text-[13px] h-[20px] text-text bg-tag text-text-reverse flex justify-center items-center"
+                            >
+                              {el?.tag?.tagTxt}
+                            </div>
+                          ))}{" "}
+                        </div>
                       </div>
                     </div>
                   );
