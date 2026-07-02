@@ -152,7 +152,7 @@ function Trans() {
                   return (
                     <div
                       key={idx}
-                      className="w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1  items-center"
+                      className="w-full min-h-[30px] concave bg-surface flex flex-col p-2 gap-1  items-center"
                       onClick={(e) => hdlSelectedTran(e, el)}
                     >
                       <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">

@@ -249,7 +249,7 @@ function Memo() {
                   </div>
                 </div>
               </div>
-              <div className="w-full min-w-0 min-h-[70px] convex bg-surface p-2 relative">
+              <div className="w-full min-w-0 min-h-[70px] concave bg-surface p-2 relative">
                 <p className="whitespace-pre-wrap break-words line-clamp-3">
                   {el.txt}
                 </p>
