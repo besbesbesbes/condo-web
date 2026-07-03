@@ -19,7 +19,7 @@ import {
 } from "../icons/menuIcon";
 import AmtKeypad from "../components/AmtKeypad";
 import Header from "../components/Header";
-import { getTagApi } from "../apis/tag-api";
+import { getRecentTagApi, getTagApi } from "../apis/tag-api";
 
 function New() {
   const { t } = useTranslation();
@@ -53,6 +53,7 @@ function New() {
   const [tagInput, setTagInput] = useState("");
   const [tagSuggest, setTagSuggest] = useState([]);
   const [showSuggest, setShowSuggest] = useState(false);
+  const [recentTag, setRecentTag] = useState([]);
   const tagBoxRef = useRef(null);
 
   const openAmtKeypad = () => {
@@ -268,6 +269,16 @@ function New() {
     setShowSuggest(false);
   };
 
+  const getRecentTag = async () => {
+    try {
+      const result = await getRecentTagApi(token);
+      setRecentTag(result.data.recentTag);
+      console.log(result.data.recentTag);
+    } catch (err) {
+      console.log(err?.response?.data?.msg || err.message);
+    }
+  };
+
   useEffect(() => {
     setInput((prev) => ({
       ...prev,
@@ -279,6 +290,7 @@ function New() {
     setCurMenu("add");
     getNewTranInfo();
     getTagList();
+    getRecentTag();
   }, []);
 
   useEffect(() => {
@@ -636,6 +648,40 @@ function New() {
             <p>{t("tag")} :</p>
           </div>{" "}
           <div className="w-full flex items-center px-4"></div>
+        </div>
+        {/* recent tag */}
+        <div className="w-9/11 flex justify-end gap-2 flex-wrap">
+          {recentTag.map((tag) => (
+            <div
+              key={tag.tagId}
+              className="bg-surface convex rounded-full px-3 py-1 cursor-pointer hover:bg-primary hover:text-text-reverse transition"
+              onClick={() => {
+                setInput((prev) => {
+                  if (prev.tags.some((t) => t.tagId === tag.tagId)) {
+                    return prev;
+                  }
+
+                  return {
+                    ...prev,
+                    tags: [
+                      ...prev.tags,
+                      {
+                        tagId: tag.tagId,
+                        tagTxt: tag.tagTxt,
+                        isNew: false,
+                      },
+                    ],
+                  };
+                });
+
+                setTagInput("");
+                setTagSuggest([]);
+                setShowSuggest(false);
+              }}
+            >
+              {tag.tagTxt}
+            </div>
+          ))}
         </div>
         <div ref={tagBoxRef} className="relative w-9/11 max-w-[350px]">
           <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2 pl-4">

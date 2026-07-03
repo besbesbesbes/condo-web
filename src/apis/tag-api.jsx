@@ -22,3 +22,10 @@ export const editTagTranApi = async (token, body) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const getRecentTagApi = async (token) =>
+  await axios.get(`${baseUrl}/tag/get-recent-tag`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
