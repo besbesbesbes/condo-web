@@ -384,7 +384,7 @@ function New() {
               }}
             >
               <div
-                className={`h-[26px] px-2  convex w-fit ${input.paidBy === user.userName ? "bg-accent" : "bg-friend"}`}
+                className={`h-[26px] px-2   w-fit ${input.paidBy === user.userName ? "bg-accent convex" : input.paidBy.length > 0 ? "bg-friend  convex" : "bg-surface"}`}
                 value={input.paidBy}
                 name="paidBy"
                 onChange={hdlInput}

@@ -7,6 +7,7 @@ import {
   LockIcon,
   MemoIcon,
   PrivateIcon,
+  SaveIcon,
 } from "../icons/menuIcon";
 import useMainStore from "../stores/main-store";
 import { editMemo } from "../apis/memo-api";
@@ -176,8 +177,8 @@ function ModalEditMemo({ refreshMemo, memo }) {
           onClick={hdlEditMemo}
         >
           <div className="flex gap-1 items-center">
-            <EditIcon className="w-[20px] h-[20px]" />
-            {t("edit")}
+            <SaveIcon className="w-[20px] h-[20px]" />
+            {t("save")}
           </div>
         </button>
         {user.userName === input?.user?.userName && (
