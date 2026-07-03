@@ -26,6 +26,7 @@ function Memo() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const { t } = useTranslation();
   const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [memos, setMemos] = useState([]);
   const [filteredMemos, setFilteredMemos] = useState([]);
@@ -33,12 +34,12 @@ function Memo() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [filter, setFilter] = useState({
-    Kaimook: true,
-    Bes: true,
+    users: {}, // { userId: true/false }
     hidden: false,
   });
   const [sort, setSort] = useState("new");
   const [showToTop, setShowToTop] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const hdlGetMemo = async () => {
     setIsLoad(true);
@@ -46,6 +47,8 @@ function Memo() {
       const result = await getMemo(token);
       console.log(result);
       setMemos(result?.data?.memos);
+      setUsers(result?.data?.users || []);
+      console.log(result?.data?.users || []);
     } catch (err) {
       const msg = err?.response?.data?.msg || err.message;
       console.log(msg);
@@ -59,9 +62,7 @@ function Memo() {
 
     const filtered = memos.filter((memo) => {
       // User filter
-      const matchUser =
-        (filter.Kaimook && memo.user.userName === "Kaimook") ||
-        (filter.Bes && memo.user.userName === "Bes");
+      const matchUser = filter.users[memo.user.userId];
 
       if (!matchUser) return false;
 
@@ -98,6 +99,20 @@ function Memo() {
     });
     setShowToTop(false);
   };
+
+  useEffect(() => {
+    if (users.length) {
+      const init = {};
+      users.forEach((u) => {
+        init[u.userId] = true;
+      });
+
+      setFilter((prev) => ({
+        ...prev,
+        users: init,
+      }));
+    }
+  }, [users]);
 
   useEffect(() => {
     const timmer = setTimeout(() => {
@@ -180,22 +195,38 @@ function Memo() {
       </div>
       {/* filter */}
       <div className="w-10/11 flex items-center justify-between gap-2 mt-1 flex-wrap">
-        <div className="flex gap-2">
-          <button
-            className={`w-[100px] h-[30px] flex-none convex my-1 ${filter.Kaimook ? "bg-primary text-text-reverse font-bold" : "bg-surface"}`}
-            onClick={() =>
-              setFilter((prev) => ({ ...prev, Kaimook: !prev.Kaimook }))
-            }
-          >
-            Kaimook
-          </button>
-          <button
-            className={`w-[100px] h-[30px] flex-none convex my-1 ${filter.Bes ? "bg-accent text-text-reverse font-bold" : "bg-surface"}`}
-            onClick={() => setFilter((prev) => ({ ...prev, Bes: !prev.Bes }))}
-          >
-            Bes
-          </button>
-        </div>
+        {users.length > 1 && (
+          <div className="flex gap-2">
+            {users.map((u) => {
+              const isMe = Number(u.userId) === Number(user.userId);
+              const isActive = filter.users[u.userId];
+
+              return (
+                <button
+                  key={u.userId}
+                  className={`w-[100px] h-[30px] flex-none convex my-1 ${
+                    isActive
+                      ? isMe
+                        ? "bg-accent text-text-reverse font-bold"
+                        : "bg-friend text-text-reverse font-bold"
+                      : "bg-surface"
+                  }`}
+                  onClick={() =>
+                    setFilter((prev) => ({
+                      ...prev,
+                      users: {
+                        ...prev.users,
+                        [u.userId]: !prev.users[u.userId],
+                      },
+                    }))
+                  }
+                >
+                  {u.userName}
+                </button>
+              );
+            })}
+          </div>
+        )}
         <button
           className={`w-[100px] h-[30px] flex-none convex my-1 flex gap-1 items-center justify-center ${filter.hidden ? "bg-primary text-text-reverse font-bold" : "bg-surface"}`}
           onClick={() =>

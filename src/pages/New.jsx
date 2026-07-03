@@ -106,7 +106,6 @@ function New() {
   const getTagList = async () => {
     const result = await getTagApi(token);
     setTagList(result.data.tags);
-    console.log(result.data.tags);
   };
 
   const hdlAddTran = async (e) => {
@@ -377,17 +376,23 @@ function New() {
             <p>{t("payer")} :</p>
           </div>{" "}
           <div className="w-full flex items-center px-4">
-            <input
-              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
-              value={input.paidBy}
-              name="paidBy"
-              onChange={hdlInput}
+            <div
+              className="w-full convex px-2 h-[30px] bg-surface pl-4 flex items-center"
               onClick={(e) => {
                 e.stopPropagation();
                 document.getElementById("paid_by_modal").showModal();
               }}
-              readOnly
-            />
+            >
+              <div
+                className={`h-[26px] px-2  convex w-fit ${input.paidBy === user.userName ? "bg-accent" : "bg-friend"}`}
+                value={input.paidBy}
+                name="paidBy"
+                onChange={hdlInput}
+                readOnly
+              >
+                {input.paidBy}
+              </div>
+            </div>
           </div>
         </div>
         {/* type */}

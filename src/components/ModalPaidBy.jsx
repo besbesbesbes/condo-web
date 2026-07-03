@@ -1,8 +1,10 @@
 import React from "react";
 import { CloseIcon, UserIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
+import useUserStore from "../stores/user-store";
 
 function ModalPaidBy({ users, setInput, headerTxt }) {
+  const user = useUserStore((state) => state.user);
   const { t } = useTranslation();
   return (
     <div className="w-[300px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text">
@@ -16,7 +18,7 @@ function ModalPaidBy({ users, setInput, headerTxt }) {
           users.map((el, idx) => (
             <div
               key={idx}
-              className={`w-10/12 h-[30px] text-center text-text-reverse font-bold convex bg-primary ${el.userName === "Bes" && "bg-accent"}`}
+              className={`w-10/12 h-[30px] text-center text-text-reverse font-bold convex  ${el.userName === user.userName ? "bg-accent" : "bg-friend"}`}
               onClick={(e) => {
                 setInput((prev) => ({
                   ...prev,
