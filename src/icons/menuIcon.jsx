@@ -568,26 +568,7 @@ export function BackIcon(props) {
   );
 }
 
-export function BuddyIcon(props) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M18.505 19H20c1.105 0 2.067-.924 1.716-1.971-.535-1.597-1.85-2.562-4.163-2.896M14.5 10.865a3.32 3.32 0 001 .135c1.667 0 2.5-.857 2.5-3s-.833-3-2.5-3a3.32 3.32 0 00-1 .136M9.5 14c3.614 0 5.54 1.01 6.216 3.029C16.066 18.076 15.105 19 14 19H5c-1.105 0-2.067-.924-1.716-1.971C3.96 15.009 5.887 14 9.5 14zm0-3c1.667 0 2.5-.857 2.5-3s-.833-3-2.5-3S7 5.857 7 8s.833 3 2.5 3z"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function PendingBuddyIcon(props) {
+export function RequestBuddyIcon(props) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -627,6 +608,60 @@ export function CameraIcon(props) {
   );
 }
 
+export function RegisterIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M13 6L6.502 7.3c-.363.072-.545.108-.692.197a1 1 0 00-.325.312c-.094.144-.138.324-.225.684L2 22m0 0l13.507-3.26c.36-.087.54-.13.684-.225a1 1 0 00.312-.325c.088-.148.125-.329.197-.692L18 11M2 22l7.586-7.586m11.283-6.546L16.13 3.131c-.396-.396-.594-.594-.822-.668a1 1 0 00-.618 0c-.228.074-.426.272-.822.668l-.738.737c-.396.397-.594.595-.668.823a1 1 0 000 .618c.074.228.272.426.668.822l4.738 4.737c.396.396.594.595.822.669a1 1 0 00.618 0c.228-.075.426-.273.822-.669l.738-.737c.396-.396.594-.594.668-.822a1 1 0 000-.618c-.074-.229-.272-.427-.668-.823zM11 11a2 2 0 110 4 2 2 0 010-4z"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function PendingBuddyIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M13.689 12.5c1.877-1.092 3.514-3.811 4.09-6.516C18.01 4.904 17.105 4 16 4H8c-1.105 0-2.01.904-1.78 1.984.577 2.705 2.214 5.424 4.091 6.516-1.877 1.092-3.514 3.811-4.09 6.516C5.99 20.096 6.895 21 8 21h8c1.105 0 2.01-.904 1.78-1.984-.577-2.705-2.214-5.424-4.091-6.516z"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function BuddyIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g fill="currentColor">
+        <path d="M14 10a1 1 0 00-1-1h-.5a5.5 5.5 0 100 11h5a5.5 5.5 0 001.573-10.772c-.563-.168-1.073.3-1.073.889v.051c0 .498.375.905.834 1.095A3.501 3.501 0 0117.5 18h-5a3.5 3.5 0 110-7h.5a1 1 0 001-1z" />
+        <path d="M11.5 4a5.5 5.5 0 110 11H11a1 1 0 110-2h.5a3.5 3.5 0 100-7h-5a3.5 3.5 0 00-1.334 6.737c.46.19.834.597.834 1.095v.051c0 .588-.51 1.057-1.073.889A5.5 5.5 0 016.5 4h5z" />
+      </g>
+    </svg>
+  );
+}
+
 export const icons = {
   TransIcon,
   NewIcon,
@@ -660,6 +695,8 @@ export const icons = {
   SaveIcon,
   BackIcon,
   BuddyIcon,
-  PendingBuddyIcon,
+  RequestBuddyIcon,
   CameraIcon,
+  RegisterIcon,
+  PendingBuddyIcon,
 };

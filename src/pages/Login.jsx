@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
 import { AppIcon } from "../icons/menuIcon";
+import ModalRegister from "../components/ModalRegister";
 
 function Login() {
   const { t, i18n } = useTranslation();
@@ -44,6 +45,17 @@ function Login() {
     } finally {
       setIsLoad(false);
     }
+  };
+
+  const openRegisterModal = () => {
+    document.getElementById("register_modal")?.show();
+  };
+
+  const hdlRegisterSuccess = (result) => {
+    setToken(result.data.token);
+    setUser(result.data.user);
+    document.getElementById("register_modal")?.close();
+    navigate(0);
   };
 
   const hdlError = (msg) => {
@@ -96,13 +108,19 @@ function Login() {
           />
         </div>
         <button
-          className="btn h-[30px] w-[130px] convex bg-primary font-bold"
+          className="btn h-[30px] w-[130px] convex bg-accent font-bold"
           onClick={hdlLogin}
         >
           {t("login")}
         </button>
+        <button
+          className="btn h-[30px] w-[130px] convex bg-primary font-bold"
+          onClick={openRegisterModal}
+        >
+          {t("register")}
+        </button>
         {/* error message */}
-        {isShowErrMsg && <p className="font-bold">{errMsg}</p>}
+        {isShowErrMsg && <p className="font-bold text-accent">{errMsg}</p>}
         <div className="self-end flex gap-2 items-center">
           {/* <p>{t("language")}</p> */}
           <select
@@ -117,6 +135,10 @@ function Login() {
           </select>
         </div>
       </div>
+      {/* register modal */}
+      <dialog id="register_modal" className="modal">
+        <ModalRegister onSuccess={hdlRegisterSuccess} />
+      </dialog>
     </div>
   );
 }

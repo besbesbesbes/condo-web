@@ -103,5 +103,7 @@
   "registerBuddy": "Register Buddy",
   "waitBuddyMatchWithYou": "Wait buddy match with you.",
   "youHaveBuddyNow": "You have buddy now.",
-  "by": "by"
+  "by": "by",
+  "register": "Register",
+  "confirmPassword": "Confirm Password"
 }

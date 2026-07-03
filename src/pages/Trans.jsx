@@ -85,7 +85,7 @@ function Trans() {
 
   useEffect(() => {
     setCurMenu("trans");
-    getTrans();
+    if (token) getTrans();
     setSelectedTran(null);
   }, [yearInput, getTrans, setCurMenu]);
 

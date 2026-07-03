@@ -27,9 +27,9 @@
   --color-surface: #fcfcfd;
   --color-primary: #3b82f6;
   --color-accent: #e61e42;
-  --color-friend: #3b82f6;
+  /* --color-friend: #3b82f6; */
   --color-tag: #ff7f00;
-  /* --color-friend: #22c55e; */
+  --color-friend: #22c55e;
   --color-text: #222222;
   --color-text-reverse: #fcfcfd;
   /* Neumorphism */
@@ -145,6 +145,10 @@ body {
   color: var(--color-text-reverse);
 }
 
+.text-accent {
+  color: var(--color-accent);
+}
+
 .btn {
   height: 32px;
   min-width: 100px;
@@ -166,6 +170,10 @@ body {
 
 .btn-accent {
   background: var(--color-accent);
+}
+
+.border-tag {
+  border-color: var(--color-tag);
 }
 
 .input-field {

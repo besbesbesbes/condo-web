@@ -102,6 +102,8 @@
   "buddy": "คู่หู",
   "registerBuddy": "ลงทะเบียนคู่หู",
   "waitBuddyMatchWithYou": "รอคู่หูจับคู่กับคุณ",
-  "youHaveBuddyNow": "คูณมีคู่หูแล้ว",
-  "by": "โดย"
+  "youHaveBuddyNow": "คุณมีคู่หูแล้ว",
+  "by": "โดย",
+  "register": "สมัคร",
+  "confirmPassword": "ยืนยันรหัสผ่าน"
 }

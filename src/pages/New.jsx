@@ -654,7 +654,7 @@ function New() {
           {recentTag.map((tag) => (
             <div
               key={tag.tagId}
-              className="bg-surface convex rounded-full px-3 py-1 cursor-pointer hover:bg-primary hover:text-text-reverse transition"
+              className="h-[24px] bg-surface convex rounded-full px-3 py-1 transition border border-tag flex justify-center items-center"
               onClick={() => {
                 setInput((prev) => {
                   if (prev.tags.some((t) => t.tagId === tag.tagId)) {
@@ -679,6 +679,7 @@ function New() {
                 setShowSuggest(false);
               }}
             >
+              {"+ "}
               {tag.tagTxt}
             </div>
           ))}
