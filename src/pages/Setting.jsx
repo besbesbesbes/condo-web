@@ -108,9 +108,7 @@ function Setting() {
             {!user?.buddyAsUser1[0]?.user2?.isDummy && (
               <>
                 <BuddyIcon className="w-[20px] h-[20px]" />
-                <div
-                  className={`h-[30px] flex justify-center items-center convex bg-friend px-2`}
-                >
+                <div className="h-[30px] flex justify-center items-center convex bg-friend px-2">
                   <p className="text-text-reverse">
                     {user?.buddyAsUser1[0]?.user2?.userName}
                   </p>
@@ -217,7 +215,7 @@ function Setting() {
             {t("logout")}
           </button>
         </div>
-        <p className="text-xs">V 1.9.1</p>
+        <p className="text-xs">V 1.9.2</p>
       </div>
 
       <Footer />

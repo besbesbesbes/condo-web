@@ -50,14 +50,12 @@ function Header() {
         >
           <p className="text-text-reverse">{user.userName}</p>
         </div>
-        {!user?.buddyAsUser1[0]?.user2?.isDummy && (
+        {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
           <>
             <BuddyIcon className="w-[20px] h-[20px]" />
-            <div
-              className={`h-[30px] flex justify-center items-center convex bg-friend px-2`}
-            >
+            <div className="h-[30px] flex justify-center items-center convex bg-friend px-2">
               <p className="text-text-reverse">
-                {user?.buddyAsUser1[0]?.user2?.userName}
+                {user?.buddyAsUser1?.[0]?.user2?.userName}
               </p>
             </div>
           </>
