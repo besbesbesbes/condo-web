@@ -52,7 +52,7 @@ function Header() {
         </div>
         {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
           <>
-            <BuddyIcon className="w-[20px] h-[20px]" />
+            <BuddyIcon className="w-[20px] h-[20px] text-accent" />
             <div className="h-[30px] flex justify-center items-center convex bg-friend px-2">
               <p className="text-text-reverse">
                 {user?.buddyAsUser1?.[0]?.user2?.userName}

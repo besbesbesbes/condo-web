@@ -11,6 +11,7 @@ import {
   PendingBuddyIcon,
   BuddyIcon,
   RequestBuddyIcon,
+  ConnectedIcon,
 } from "../icons/menuIcon";
 import Header from "../components/Header";
 import { requestBuddyApi } from "../apis/buddy-api";
@@ -107,7 +108,7 @@ function Setting() {
             </div>
             {!user?.buddyAsUser1[0]?.user2?.isDummy && (
               <>
-                <BuddyIcon className="w-[20px] h-[20px]" />
+                <BuddyIcon className="w-[20px] h-[20px] text-accent" />
                 <div className="h-[30px] flex justify-center items-center convex bg-friend px-2">
                   <p className="text-text-reverse">
                     {user?.buddyAsUser1[0]?.user2?.userName}
@@ -158,7 +159,7 @@ function Setting() {
             ) : displayStatus === "PENDING" ? (
               <PendingBuddyIcon className="w-[20px] h-[20px] text-text-reverse" />
             ) : (
-              <BuddyIcon className="w-[20px] h-[20px] text-text-reverse" />
+              <ConnectedIcon className="w-[20px] h-[20px] text-text-reverse" />
             )}
           </div>
         </div>

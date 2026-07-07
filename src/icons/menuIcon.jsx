@@ -646,7 +646,7 @@ export function PendingBuddyIcon(props) {
   );
 }
 
-export function BuddyIcon(props) {
+export function ConnectedIcon(props) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -658,6 +658,22 @@ export function BuddyIcon(props) {
         <path d="M14 10a1 1 0 00-1-1h-.5a5.5 5.5 0 100 11h5a5.5 5.5 0 001.573-10.772c-.563-.168-1.073.3-1.073.889v.051c0 .498.375.905.834 1.095A3.501 3.501 0 0117.5 18h-5a3.5 3.5 0 110-7h.5a1 1 0 001-1z" />
         <path d="M11.5 4a5.5 5.5 0 110 11H11a1 1 0 110-2h.5a3.5 3.5 0 100-7h-5a3.5 3.5 0 00-1.334 6.737c.46.19.834.597.834 1.095v.051c0 .588-.51 1.057-1.073.889A5.5 5.5 0 016.5 4h5z" />
       </g>
+    </svg>
+  );
+}
+
+export function BuddyIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M1.243 8.243L8 15l6.757-6.757a4.243 4.243 0 001.243-3v-.19A4.052 4.052 0 008.783 2.52L8 3.5l-.783-.98A4.052 4.052 0 000 5.053v.19c0 1.126.447 2.205 1.243 3z"
+        fill="currentColor"
+      />
     </svg>
   );
 }
@@ -699,4 +715,5 @@ export const icons = {
   CameraIcon,
   RegisterIcon,
   PendingBuddyIcon,
+  ConnectedIcon,
 };

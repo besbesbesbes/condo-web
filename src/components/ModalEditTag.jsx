@@ -222,7 +222,7 @@ function ModalEditTag({
           {tagList.map((tag, idx) => (
             <div
               key={idx}
-              className="bg-accent text-text-reverse rounded-full px-3 flex items-center gap-2"
+              className="bg-tag text-text-reverse rounded-full px-3 flex items-center gap-2"
             >
               <span>{tag.tagTxt}</span>
 
