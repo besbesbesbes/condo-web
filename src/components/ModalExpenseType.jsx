@@ -10,6 +10,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   const [newType, setNewType] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const token = useUserStore((state) => state.token);
+  const { userId } = useUserStore((state) => state.user);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const { t } = useTranslation();
 
@@ -38,7 +39,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
   }, []);
 
   return (
-    <div className="w-[300px] h-auto bg-app shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-4 pb-4 pt-6 items-center text-lg text-text text-text">
+    <div className="w-[300px] h-auto bg-app shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-4 pb-4 pt-6 items-center text-lg text-text text-text">
       <div className="flex gap-1 items-center">
         <TypeIcon className="w-[20px] h-[20px]" />
         <p className="">{t("selectType")}</p>
@@ -50,40 +51,38 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
         tabIndex={-1}
       >
         {types?.length ? (
-          types
-            .filter((el) => el.userId === input.paidById)
-            .map((el, idx) => (
+          types.map((el, idx) => (
+            <div
+              key={idx}
+              className="w-10/11 bg-surface flex justify-center items-center relative convex flex-none h-[32px]"
+            >
               <div
-                key={idx}
-                className="w-10/11 bg-surface flex justify-center items-center relative convex flex-none h-[32px]"
+                className="w-full text-center cursor-pointer"
+                onClick={(e) => {
+                  setInput((prev) => ({
+                    ...prev,
+                    type: el.expenseName,
+                    typeId: el.expenseTypeId,
+                  }));
+                  e.target.closest("dialog").close();
+                }}
               >
-                <div
-                  className="w-full text-center cursor-pointer"
-                  onClick={(e) => {
-                    setInput((prev) => ({
-                      ...prev,
-                      type: el.expenseName,
-                      typeId: el.expenseTypeId,
-                    }));
-                    e.target.closest("dialog").close();
-                  }}
-                >
-                  {el.expenseName}
-                </div>
-                <div
-                  className="w-[20px] h-[20px] flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedType(el);
-                    document.getElementById("edit_type_modal").showModal();
-                  }}
-                >
-                  <div className="w-[20px] h-[20px] flex-none convex bg-primary mr-2 text-text-reverse items-center justify-center">
-                    <EditIcon className="p-[3px]" />
-                  </div>
+                {el.expenseName}
+              </div>
+              <div
+                className="w-[20px] h-[20px] flex justify-center items-center text-center font-bold rounded-full absolute right-0 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedType(el);
+                  document.getElementById("edit_type_modal").showModal();
+                }}
+              >
+                <div className="w-[20px] h-[20px] flex-none convex bg-primary mr-2 text-text-reverse items-center justify-center">
+                  <EditIcon className="p-[3px]" />
                 </div>
               </div>
-            ))
+            </div>
+          ))
         ) : (
           <p>No type</p>
         )}

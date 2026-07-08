@@ -10,6 +10,7 @@ import {
   CameraIcon,
   NoTrans,
   SearchIcon,
+  ToTopArrow,
   TransIcon,
 } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,7 @@ function Trans() {
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
   const navigate = useNavigate();
+  const [showToTop, setShowToTop] = useState(false);
 
   const getTrans = useCallback(async () => {
     setIsLoad(true);
@@ -64,6 +66,13 @@ function Trans() {
 
   const hdlSelectedTran = (e, el) => {
     setSelectedTran(el);
+  };
+
+  const hdlToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -88,6 +97,18 @@ function Trans() {
     if (token) getTrans();
     setSelectedTran(null);
   }, [yearInput, getTrans, setCurMenu]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowToTop(window.scrollY > 300); // <-- show after scrolling 300px
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div>
@@ -255,7 +276,16 @@ function Trans() {
                 </div>
               )}
             </div>
-          </div>
+          </div>{" "}
+          {/* to top arrow */}
+          {showToTop && (
+            <button
+              className="w-[40px] h-[40px] concave fixed bottom-19 right-4 bg-primary flex justify-center items-center animate-fade-in"
+              onClick={hdlToTop}
+            >
+              <ToTopArrow className="w-[24px] h-[24px]" />
+            </button>
+          )}
           <Footer />
         </>
       )}

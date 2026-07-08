@@ -52,7 +52,6 @@ function Report() {
   };
 
   useEffect(() => {
-    console.log("Use effect");
     setCurMenu("report");
     getReportInfo();
   }, [input.userName, input.month, input.year]);
@@ -114,7 +113,7 @@ function Report() {
             value={input.year}
             onChange={hdlInput}
           >
-            {Array.from({ length: 10 }, (_, i) => 2021 + i).map((y) => (
+            {Array.from({ length: 14 }, (_, i) => 2021 + i).map((y) => (
               <option key={y} value={y}>
                 {y}
               </option>
