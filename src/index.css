@@ -38,6 +38,35 @@
   --nm-shadow-dark: #d7dbe1;
 }
 
+/* Remove default browser focus styles and Tailwind rings */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+
+  /* Tailwind ring variables */
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-color: transparent !important;
+
+  /* iOS Safari tap highlight */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove Safari's default appearance for form controls */
+button,
+input,
+textarea,
+select,
+a {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 html.theme-dark {
   --color-bg: #0f1115;
   --color-surface: #171a21;
