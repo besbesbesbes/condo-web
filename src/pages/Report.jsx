@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Footer from "../components/Footer";
 import useMainStore from "../stores/main-store";
 import ModalPaidBy from "../components/ModalPaidBy";
@@ -6,25 +6,46 @@ import { getReportInfoApi } from "../apis/report-api";
 import useUserStore from "../stores/user-store";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
-import { AppIcon, ReportIcon, NoTrans } from "../icons/menuIcon";
+import {
+  AppIcon,
+  ReportIcon,
+  NoTrans,
+  PrevIcon,
+  NextIcon,
+} from "../icons/menuIcon";
 import Header from "../components/Header";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+const COLORS = [
+  "#f94144",
+  "#f3722c",
+  "#f8961e",
+  "#f9c74f",
+  "#90be6d",
+  "#43aa8b",
+  "#577590",
+];
 
 function Report() {
   const { t } = useTranslation();
   const token = useUserStore((state) => state.token);
-  const { userName, userId } = useUserStore((state) => state.user);
+
+  const user = useUserStore((state) => state.user);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
-  const [users, setUsers] = useState({});
+  const [users, setUsers] = useState([]);
   const today = new Date();
-  const [result, setResult] = useState(null);
-  const [resultSum, setResultSum] = useState(null);
-  const [resultOther, setResultOther] = useState(null);
-  const [resultSumOther, setResultSumOther] = useState(null);
-  const [body, setBody] = useState(null);
+  const [report, setReport] = useState(null);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const [input, setInput] = useState({
-    userName: userName,
-    userId: userId,
+    userName: user.userName,
+    userId: user.userId,
     month: today.getMonth() + 1,
     year: today.getFullYear(),
   });
@@ -38,17 +59,124 @@ function Report() {
     try {
       const result = await getReportInfoApi(token, input);
       console.log(result.data);
-      setBody(result.data.body);
       setUsers(result.data.users);
-      setResult(result.data.result);
-      setResultSum(result.data.resultSum);
-      setResultOther(result.data.resultOther);
-      setResultSumOther(result.data.resultSumOther);
+      setReport(result.data.report);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
     } finally {
       setIsLoad(false);
     }
+  };
+
+  const summary = useMemo(() => {
+    if (!report?.length || !users?.length) return null;
+
+    const data = {
+      totalAmt: 0,
+      paid: {},
+      expense: {},
+    };
+
+    users.forEach((u) => {
+      data.paid[u.userId] = 0;
+      data.expense[u.userId] = 0;
+    });
+
+    report.forEach((row) => {
+      data.totalAmt += row.totalAmt;
+
+      users.forEach((u) => {
+        data.paid[u.userId] += row.paid[u.userId];
+        data.expense[u.userId] += row.expense[u.userId];
+      });
+    });
+
+    return data;
+  }, [report, users]);
+
+  const pieData = useMemo(() => {
+    if (!report?.length) return [];
+
+    return report.map((row) => ({
+      name: row.expenseTypeName,
+      value: row.totalAmt,
+    }));
+  }, [report]);
+
+  const sortedUsers = useMemo(() => {
+    if (!users?.length || !user?.userId) return users;
+
+    return [
+      ...users.filter((u) => u.userId === user.userId),
+      ...users.filter((u) => u.userId !== user.userId),
+    ];
+  }, [users, user]);
+
+  const renderLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    name,
+  }) => {
+    const isBig = percent >= 0.08;
+
+    // CHANGE THIS VALUE
+    const radius = isBig
+      ? innerRadius + (outerRadius - innerRadius) / 2
+      : outerRadius + 5;
+
+    const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
+    const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="currentColor"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+      >
+        {`${name} ${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
+  const hdlPrevMonth = () => {
+    setInput((prev) => {
+      if (prev.month === 1) {
+        return {
+          ...prev,
+          month: 12,
+          year: prev.year - 1,
+        };
+      }
+
+      return {
+        ...prev,
+        month: prev.month - 1,
+      };
+    });
+  };
+
+  const hdlNextMonth = () => {
+    setInput((prev) => {
+      if (prev.month === 12) {
+        return {
+          ...prev,
+          month: 1,
+          year: prev.year + 1,
+        };
+      }
+
+      return {
+        ...prev,
+        month: prev.month + 1,
+      };
+    });
   };
 
   useEffect(() => {
@@ -61,27 +189,14 @@ function Report() {
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-2 items-center relative mb-[75px] mt-[60px]">
         {/* header */}
         <Header />
-        {/* User select */}
-        <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
-          <p className="w-[100px] flex-none text-right pr-2">
-            {t("userName")} :
-          </p>
-          <input
-            className="input-field convex flex w-[150px] text-center bg-surface"
-            type="text"
-            value={input.userName}
-            name="user"
-            onChange={hdlInput}
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById("user_select_modal").showModal();
-            }}
-            readOnly
-          />
-        </div>
         {/*Report date */}
         <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
-          <p className="w-[100px] flex-none text-right pr-2 ">{t("month")} :</p>
+          <button
+            onClick={hdlPrevMonth}
+            className="w-[35px] h-[35px] flex justify-center items-center bg-surface convex rounded-full"
+          >
+            <PrevIcon className="w-5 h-5" />
+          </button>
           <select
             className="input-field convex bg-surface pl-4 w-[75px]"
             name="month"
@@ -107,6 +222,12 @@ function Report() {
               </option>
             ))}
           </select>
+          <button
+            onClick={hdlNextMonth}
+            className="w-[35px] h-[35px] flex justify-center items-center bg-surface convex rounded-full"
+          >
+            <NextIcon className="w-5 h-5" />
+          </button>
           <select
             className="input-field w-[75px]  convex  pl-4 bg-surface"
             name="year"
@@ -120,112 +241,199 @@ function Report() {
             ))}
           </select>
         </div>
-        {/* report list */}
-        <div className="w-full flex items-center flex-col gap-2 mt-5">
-          <div className="w-10/12 font-bold text-center text-primary">
-            {body?.userName}
-          </div>
-          {/* header */}
-          <div className="w-10/12 grid grid-cols-3 font-bold text-right">
-            <div></div>
-            <div>{t("total")}</div>
-            <div>{t("receivable")}</div>
-          </div>
-          {result?.length ? (
-            result.map((el, idx) => (
-              <div key={idx} className="w-10/12 grid grid-cols-3 ">
-                <div>{el.typeName}</div>
-                <NumericFormat
-                  className="text-right"
-                  value={el.sumTotalAmt}
-                  displayType="text"
-                  thousandSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale
-                />
-                <NumericFormat
-                  className="text-right"
-                  value={el.sumOtherAmt}
-                  displayType="text"
-                  thousandSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale
-                />
+        {/* pie chart */}
+        <div className="w-full h-[350px] overflow-visible">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={120}
+                label={renderLabel}
+                labelLine={false}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+
+              <Tooltip
+                formatter={(value) => new Intl.NumberFormat().format(value)}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        {/* report expense table */}
+        <div className="w-9/10 flex flex-col gap-2 text-sm">
+          {report?.length ? (
+            <>
+              {/* Header */}
+              <div className="grid grid-cols-9 gap-2 px-3 items-center">
+                <div className="col-span-3"></div>
+                <div className="col-span-2 text-right">Total</div>
+                {sortedUsers.map((u) => (
+                  <div key={u.userId} className="col-span-2 flex justify-end">
+                    <div
+                      className={`w-fit h-[30px] flex justify-center items-center convex px-2 ${
+                        user?.userId === u.userId ? "bg-accent" : "bg-friend"
+                      }`}
+                    >
+                      <p className="text-text-reverse">
+                        {user?.buddyAsUser1?.[0]?.user2?.isDummy &&
+                        u.userId !== user.userId
+                          ? t("other")
+                          : u.userName}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))
+
+              {/* Body */}
+              {report.map((row) => (
+                <div
+                  key={row.expenseTypeId}
+                  className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface"
+                >
+                  {/* Expense Type */}
+                  <div className="col-span-3">{row.expenseTypeName}</div>
+
+                  {/* Total */}
+                  <NumericFormat
+                    className="col-span-2 text-right"
+                    value={row.totalAmt}
+                    displayType="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+
+                  {/* User expense */}
+                  {sortedUsers.map((u) => (
+                    <NumericFormat
+                      key={u.userId}
+                      className="col-span-2 text-right"
+                      value={row.expense[u.userId]}
+                      displayType="text"
+                      thousandSeparator=","
+                      decimalScale={2}
+                      fixedDecimalScale
+                    />
+                  ))}
+                </div>
+              ))}
+
+              {/* Total Row */}
+              <div className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface font-bold">
+                <div className="col-span-3"></div>
+
+                <NumericFormat
+                  className="col-span-2 text-right"
+                  value={summary?.totalAmt}
+                  displayType="text"
+                  thousandSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale
+                />
+
+                {sortedUsers.map((u) => (
+                  <NumericFormat
+                    key={u.userId}
+                    className="col-span-2 text-right"
+                    value={summary?.expense[u.userId]}
+                    displayType="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+                ))}
+              </div>
+            </>
           ) : (
             <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
               <NoTrans className="w-[40px] h-[40px]" />
-              <p className="text-center">{t("noRecordFound")}</p>
+              <p>{t("noRecordFound")}</p>
             </div>
           )}
-          {/* total amt */}
-          <div className="w-10/12 grid grid-cols-3 font-bold">
-            <div></div>
-            <NumericFormat
-              className="text-right border-b"
-              value={resultSum?.sumTotalAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-            <NumericFormat
-              className="text-right border-b"
-              value={resultSum?.sumOtherAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-          </div>
-          {/* Other */}
-          {/* <div className="w-10/12 mt-4 font-bold text-center bg-slate-100">
-            <p>Other</p>{" "}
-          </div> */}
-          <div className="w-10/12 grid grid-cols-3">
-            <div>
-              <p className="text-right pr-1">(Minus) Other</p>
-            </div>
-            <NumericFormat
-              className="text-right border-b"
-              value={resultSumOther?.sumTotalAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-            <NumericFormat
-              className="text-right border-b"
-              value={resultSumOther?.sumOtherAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-          </div>
-          <div className="w-10/12 grid grid-cols-3 font-bold">
-            <div></div>
-            <NumericFormat
-              className="text-right border-b-4 border-double"
-              value={resultSum?.sumTotalAmt - resultSumOther?.sumTotalAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-            <NumericFormat
-              className="text-right border-b-4 border-double"
-              value={resultSum?.sumOtherAmt - resultSumOther?.sumOtherAmt}
-              displayType="text"
-              thousandSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-            />
-          </div>
         </div>
+        {/* report receivable table */}
+        {summary && (
+          <div className="w-9/10 mt-8 flex flex-col gap-2 text-sm">
+            {/* Header */}
+            <div className="grid grid-cols-9 gap-2 px-3 ">
+              <div className="col-span-3"></div>
+              <div className="col-span-2 text-right">{t("paid")}</div>
+              <div className="col-span-2 text-right">{t("expense")}</div>
+              <div className="col-span-2 text-right">{t("receivable")}</div>
+            </div>
+
+            {/* Body */}
+            {sortedUsers.map((u) => {
+              const receivable =
+                summary.paid[u.userId] - summary.expense[u.userId];
+
+              return (
+                <div
+                  key={u.userId}
+                  className="grid grid-cols-9 gap-2 concave bg-surface px-3 h-[42px] items-center"
+                >
+                  {/* user */}
+                  <div className="col-span-3 flex items-center">
+                    <div
+                      className={`w-fit h-[30px] flex justify-center items-center convex px-2 ${
+                        user?.userId === u.userId ? "bg-accent" : "bg-friend"
+                      }`}
+                    >
+                      <p className="text-text-reverse">
+                        {user?.buddyAsUser1?.[0]?.user2?.isDummy &&
+                        u.userId !== user.userId
+                          ? t("other")
+                          : u.userName}
+                      </p>
+                    </div>
+                  </div>
+                  {/* paid */}
+                  <NumericFormat
+                    className="col-span-2 text-right"
+                    value={summary.paid[u.userId]}
+                    displayType="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+                  {/* expense */}
+                  <NumericFormat
+                    className="col-span-2 text-right"
+                    value={summary.expense[u.userId]}
+                    displayType="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+                  {/* receivable */}
+                  <NumericFormat
+                    className={`col-span-2 text-right font-bold ${
+                      receivable >= 0 ? "text-green-600" : "text-red-500"
+                    }`}
+                    value={receivable}
+                    displayType="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
-      {/* <button onClick={() => console.log(input)}>Input</button> */}
+      {/* footer */}
       <Footer />
       {/* modal user select */}
       <dialog id="user_select_modal" className="modal">

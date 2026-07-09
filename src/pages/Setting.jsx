@@ -61,7 +61,7 @@ function Setting() {
       return;
     }
 
-    if (buddyName.trim().toLowerCase() === user.userName.toLowerCase()) {
+    if (buddyName.trim().toLowerCase() === user?.userName?.toLowerCase()) {
       showMessage("You cannot request yourself");
       return;
     }
@@ -104,14 +104,14 @@ function Setting() {
             <div
               className={`h-[30px] flex justify-center items-center convex bg-accent px-2`}
             >
-              <p className="text-text-reverse">{user.userName}</p>
+              <p className="text-text-reverse">{user?.userName}</p>
             </div>
-            {!user?.buddyAsUser1[0]?.user2?.isDummy && (
+            {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
               <>
                 <BuddyIcon className="w-[20px] h-[20px] text-accent" />
                 <div className="h-[30px] flex justify-center items-center convex bg-friend px-2">
                   <p className="text-text-reverse">
-                    {user?.buddyAsUser1[0]?.user2?.userName}
+                    {user?.buddyAsUser1?.[0]?.user2?.userName}
                   </p>
                 </div>
               </>
@@ -216,7 +216,7 @@ function Setting() {
             {t("logout")}
           </button>
         </div>
-        <p className="text-xs">V 1.9.4</p>
+        <p className="text-xs">V 1.9.5</p>
       </div>
 
       <Footer />

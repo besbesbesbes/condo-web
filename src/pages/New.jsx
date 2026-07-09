@@ -95,6 +95,10 @@ function New() {
       console.log(result.data.users);
       console.log(result.data.types);
       setUsers(result.data.users);
+
+      console.log(result.data.users);
+      console.log(user);
+
       setTypes(result.data.types);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
@@ -526,60 +530,101 @@ function New() {
             100%
           </div>
         </div>
-        {/* My Amount */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
-          <p className="w-[150px] flex-none text-right">
-            {t("payerOtherAmount")} :
-          </p>
-          <NumericFormat
-            className="input-field w-full px-2"
-            value={input.myAmt === "" ? "" : input.myAmt}
-            name="myAmt"
-            thousandSeparator
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            inputMode="decimal"
-            disabled
-          />
-          <p> / </p>
-          <NumericFormat
-            className="input-field w-full px-2"
-            value={input.otherAmt === "" ? "" : input.otherAmt}
-            name="otherAmt"
-            thousandSeparator
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            inputMode="decimal"
-            disabled
-          />
+        {/* User Amount */}
+        <div className="flex flex-col gap-1">
+          <div className="w-9/11 grid grid-cols-6 items-center">
+            <div className="col-span-3  flex justify-end mr-4">
+              <div className="w-fit h-[30px] flex justify-center items-center convex bg-accent px-2">
+                <p className="text-text-reverse truncate">{user.userName}</p>
+              </div>
+            </div>
+            <div className="text-right italic">
+              (
+              {input.paidById === user.userId
+                ? input.myPortion * 100
+                : (1 - input.myPortion) * 100}
+              %)
+            </div>
+            <div className="col-span-2 flex">
+              <NumericFormat
+                className="input-field w-full px-2 text-right"
+                value={
+                  input.paidById === user.userId ? input.myAmt : input.otherAmt
+                }
+                name="myAmt"
+                thousandSeparator
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                inputMode="decimal"
+                disabled
+              />
+            </div>
+          </div>
+          {/* Buddy Amount */}
+          <div className="w-9/11 grid grid-cols-6 items-center">
+            <div className="col-span-3  flex justify-end mr-4">
+              {user?.buddyAsUser1?.[0]?.user2?.isDummy ? (
+                <div>{t("otherAmount")}</div>
+              ) : (
+                <div className="w-fit h-[30px] flex justify-center items-center convex bg-friend px-2">
+                  <p className="text-text-reverse truncate">
+                    {user?.buddyAsUser1?.[0]?.user2?.userName}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="text-right italic">
+              (
+              {input.paidById === user.userId
+                ? (1 - input.myPortion) * 100
+                : input.myPortion * 100}
+              %)
+            </div>
+            <div className="col-span-2 flex">
+              <NumericFormat
+                className="input-field w-full px-2 text-right"
+                value={
+                  input.paidById === user.userId ? input.otherAmt : input.myAmt
+                }
+                name="otherAmt"
+                thousandSeparator
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                inputMode="decimal"
+                disabled
+              />
+            </div>
+          </div>
         </div>
 
         {/* installment plan */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
-          <p className="w-[150px] flex-none text-right">
-            {t("installmentPlan")} :
-          </p>
-          <div className="w-full flex items-center px-4">
-            <NumericFormat
-              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
-              value={input.instPlan === "" ? "" : input.instPlan}
-              name="instPlan"
-              thousandSeparator
-              decimalScale={0}
-              fixedDecimalScale
-              allowNegative={false}
-              inputMode="decimal"
-              onValueChange={(values) => {
-                setInput((prev) => ({
-                  ...prev,
-                  instPlan: values.floatValue ?? "", // fallback to "" when cleared
-                }));
-              }}
-            />
+        {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
+          <div className=" w-9/11 flex justify-center gap-2 items-center">
+            <p className="w-[150px] flex-none text-right">
+              {t("installmentPlan")} :
+            </p>
+            <div className="w-full flex items-center px-4">
+              <NumericFormat
+                className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+                value={input.instPlan === "" ? "" : input.instPlan}
+                name="instPlan"
+                thousandSeparator
+                decimalScale={0}
+                fixedDecimalScale
+                allowNegative={false}
+                inputMode="decimal"
+                onValueChange={(values) => {
+                  setInput((prev) => ({
+                    ...prev,
+                    instPlan: values.floatValue ?? "", // fallback to "" when cleared
+                  }));
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {typeof input.instPlan === "number" && input.instPlan > 0 && (
           <div className=" w-9/11 flex justify-end gap-2 items-center pr-4">
             <div

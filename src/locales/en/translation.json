@@ -105,5 +105,8 @@
   "youHaveBuddyNow": "You have buddy now.",
   "by": "by",
   "register": "Register",
-  "confirmPassword": "Confirm Password"
+  "confirmPassword": "Confirm Password",
+  "paid": "Paid",
+  "expense": "Expense",
+  "other": "Other"
 }

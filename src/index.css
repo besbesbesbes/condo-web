@@ -42,11 +42,11 @@
 *:focus,
 *:focus-visible {
   outline: none !important;
-  box-shadow: none !important;
+  /* box-shadow: none !important; */
 
   /* Tailwind ring variables */
-  --tw-ring-shadow: 0 0 #0000 !important;
-  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  /* --tw-ring-shadow: 0 0 #0000 !important; */
+  /* --tw-ring-offset-shadow: 0 0 #0000 !important; */
   --tw-ring-color: transparent !important;
 
   /* iOS Safari tap highlight */

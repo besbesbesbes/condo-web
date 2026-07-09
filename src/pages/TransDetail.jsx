@@ -326,18 +326,23 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             <p>{t("payer")} :</p>
           </div>{" "}
           <div className="w-full flex items-center px-4">
-            <input
-              className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
-              type="text"
-              value={input.paidBy}
-              name="paidBy"
-              onChange={hdlInput}
+            <div
+              className="w-full convex px-2 h-[30px] bg-surface pl-4 flex items-center"
               onClick={(e) => {
                 e.stopPropagation();
                 document.getElementById("paid_by_modal").showModal();
               }}
-              readOnly
-            />
+            >
+              <div
+                className={`h-[26px] px-2   w-fit ${input.paidBy === user.userName ? "bg-accent convex" : input.paidBy.length > 0 ? "bg-friend  convex" : "bg-surface"}`}
+                value={input.paidBy}
+                name="paidBy"
+                onChange={hdlInput}
+                readOnly
+              >
+                {input.paidBy}
+              </div>
+            </div>
           </div>
         </div>
         {/* type */}
@@ -471,8 +476,76 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             100%
           </div>
         </div>
+        {/* User Amount */}
+        <div className="flex flex-col gap-1">
+          <div className="w-9/11 grid grid-cols-6 items-center">
+            <div className="col-span-3  flex justify-end mr-4">
+              <div className="w-fit h-[30px] flex justify-center items-center convex bg-accent px-2">
+                <p className="text-text-reverse truncate">{user.userName}</p>
+              </div>
+            </div>
+            <div className="text-right italic">
+              (
+              {input.paidById === user.userId
+                ? input.myPortion * 100
+                : (1 - input.myPortion) * 100}
+              %)
+            </div>
+            <div className="col-span-2 flex">
+              <NumericFormat
+                className="input-field w-full px-2 text-right"
+                value={
+                  input.paidById === user.userId ? input.myAmt : input.otherAmt
+                }
+                name="myAmt"
+                thousandSeparator
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                inputMode="decimal"
+                disabled
+              />
+            </div>
+          </div>
+          {/* Buddy Amount */}
+          <div className="w-9/11 grid grid-cols-6 items-center">
+            <div className="col-span-3  flex justify-end mr-4">
+              {user?.buddyAsUser1?.[0]?.user2?.isDummy ? (
+                <div>{t("otherAmount")}</div>
+              ) : (
+                <div className="w-fit h-[30px] flex justify-center items-center convex bg-friend px-2">
+                  <p className="text-text-reverse truncate">
+                    {user?.buddyAsUser1?.[0]?.user2?.userName}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="text-right italic">
+              (
+              {input.paidById === user.userId
+                ? (1 - input.myPortion) * 100
+                : input.myPortion * 100}
+              %)
+            </div>
+            <div className="col-span-2 flex">
+              <NumericFormat
+                className="input-field w-full px-2 text-right"
+                value={
+                  input.paidById === user.userId ? input.otherAmt : input.myAmt
+                }
+                name="otherAmt"
+                thousandSeparator
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                inputMode="decimal"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
         {/* My Amount */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        {/* <div className=" w-9/11 flex justify-center gap-2 items-center">
           <p className="w-[150px] flex-none text-right">
             {t("payerOtherAmount")} :
           </p>
@@ -499,7 +572,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             inputMode="decimal"
             disabled
           />
-        </div>
+        </div> */}
         {/* tag */}
         <div className=" w-9/11 flex justify-center gap-2 items-center">
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">

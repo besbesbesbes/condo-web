@@ -105,5 +105,8 @@
   "youHaveBuddyNow": "คุณมีคู่หูแล้ว",
   "by": "โดย",
   "register": "สมัคร",
-  "confirmPassword": "ยืนยันรหัสผ่าน"
+  "confirmPassword": "ยืนยันรหัสผ่าน",
+  "paid": "ชำระ",
+  "expense": "ค่าใช้จ่าย",
+  "other": "คนอื่น"
 }

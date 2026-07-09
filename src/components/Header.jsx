@@ -48,7 +48,7 @@ function Header() {
         <div
           className={`h-[30px] flex justify-center items-center convex bg-accent px-2`}
         >
-          <p className="text-text-reverse">{user.userName}</p>
+          <p className="text-text-reverse">{user?.userName}</p>
         </div>
         {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
           <>

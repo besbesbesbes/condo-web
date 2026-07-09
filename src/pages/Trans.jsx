@@ -45,7 +45,6 @@ function Trans() {
   const setToken = useUserStore((state) => state.setToken);
   const navigate = useNavigate();
   const [showToTop, setShowToTop] = useState(false);
-
   const getTrans = useCallback(async () => {
     setIsLoad(true);
     try {
