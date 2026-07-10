@@ -151,7 +151,7 @@ function Trans() {
                 </select>
               </div>
             </div>
-            <div className="w-11/12  flex flex-col gap-4">
+            <div className="w-11/12  flex flex-col gap-2 mb-2">
               {trans?.length ? (
                 trans.map((el, idx) => {
                   const rawDate = new Date(el.recordDate);

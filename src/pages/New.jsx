@@ -54,6 +54,7 @@ function New() {
   const [tagSuggest, setTagSuggest] = useState([]);
   const [showSuggest, setShowSuggest] = useState(false);
   const [recentTag, setRecentTag] = useState([]);
+  const [showInstallment, setShowInstallment] = useState(false);
   const tagBoxRef = useRef(null);
 
   const openAmtKeypad = () => {
@@ -68,16 +69,31 @@ function New() {
   };
 
   useEffect(() => {
-    if (
-      input.totalAmt !== "" &&
-      input.myPortion !== null &&
-      input.myPortion !== undefined
-    ) {
-      const newMyAmt = (input.totalAmt * input.myPortion).toFixed(2); // Round to 2 decimal places
-      const newOtherAmt = (input.totalAmt - newMyAmt).toFixed(2); // Round to 2 decimal places
+    const totalAmt = Number(input.totalAmt);
+    const myPortion = input.myPortion;
 
-      setInput((prev) => ({ ...prev, myAmt: newMyAmt, otherAmt: newOtherAmt }));
-    }
+    setInput((prev) => {
+      const next = { ...prev };
+
+      if (
+        !Number.isNaN(totalAmt) &&
+        totalAmt > 0 &&
+        myPortion !== null &&
+        myPortion !== undefined
+      ) {
+        next.myAmt = +(totalAmt * myPortion).toFixed(2);
+        next.otherAmt = +(totalAmt - next.myAmt).toFixed(2);
+      }
+
+      if (prev.instPlan !== 0 || prev.inst.length > 0) {
+        next.instPlan = 0;
+        next.inst = [];
+      }
+
+      return next;
+    });
+
+    setShowInstallment(false);
   }, [input.totalAmt, input.myPortion]);
 
   const getNewTranInfo = async () => {
@@ -602,31 +618,45 @@ function New() {
         {/* installment plan */}
         {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
           <div className=" w-9/11 flex justify-center gap-2 items-center">
-            <p className="w-[150px] flex-none text-right">
-              {t("installmentPlan")} :
-            </p>
-            <div className="w-full flex items-center px-4">
-              <NumericFormat
-                className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
-                value={input.instPlan === "" ? "" : input.instPlan}
-                name="instPlan"
-                thousandSeparator
-                decimalScale={0}
-                fixedDecimalScale
-                allowNegative={false}
-                inputMode="decimal"
-                onValueChange={(values) => {
-                  setInput((prev) => ({
-                    ...prev,
-                    instPlan: values.floatValue ?? "", // fallback to "" when cleared
-                  }));
-                }}
-              />
-            </div>
+            {!showInstallment &&
+              input?.myPortion == 0 &&
+              input?.totalAmt > 0 && (
+                <div
+                  className="convex px-3 text-text-reverse bg-primary h-[30px] flex justify-center items-center"
+                  onClick={() => setShowInstallment((prev) => !prev)}
+                >
+                  {t("userInstallmentPlan")}
+                </div>
+              )}
+            {showInstallment && (
+              <div className=" w-9/11 flex justify-center gap-2 items-center">
+                <p className="w-[150px] flex-none text-right">
+                  {t("installmentPlan")} :
+                </p>
+                <div className="w-full flex items-center px-4">
+                  <NumericFormat
+                    className="input-field w-full convex px-2 h-[30px] bg-surface pl-4"
+                    value={input.instPlan === "" ? "" : input.instPlan}
+                    name="instPlan"
+                    thousandSeparator
+                    decimalScale={0}
+                    fixedDecimalScale
+                    allowNegative={false}
+                    inputMode="decimal"
+                    onValueChange={(values) => {
+                      setInput((prev) => ({
+                        ...prev,
+                        instPlan: values.floatValue ?? "", // fallback to "" when cleared
+                      }));
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
         {typeof input.instPlan === "number" && input.instPlan > 0 && (
-          <div className=" w-9/11 flex justify-end gap-2 items-center pr-4">
+          <div className=" w-9/11 flex justify-center gap-2 items-center pr-4">
             <div
               className="btn btn-primary text-text-reverse"
               onClick={hdlGenInstPlan}

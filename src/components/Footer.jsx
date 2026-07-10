@@ -23,8 +23,8 @@ function MenuBox({ icon: Icon, txt, label }) {
 
   return (
     <div
-      className={`flex justify-center bg-surface items-center m-[6px] cursor-pointer convex ${
-        txt === curMenu ? "bg-primary" : ""
+      className={`flex justify-center bg-surface items-center m-[6px] cursor-pointer  ${
+        txt === curMenu ? "bg-primary convex" : ""
       }`}
       onClick={(e) => {
         hdlNavigate(e, txt);

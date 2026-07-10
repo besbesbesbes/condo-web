@@ -108,5 +108,6 @@
   "confirmPassword": "ยืนยันรหัสผ่าน",
   "paid": "ชำระ",
   "expense": "ค่าใช้จ่าย",
-  "other": "คนอื่น"
+  "other": "คนอื่น",
+  "userInstallmentPlan": "ใช้การผ่อนชำระ"
 }

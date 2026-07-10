@@ -216,7 +216,7 @@ function Setting() {
             {t("logout")}
           </button>
         </div>
-        <p className="text-xs">V 1.9.5</p>
+        <p className="text-xs">V 1.9.6</p>
       </div>
 
       <Footer />
