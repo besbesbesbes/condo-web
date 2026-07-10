@@ -15,6 +15,7 @@ import {
 } from "../icons/menuIcon";
 import Header from "../components/Header";
 import { requestBuddyApi } from "../apis/buddy-api";
+import { APP_VERSION } from "../config/version";
 
 function Setting() {
   const { t, i18n } = useTranslation();
@@ -216,7 +217,7 @@ function Setting() {
             {t("logout")}
           </button>
         </div>
-        <p className="text-xs">V 1.9.6</p>
+        <p className="text-xs">{APP_VERSION}</p>
       </div>
 
       <Footer />
