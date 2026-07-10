@@ -43,6 +43,10 @@ function Report() {
   const today = new Date();
   const [report, setReport] = useState(null);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
+  const [activeFilters, setActiveFilters] = useState({
+    user: true,
+    buddy: true,
+  });
   const [input, setInput] = useState({
     userName: user.userName,
     userId: user.userId,
@@ -50,8 +54,29 @@ function Report() {
     year: today.getFullYear(),
   });
 
+  const buddyUser = user?.buddyAsUser1?.[0]?.user2;
+  const isBuddyDummy = buddyUser?.isDummy;
+  const buddyName = isBuddyDummy
+    ? t("other")
+    : buddyUser?.userName || t("buddy");
+
+  const toggleFilter = (key) => {
+    setActiveFilters((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      if (!next.user && !next.buddy) {
+        return { user: true, buddy: true };
+      }
+      return next;
+    });
+  };
+
   const hdlInput = (e) => {
-    setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+    const value =
+      e.target.name === "month" || e.target.name === "year"
+        ? Number(e.target.value)
+        : e.target.value;
+
+    setInput((prv) => ({ ...prv, [e.target.name]: value }));
   };
 
   const getReportInfo = async () => {
@@ -94,14 +119,31 @@ function Report() {
     return data;
   }, [report, users]);
 
-  const pieData = useMemo(() => {
+  const sortedReport = useMemo(() => {
     if (!report?.length) return [];
 
-    return report.map((row) => ({
-      name: row.expenseTypeName,
-      value: row.totalAmt,
-    }));
+    return [...report].sort((a, b) => b.totalAmt - a.totalAmt);
   }, [report]);
+
+  const pieData = useMemo(() => {
+    if (!sortedReport?.length) return [];
+
+    const bothActive = activeFilters.user && activeFilters.buddy;
+    const onlyUserActive = activeFilters.user && !activeFilters.buddy;
+    const onlyBuddyActive = !activeFilters.user && activeFilters.buddy;
+    const buddyId = buddyUser?.userId;
+
+    return sortedReport.map((row) => ({
+      name: row.expenseTypeName,
+      value: bothActive
+        ? row.totalAmt
+        : onlyUserActive
+          ? (row.expense?.[user?.userId] ?? 0)
+          : onlyBuddyActive
+            ? (row.expense?.[buddyId] ?? 0)
+            : row.totalAmt,
+    }));
+  }, [sortedReport, activeFilters, buddyUser?.userId, user?.userId]);
 
   const sortedUsers = useMemo(() => {
     if (!users?.length || !user?.userId) return users;
@@ -126,7 +168,7 @@ function Report() {
     // CHANGE THIS VALUE
     const radius = isBig
       ? innerRadius + (outerRadius - innerRadius) / 2
-      : outerRadius + 5;
+      : outerRadius - 10;
 
     const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
     const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
@@ -136,6 +178,8 @@ function Report() {
         x={x}
         y={y}
         fill="currentColor"
+        stroke="rgba(0,0,0,0.1)"
+        strokeWidth={0.5}
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
         fontSize={12}
@@ -147,34 +191,40 @@ function Report() {
 
   const hdlPrevMonth = () => {
     setInput((prev) => {
-      if (prev.month === 1) {
+      const month = Number(prev.month);
+      const year = Number(prev.year);
+
+      if (month <= 1) {
         return {
           ...prev,
           month: 12,
-          year: prev.year - 1,
+          year: year - 1,
         };
       }
 
       return {
         ...prev,
-        month: prev.month - 1,
+        month: month - 1,
       };
     });
   };
 
   const hdlNextMonth = () => {
     setInput((prev) => {
-      if (prev.month === 12) {
+      const month = Number(prev.month);
+      const year = Number(prev.year);
+
+      if (month >= 12) {
         return {
           ...prev,
           month: 1,
-          year: prev.year + 1,
+          year: year + 1,
         };
       }
 
       return {
         ...prev,
-        month: prev.month + 1,
+        month: month + 1,
       };
     });
   };
@@ -198,24 +248,24 @@ function Report() {
             <PrevIcon className="w-5 h-5" />
           </button>
           <select
-            className="input-field convex bg-surface pl-4 w-[75px]"
+            className="input-field convex bg-surface text-center w-[100px]"
             name="month"
             value={input.month}
             onChange={hdlInput}
           >
             {[
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec",
+              t("January"),
+              t("February"),
+              t("March"),
+              t("April"),
+              t("May"),
+              t("June"),
+              t("July"),
+              t("August"),
+              t("September"),
+              t("October"),
+              t("November"),
+              t("December"),
             ].map((m, i) => (
               <option key={i} value={i + 1}>
                 {m}
@@ -240,6 +290,28 @@ function Report() {
               </option>
             ))}
           </select>
+        </div>
+        <div className="w-10/12 flex justify-center items-center gap-2 mt-2">
+          <div
+            onClick={() => toggleFilter("user")}
+            className={`input-field convex px-3 flex justify-center items-center ${
+              activeFilters.user
+                ? "bg-accent text-text-reverse"
+                : "bg-surface text-text"
+            }`}
+          >
+            {user?.userName || t("you")}
+          </div>
+          <div
+            onClick={() => toggleFilter("buddy")}
+            className={`input-field convex px-3 flex justify-center items-center ${
+              activeFilters.buddy
+                ? "bg-friend text-text-reverse"
+                : "bg-surface text-text"
+            }`}
+          >
+            {buddyName}
+          </div>
         </div>
         {/* pie chart */}
         <div className="w-full h-[350px] overflow-visible">
@@ -276,7 +348,7 @@ function Report() {
               {/* Header */}
               <div className="grid grid-cols-9 gap-2 px-3 items-center">
                 <div className="col-span-3"></div>
-                <div className="col-span-2 text-right">Total</div>
+                <div className="col-span-2 text-right">{t("total")}</div>
                 {sortedUsers.map((u) => (
                   <div key={u.userId} className="col-span-2 flex justify-end">
                     <div
@@ -296,7 +368,7 @@ function Report() {
               </div>
 
               {/* Body */}
-              {report.map((row) => (
+              {sortedReport.map((row) => (
                 <div
                   key={row.expenseTypeId}
                   className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface"
@@ -364,7 +436,7 @@ function Report() {
         </div>
         {/* report receivable table */}
         {summary && (
-          <div className="w-9/10 mt-8 flex flex-col gap-2 text-sm">
+          <div className="w-9/10 my-8 flex flex-col gap-2 text-sm ">
             {/* Header */}
             <div className="grid grid-cols-9 gap-2 px-3 ">
               <div className="col-span-3"></div>

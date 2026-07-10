@@ -70,6 +70,7 @@ button {
 html.theme-dark {
   --color-bg: #0f1115;
   --color-surface: #171a21;
+  /* --color-primary: #ffd700; */
   --color-primary: #3b82f6;
   --color-accent: #e61e42;
   --color-text: #e5e7eb;
@@ -83,6 +84,7 @@ html.theme-dark {
 html.theme-light {
   --color-bg: #f7f7f8;
   --color-surface: #fcfcfd;
+  /* --color-primary: #ffd700; */
   --color-primary: #3b82f6;
   --color-accent: #e61e42;
   --color-text: #222222;

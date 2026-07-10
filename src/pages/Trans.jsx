@@ -10,7 +10,7 @@ import {
   CameraIcon,
   NoTrans,
   SearchIcon,
-  ToTopArrow,
+  ToTopIcon,
   TransIcon,
 } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
@@ -99,7 +99,7 @@ function Trans() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowToTop(window.scrollY > 300); // <-- show after scrolling 300px
+      setShowToTop(window.scrollY > 30); // <-- show after scrolling 300px
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -177,12 +177,12 @@ function Trans() {
                     >
                       <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">
                         {/* type */}
-                        <p className="flex-1 text-[19px]">
+                        <p className="flex-1 text-[16px]">
                           {el.expenseType?.expenseName}
                         </p>
                         {/* totalAmt */}
                         <NumericFormat
-                          className="flex-none w-[120px]  text-right text-[26px]"
+                          className="flex-none w-[120px]  text-right text-[20px] font-bold"
                           value={el.totalAmt}
                           displayType="text"
                           thousandSeparator=","
@@ -279,10 +279,10 @@ function Trans() {
           {/* to top arrow */}
           {showToTop && (
             <button
-              className="w-[40px] h-[40px] concave fixed bottom-19 right-4 bg-primary flex justify-center items-center animate-fade-in"
+              className="w-[44px] h-[44px] convex-full fixed bottom-19 left-1/2 -translate-x-1/2 bg-primary flex justify-center items-center animate-fade-in"
               onClick={hdlToTop}
             >
-              <ToTopArrow className="w-[24px] h-[24px]" />
+              <ToTopIcon className="w-[36px] h-[36px] text-text-reverse" />
             </button>
           )}
           <Footer />

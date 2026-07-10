@@ -109,14 +109,14 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
         </div>
         <div className="mt-5 my-1 flex gap-2">
           <button
-            className="flex-1 btn btn-accent py-3 concave text-text-reverse"
+            className="flex-1 h-[50px] py-3 convex bg-accent text-text-reverse flex justify-center items-center"
             type="button"
             onClick={clearAll}
           >
             {t("clear")}
           </button>
           <button
-            className="flex-1 btn btn-primary py-3 concave text-text-reverse"
+            className="flex-1  h-[50px] py-3 convex bg-primary text-text-reverse flex justify-center items-center"
             type="button"
             onClick={confirm}
           >

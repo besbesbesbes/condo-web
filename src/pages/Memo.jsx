@@ -256,7 +256,7 @@ function Memo() {
             >
               <div className="w-[50px] flex-none flex flex-col items-center">
                 <div
-                  className={`w-[24px] h-[24px] flex justify-center items-center convex bg-primary ${el.user.userName?.[0]?.toUpperCase() === "K" ? "bg-primary" : "bg-accent"}`}
+                  className={`w-[24px] h-[24px] flex justify-center items-center convex bg-primary ${el?.userId === user.userId ? "bg-accent" : "bg-friend"}`}
                 >
                   <p className="text-text-reverse">
                     {el.user.userName?.[0]?.toUpperCase()}
