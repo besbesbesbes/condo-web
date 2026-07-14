@@ -6,7 +6,14 @@ import ModalEditType from "./ModalEditType";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
 
-function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
+function ModalExpenseType({
+  types,
+  setInput,
+  getNewTranInfo,
+  input,
+  onSelect,
+  onClose,
+}) {
   const [newType, setNewType] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const token = useUserStore((state) => state.token);
@@ -64,6 +71,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
                     type: el.expenseName,
                     typeId: el.expenseTypeId,
                   }));
+                  onSelect?.(el);
                   e.target.closest("dialog").close();
                 }}
               >
@@ -108,6 +116,7 @@ function ModalExpenseType({ types, setInput, getNewTranInfo, input }) {
       <button
         className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
         onClick={(e) => {
+          onClose?.();
           e.target.closest("dialog").close();
         }}
       >

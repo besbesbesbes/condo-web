@@ -3,7 +3,7 @@ import { CloseIcon, UserIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
 
-function ModalPaidBy({ users, setInput, headerTxt }) {
+function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
   const user = useUserStore((state) => state.user);
   const { t } = useTranslation();
   return (
@@ -29,6 +29,7 @@ function ModalPaidBy({ users, setInput, headerTxt }) {
                   type: "",
                   typeId: "",
                 }));
+                onSelect?.(el);
                 e.target.closest("dialog").close();
               }}
             >
@@ -43,6 +44,7 @@ function ModalPaidBy({ users, setInput, headerTxt }) {
       <button
         className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
         onClick={(e) => {
+          onClose?.();
           e.target.closest("dialog").close();
         }}
       >

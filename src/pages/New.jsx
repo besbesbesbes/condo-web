@@ -6,8 +6,8 @@ import { addTran, getNewTranInfoApi } from "../apis/new-api";
 import useUserStore from "../stores/user-store";
 import ModalExpenseType from "../components/ModalExpenseType";
 import ModalPaidBy from "../components/ModalPaidBy";
-import { useNavigate } from "react-router-dom";
-import { addTranMail } from "../apis/mail-api";
+import { useLocation, useNavigate } from "react-router-dom";
+// import { addTranMail } from "../apis/mail-api";
 import { useTranslation } from "react-i18next";
 import {
   AddPhoto,
@@ -24,6 +24,7 @@ import { getRecentTagApi, getTagApi } from "../apis/tag-api";
 function New() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const setIsLoad = useMainStore((state) => state.setIsLoad);
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const token = useUserStore((state) => state.token);
@@ -55,7 +56,12 @@ function New() {
   const [showSuggest, setShowSuggest] = useState(false);
   const [recentTag, setRecentTag] = useState([]);
   const [showInstallment, setShowInstallment] = useState(false);
+  const [fastInputState, setFastInputState] = useState({
+    active: false,
+    step: 0,
+  });
   const tagBoxRef = useRef(null);
+  const skipNextDialogCloseRef = useRef(false);
 
   const openAmtKeypad = () => {
     setShowAmtKeypad(true);
@@ -64,6 +70,54 @@ function New() {
   const closeAmtKeypad = () => {
     setShowAmtKeypad(false);
   };
+
+  const openPaidByModal = () => {
+    document.getElementById("paid_by_modal")?.showModal();
+  };
+
+  const openExpenseTypeModal = () => {
+    document.getElementById("expense_type_modal")?.showModal();
+  };
+
+  const disableFastInput = () => {
+    setFastInputState({ active: false, step: 0 });
+  };
+
+  const startFastInput = () => {
+    setFastInputState({ active: true, step: 1 });
+    window.setTimeout(() => {
+      if (location.pathname === "/add") {
+        openPaidByModal();
+      }
+    }, 120);
+  };
+
+  const handlePaidBySelect = () => {
+    if (!fastInputState.active || fastInputState.step !== 1) return;
+
+    skipNextDialogCloseRef.current = true;
+    setFastInputState({ active: true, step: 2 });
+
+    window.setTimeout(() => {
+      if (location.pathname === "/add") {
+        openExpenseTypeModal();
+      }
+    }, 120);
+  };
+
+  const handleExpenseTypeSelect = () => {
+    if (!fastInputState.active || fastInputState.step !== 2) return;
+
+    skipNextDialogCloseRef.current = true;
+    setFastInputState({ active: true, step: 3 });
+
+    window.setTimeout(() => {
+      if (location.pathname === "/add") {
+        setShowAmtKeypad(true);
+      }
+    }, 120);
+  };
+
   const hdlInput = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
   };
@@ -311,6 +365,54 @@ function New() {
     getTagList();
     getRecentTag();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname !== "/add") return;
+
+    startFastInput();
+
+    return () => {
+      disableFastInput();
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const paidByModal = document.getElementById("paid_by_modal");
+    const expenseTypeModal = document.getElementById("expense_type_modal");
+
+    const handlePaidByDialogClose = () => {
+      if (skipNextDialogCloseRef.current) {
+        skipNextDialogCloseRef.current = false;
+        return;
+      }
+
+      if (fastInputState.active && fastInputState.step === 1) {
+        disableFastInput();
+      }
+    };
+
+    const handleExpenseTypeDialogClose = () => {
+      if (skipNextDialogCloseRef.current) {
+        skipNextDialogCloseRef.current = false;
+        return;
+      }
+
+      if (fastInputState.active && fastInputState.step === 2) {
+        disableFastInput();
+      }
+    };
+
+    paidByModal?.addEventListener("close", handlePaidByDialogClose);
+    expenseTypeModal?.addEventListener("close", handleExpenseTypeDialogClose);
+
+    return () => {
+      paidByModal?.removeEventListener("close", handlePaidByDialogClose);
+      expenseTypeModal?.removeEventListener(
+        "close",
+        handleExpenseTypeDialogClose,
+      );
+    };
+  }, [fastInputState.active, fastInputState.step]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -932,9 +1034,27 @@ function New() {
       <AmtKeypad
         show={showAmtKeypad}
         initialValue={input.totalAmt}
-        onClose={closeAmtKeypad}
+        onClose={() => {
+          if (fastInputState.active && fastInputState.step === 3) {
+            disableFastInput();
+          }
+          closeAmtKeypad();
+        }}
         onConfirm={(resultValue) => {
-          setInput((prev) => ({ ...prev, totalAmt: Number(resultValue) }));
+          const amount = Number(resultValue);
+          setInput((prev) => ({ ...prev, totalAmt: amount }));
+
+          if (
+            fastInputState.active &&
+            fastInputState.step === 3 &&
+            Number.isFinite(amount) &&
+            amount > 0
+          ) {
+            setFastInputState({ active: false, step: 0 });
+          } else if (fastInputState.active && fastInputState.step === 3) {
+            disableFastInput();
+          }
+
           closeAmtKeypad();
         }}
         t={t}
@@ -943,7 +1063,12 @@ function New() {
       <Footer />
       {/* modal paid by */}
       <dialog id="paid_by_modal" className="modal">
-        <ModalPaidBy users={users} setInput={setInput} />
+        <ModalPaidBy
+          users={users}
+          setInput={setInput}
+          onSelect={handlePaidBySelect}
+          onClose={disableFastInput}
+        />
       </dialog>
       {/* modal expense type */}
       <dialog id="expense_type_modal" className="modal">
@@ -952,6 +1077,8 @@ function New() {
           types={types}
           setInput={setInput}
           getNewTranInfo={getNewTranInfo}
+          onSelect={handleExpenseTypeSelect}
+          onClose={disableFastInput}
         />
       </dialog>
     </div>
