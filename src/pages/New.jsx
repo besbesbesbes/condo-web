@@ -29,8 +29,9 @@ function New() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
-  const [users, setUsers] = useState({});
-  const [types, setTypes] = useState({});
+  const [users, setUsers] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [isInitialDataReady, setIsInitialDataReady] = useState(false);
   const [files, setFiles] = useState([]);
   const [errMsg, setErrMsg] = useState("");
   const [input, setInput] = useState({
@@ -72,10 +73,12 @@ function New() {
   };
 
   const openPaidByModal = () => {
+    if (!isInitialDataReady) return;
     document.getElementById("paid_by_modal")?.showModal();
   };
 
   const openExpenseTypeModal = () => {
+    if (!isInitialDataReady) return;
     document.getElementById("expense_type_modal")?.showModal();
   };
 
@@ -84,12 +87,8 @@ function New() {
   };
 
   const startFastInput = () => {
+    if (location.pathname !== "/add") return;
     setFastInputState({ active: true, step: 1 });
-    window.setTimeout(() => {
-      if (location.pathname === "/add") {
-        openPaidByModal();
-      }
-    }, 120);
   };
 
   const handlePaidBySelect = () => {
@@ -152,6 +151,7 @@ function New() {
 
   const getNewTranInfo = async () => {
     setIsLoad(true);
+    setIsInitialDataReady(false);
     try {
       const result = await getNewTranInfoApi(token);
       console.log(result.data);
@@ -164,14 +164,16 @@ function New() {
       }
       console.log(result.data.users);
       console.log(result.data.types);
-      setUsers(result.data.users);
+      setUsers(result.data.users || []);
 
       console.log(result.data.users);
       console.log(user);
 
-      setTypes(result.data.types);
+      setTypes(result.data.types || []);
+      setIsInitialDataReady(true);
     } catch (err) {
       console.log(err?.response?.data?.msg || err.message);
+      setIsInitialDataReady(false);
     } finally {
       setIsLoad(false);
     }
@@ -375,6 +377,34 @@ function New() {
       disableFastInput();
     };
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (
+      location.pathname !== "/add" ||
+      !fastInputState.active ||
+      fastInputState.step !== 1 ||
+      !isInitialDataReady
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (
+        location.pathname === "/add" &&
+        fastInputState.active &&
+        fastInputState.step === 1
+      ) {
+        openPaidByModal();
+      }
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    location.pathname,
+    fastInputState.active,
+    fastInputState.step,
+    isInitialDataReady,
+  ]);
 
   useEffect(() => {
     const paidByModal = document.getElementById("paid_by_modal");

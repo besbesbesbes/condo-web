@@ -147,6 +147,16 @@ function Calendar() {
       ];
 
       setTagList(tagList);
+      setActiveTags((prevActiveTags) => {
+        if (prevActiveTags.length === 0) {
+          return tagList.slice(0, 4).map((tag, index) => ({
+            tagId: tag.tagId,
+            slot: index,
+          }));
+        }
+
+        return prevActiveTags.map((tag) => ({ ...tag }));
+      });
 
       // Build map: YYYY-MM-DD -> tagTrans[]
       const tagMap = new Map();
