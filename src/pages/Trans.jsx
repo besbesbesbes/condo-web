@@ -187,7 +187,7 @@ function Trans() {
                         className="trans-list-item w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
                         style={{
                           animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                          animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+                          animationDelay: `${idx * 0}ms`,
                         }}
                         onClick={(e) => hdlSelectedTran(e, el)}
                       >
