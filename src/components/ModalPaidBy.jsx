@@ -2,6 +2,30 @@ import React from "react";
 import { CloseIcon, UserIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
   const user = useUserStore((state) => state.user);
@@ -18,7 +42,11 @@ function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
           users.map((el, idx) => (
             <div
               key={idx}
-              className={`w-10/12 h-[30px] text-center text-text-reverse font-bold convex  ${el.userName === user.userName ? "bg-accent" : "bg-friend"}`}
+              className={`trans-list-item w-10/12 h-[30px] text-center text-text-reverse font-bold convex  ${el.userName === user.userName ? "bg-accent" : "bg-friend"}`}
+              style={{
+                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+              }}
               onClick={(e) => {
                 setInput((prev) => ({
                   ...prev,

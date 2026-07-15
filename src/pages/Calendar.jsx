@@ -7,6 +7,30 @@ import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
 import { editTagTranApi, getTagApi, getTagTranApi } from "../apis/tag-api";
 import ModalEditTag from "../components/ModalEditTag";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 function Calendar() {
   const { t } = useTranslation();
@@ -254,13 +278,20 @@ function Calendar() {
       <Header />
 
       {/* Calendar */}
-      <div className="w-10/11 mt-4 concave p-1 rounded-xl bg-surface">
+      <AnimatedSection
+        className="min-h-[290px]  w-10/11 mt-4 concave p-1 rounded-xl bg-surface"
+        index={0}
+      >
         {/* Week Header */}
         <div className="grid grid-cols-7 gap-1 mt-1">
-          {weekDays.map((day) => (
+          {weekDays.map((day, idx) => (
             <div
               key={day}
-              className="h-8 flex items-center justify-center font-bold"
+              className="trans-list-item  h-8 flex items-center justify-center font-bold"
+              style={{
+                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+              }}
             >
               {day}
             </div>
@@ -269,10 +300,10 @@ function Calendar() {
 
         {/* Days */}
         <div className="grid grid-cols-7 gap-1 place-items-center">
-          {calendarDays.map((item) => (
+          {calendarDays.map((item, idx) => (
             <div
               key={item.date}
-              className={`h-[30px] w-[30px] rounded-full my-1 flex items-center justify-center
+              className={`trans-list-item h-[30px] w-[30px] rounded-full my-1 flex items-center justify-center
         ${
           item.date === todayStr
             ? "bg-surface convex border border-blue-500 font-bold"
@@ -280,6 +311,10 @@ function Calendar() {
               ? "bg-surface"
               : "bg-surface text-gray-300"
         }`}
+              style={{
+                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                animationDelay: `${idx * 5}ms`,
+              }}
               onClick={() => openEditTag(item)}
             >
               {item.day}
@@ -302,10 +337,13 @@ function Calendar() {
             </div>
           ))}
         </div>
-      </div>
+      </AnimatedSection>
 
       {/* Navigation */}
-      <div className="w-10/11 h-[40px] mt-5 flex items-center justify-between gap-2">
+      <AnimatedSection
+        className="w-10/11 h-[40px] mt-5 flex items-center justify-between gap-2"
+        index={1}
+      >
         <div className="w-[80px] h-[35px] convex bg-surface rounded-lg px-2">
           <select
             value={year}
@@ -345,12 +383,15 @@ function Calendar() {
         >
           {t("today")}
         </button>
-      </div>
+      </AnimatedSection>
 
       {/* Filtered */}
-      <div className="w-10/11 min-h-[40px] mt-4 concave bg-surface p-3">
+      <AnimatedSection
+        className="w-10/11 min-h-[40px] mt-4 concave bg-surface p-3"
+        index={2}
+      >
         <div className="w-full flex flex-wrap gap-2">
-          {tagList.map((tag) => {
+          {tagList.map((tag, idx) => {
             const activeTag = activeTags.find((t) => t.tagId === tag.tagId);
 
             const bgColor = activeTag
@@ -361,16 +402,20 @@ function Calendar() {
               <button
                 key={tag.tagId}
                 onClick={() => toggleTag(tag.tagId)}
-                className={`px-3 py-1 my-1 rounded-full convex transition-all duration-200 ${bgColor} ${
+                className={`trans-list-item px-3 py-1 my-1 rounded-full convex transition-all duration-200 ${bgColor} ${
                   activeTag ? "text-white" : ""
                 }`}
+                style={{
+                  animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                  animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+                }}
               >
                 {tag.tagTxt}
               </button>
             );
           })}
         </div>
-      </div>
+      </AnimatedSection>
       <Footer />
       {/* modal edit tag */}
       <dialog id="edit_tag_modal" className="modal">

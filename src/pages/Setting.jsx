@@ -16,6 +16,30 @@ import {
 import Header from "../components/Header";
 import { requestBuddyApi } from "../apis/buddy-api";
 import { APP_VERSION } from "../config/version";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 function Setting() {
   const { t, i18n } = useTranslation();
@@ -97,7 +121,10 @@ function Setting() {
     <div>
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-7 items-center relative mb-[75px] mt-[60px]">
         <Header />
-        <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
+        <AnimatedSection
+          className="w-10/12 flex justify-center items-center gap-2 mt-4"
+          index={0}
+        >
           <p className="w-[100px] text-right pr-2 font-bold">
             {t("userName")} :
           </p>
@@ -118,8 +145,11 @@ function Setting() {
               </>
             )}
           </div>
-        </div>
-        <div className="w-9/11 flex items-center justify-between rounded-2xl relative">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 flex items-center justify-between rounded-2xl relative"
+          index={1}
+        >
           <div>
             <p className="font-bold">{t("buddy")}</p>
             <p className="text-sm">
@@ -163,12 +193,17 @@ function Setting() {
               <ConnectedIcon className="w-[20px] h-[20px] text-text-reverse" />
             )}
           </div>
-        </div>
+        </AnimatedSection>
         {isShowErrMsg && (
           <p className="text-sm text-red-500 w-9/11 text-center">{errMsg}</p>
         )}
-        <ThemeToggle />
-        <div className="w-9/11 flex items-center justify-between rounded-2xl">
+        <AnimatedSection index={2} className="w-full flex justify-center">
+          <ThemeToggle />
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 flex items-center justify-between rounded-2xl"
+          index={3}
+        >
           <div>
             <p className="font-bold">{t("password")}</p>
             <p className="text-sm">{t("changePassword")}</p>
@@ -182,8 +217,11 @@ function Setting() {
           >
             {t("changePassword")}
           </button>
-        </div>
-        <div className="w-9/11 flex items-center justify-between rounded-2xl">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 flex items-center justify-between rounded-2xl"
+          index={4}
+        >
           <div>
             <p className="font-bold">{t("changeLanguage")}</p>
             <p className="text-sm text-muted"></p>
@@ -200,8 +238,11 @@ function Setting() {
               ภาษาไทย
             </option>
           </select>
-        </div>
-        <div className="w-9/11 flex items-center justify-between rounded-2xl">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 flex items-center justify-between rounded-2xl"
+          index={5}
+        >
           <div>
             <p className="font-bold">{t("logout")}</p>
             <p className="text-sm text-muted"></p>
@@ -216,8 +257,10 @@ function Setting() {
           >
             {t("logout")}
           </button>
-        </div>
-        <p className="text-xs">{APP_VERSION}</p>
+        </AnimatedSection>
+        <AnimatedSection className="text-xs" index={6}>
+          <p>{APP_VERSION}</p>
+        </AnimatedSection>
       </div>
 
       <Footer />

@@ -1,6 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { CloseIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
   const { t } = useTranslation();

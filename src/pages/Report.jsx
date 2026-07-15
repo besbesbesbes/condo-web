@@ -22,6 +22,30 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 const COLORS = [
   "#f94144",
@@ -240,7 +264,10 @@ function Report() {
         {/* header */}
         <Header />
         {/*Report date */}
-        <div className=" w-10/12 flex justify-center items-center gap-2 mt-4">
+        <AnimatedSection
+          className="w-10/12 flex justify-center items-center gap-2 mt-4"
+          index={0}
+        >
           <button
             onClick={hdlPrevMonth}
             className="w-[35px] h-[35px] flex justify-center items-center bg-surface convex rounded-full"
@@ -290,8 +317,11 @@ function Report() {
               </option>
             ))}
           </select>
-        </div>
-        <div className="w-10/12 flex justify-center items-center gap-2 mt-2">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-10/12 flex justify-center items-center gap-2 mt-2"
+          index={1}
+        >
           <div
             onClick={() => toggleFilter("user")}
             className={`input-field convex px-3 flex justify-center items-center ${
@@ -312,9 +342,12 @@ function Report() {
           >
             {buddyName}
           </div>
-        </div>
+        </AnimatedSection>
         {/* pie chart */}
-        <div className="w-full h-[350px] overflow-visible">
+        <AnimatedSection
+          className="w-full h-[350px] overflow-visible"
+          index={2}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -340,9 +373,12 @@ function Report() {
               />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </AnimatedSection>
         {/* report expense table */}
-        <div className="w-9/10 flex flex-col gap-2 text-sm">
+        <AnimatedSection
+          className="w-9/10 flex flex-col gap-2 text-sm"
+          index={3}
+        >
           {report?.length ? (
             <>
               {/* Header */}
@@ -368,10 +404,11 @@ function Report() {
               </div>
 
               {/* Body */}
-              {sortedReport.map((row) => (
-                <div
+              {sortedReport.map((row, rowIndex) => (
+                <AnimatedSection
                   key={row.expenseTypeId}
                   className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface"
+                  index={4 + rowIndex}
                 >
                   {/* Expense Type */}
                   <div className="col-span-3">{row.expenseTypeName}</div>
@@ -398,11 +435,14 @@ function Report() {
                       fixedDecimalScale
                     />
                   ))}
-                </div>
+                </AnimatedSection>
               ))}
 
               {/* Total Row */}
-              <div className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface font-bold">
+              <AnimatedSection
+                className="grid grid-cols-9 gap-2 px-3 h-[42px] items-center concave bg-surface font-bold"
+                index={4 + sortedReport.length}
+              >
                 <div className="col-span-3"></div>
 
                 <NumericFormat
@@ -425,7 +465,7 @@ function Report() {
                     fixedDecimalScale
                   />
                 ))}
-              </div>
+              </AnimatedSection>
             </>
           ) : (
             <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
@@ -433,10 +473,13 @@ function Report() {
               <p>{t("noRecordFound")}</p>
             </div>
           )}
-        </div>
+        </AnimatedSection>
         {/* report receivable table */}
         {summary && (
-          <div className="w-9/10 my-8 flex flex-col gap-2 text-sm ">
+          <AnimatedSection
+            className="w-9/10 my-8 flex flex-col gap-2 text-sm"
+            index={5 + sortedReport.length}
+          >
             {/* Header */}
             <div className="grid grid-cols-9 gap-2 px-3 ">
               <div className="col-span-3"></div>
@@ -446,14 +489,15 @@ function Report() {
             </div>
 
             {/* Body */}
-            {sortedUsers.map((u) => {
+            {sortedUsers.map((u, userIndex) => {
               const receivable =
                 summary.paid[u.userId] - summary.expense[u.userId];
 
               return (
-                <div
+                <AnimatedSection
                   key={u.userId}
                   className="grid grid-cols-9 gap-2 concave bg-surface px-3 h-[42px] items-center"
+                  index={6 + sortedReport.length + userIndex}
                 >
                   {/* user */}
                   <div className="col-span-3 flex items-center">
@@ -499,10 +543,10 @@ function Report() {
                     decimalScale={2}
                     fixedDecimalScale
                   />
-                </div>
+                </AnimatedSection>
               );
             })}
-          </div>
+          </AnimatedSection>
         )}
       </div>
       {/* footer */}

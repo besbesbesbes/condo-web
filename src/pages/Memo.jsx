@@ -21,6 +21,30 @@ import useUserStore from "../stores/user-store";
 import { getMemo } from "../apis/memo-api";
 import ModalEditMemo from "../components/ModalEditMemo";
 import ModalConfirmDeleteMemo from "../components/ModalConfirmDeleteMemo";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = ({
+  children,
+  index,
+  className = "",
+  style = {},
+  ...props
+}) => (
+  <div
+    className={`trans-list-item ${className}`.trim()}
+    style={{
+      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+      ...style,
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 function Memo() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -155,7 +179,10 @@ function Memo() {
       {/* header */}
       <Header />
       {/* searh */}
-      <div className="w-10/11 flex items-center justify-between mt-3 gap-2">
+      <AnimatedSection
+        className="w-10/11 flex items-center justify-between mt-3 gap-2"
+        index={0}
+      >
         <div className="h-[30px] flex-1 concave bg-surface flex justify-between items-center px-2">
           <input
             className=" w-full focus:outline-none pl-1"
@@ -192,9 +219,12 @@ function Memo() {
             <p>{t("old")}</p>
           </button>
         )}
-      </div>
+      </AnimatedSection>
       {/* filter */}
-      <div className="w-10/11 flex items-center justify-between gap-2 mt-1 flex-wrap">
+      <AnimatedSection
+        className="w-10/11 flex items-center justify-between gap-2 mt-1 flex-wrap"
+        index={1}
+      >
         {users.length > 1 && (
           <div className="flex gap-2">
             {users.map((u) => {
@@ -241,14 +271,15 @@ function Memo() {
 
           {t("hidden")}
         </button>
-      </div>
+      </AnimatedSection>
       {/* memo list */}
-      <div className="w-9/10 flex flex-col gap-4 mt-2">
+      <AnimatedSection className="w-9/10 flex flex-col gap-4 mt-2" index={2}>
         {filteredMemos?.length > 0 ? (
           filteredMemos.map((el, idx) => (
-            <div
+            <AnimatedSection
               key={idx}
               className="w-full flex gap-2"
+              index={3 + idx}
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedMemo({ ...el });
@@ -304,7 +335,7 @@ function Memo() {
                   )}
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           ))
         ) : (
           <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
@@ -312,8 +343,12 @@ function Memo() {
             <p className="text-center">{t("noRecordFound")}</p>
           </div>
         )}
-      </div>
+      </AnimatedSection>
       {/* add new */}
+      {/* <AnimatedSection
+        className="w-full flex justify-center"
+        index={3 + filteredMemos.length}
+      > */}
       <button
         className="w-[150px] h-[30px] fixed bottom-18 my-2 btn btn-primary text-text-reverse"
         onClick={(e) => {
@@ -326,6 +361,7 @@ function Memo() {
           {t("add")}
         </div>
       </button>
+      {/* </AnimatedSection> */}
       {/* to top */}
       {showToTop && (
         <div
