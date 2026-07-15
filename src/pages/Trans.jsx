@@ -16,9 +16,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-
-const TRANS_LIST_ANIMATION_DURATION_MS = 200;
-const TRANS_LIST_ANIMATION_STAGGER_MS = 75;
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
 
 function formatDateTime(date, lang = "en") {
   const d = new Date(date);

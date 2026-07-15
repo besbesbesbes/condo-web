@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import Footer from "../components/Footer";
 import { NumericFormat } from "react-number-format";
 import { editTranApi } from "../apis/trans-api";
@@ -24,6 +24,30 @@ import {
   UserIcon,
 } from "../icons/menuIcon";
 import Header from "../components/Header";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = forwardRef(
+  ({ children, index, className = "", style = {} }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`trans-list-item ${className}`.trim()}
+        style={{
+          animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+          animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+          ...style,
+        }}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+AnimatedSection.displayName = "AnimatedSection";
 
 function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
   const { t } = useTranslation();
@@ -290,7 +314,10 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           </div>
         </div> */}
         {/* record date */}
-        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 mt-4 items-center"
+          index={0}
+        >
           <p className="w-[100px] flex-none text-right pr-2">
             {t("recordDate")} :
           </p>
@@ -303,9 +330,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               onChange={hdlInput}
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* record time */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={1}
+        >
           <p className="w-[100px] flex-none text-right pr-2">
             {t("recordTime")} :
           </p>
@@ -318,9 +348,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               onChange={hdlInput}
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* paid by */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={2}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <UserIcon className="w-[20px] h-[20px]" />
             <p>{t("payer")} :</p>
@@ -344,9 +377,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
         {/* type */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={3}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <TypeIcon className="w-[20px] h-[20px]" />
             <p>{t("type")} :</p>
@@ -365,9 +401,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               readOnly
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* amount */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={4}
+        >
           <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
             {t("totalAmount")} :
           </p>
@@ -393,9 +432,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               autoComplete="off"
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* My Portion */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={5}
+        >
           <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
             {t("payerPortion")} :
           </p>
@@ -418,8 +460,11 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               }}
             />
           </div>
-        </div>{" "}
-        <div className=" w-9/11 flex justify-end pr-4 gap-2 items-center">
+        </AnimatedSection>{" "}
+        <AnimatedSection
+          className="w-9/11 flex justify-end pr-4 gap-2 items-center"
+          index={6}
+        >
           <div
             className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0 ? "text-text-reverse bg-primary" : "bg-surface"}`}
             onClick={() => {
@@ -475,9 +520,9 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           >
             100%
           </div>
-        </div>
+        </AnimatedSection>
         {/* User Amount */}
-        <div className="flex flex-col gap-1">
+        <AnimatedSection className="flex flex-col gap-1" index={7}>
           <div className="w-9/11 grid grid-cols-6 items-center">
             <div className="col-span-3  flex justify-end mr-4">
               <div className="w-fit h-[30px] flex justify-center items-center convex bg-accent px-2">
@@ -543,7 +588,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               />
             </div>
           </div>
-        </div>
+        </AnimatedSection>
         {/* My Amount */}
         {/* <div className=" w-9/11 flex justify-center gap-2 items-center">
           <p className="w-[150px] flex-none text-right">
@@ -574,14 +619,21 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           />
         </div> */}
         {/* tag */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={8}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <TagIcon className="w-[20px] h-[20px]" />
             <p>{t("tag")} :</p>
           </div>{" "}
           <div className="w-full flex items-center px-4"></div>
-        </div>
-        <div ref={tagBoxRef} className="relative w-9/11 max-w-[350px]">
+        </AnimatedSection>
+        <AnimatedSection
+          ref={tagBoxRef}
+          className="relative w-9/11 max-w-[350px]"
+          index={9}
+        >
           <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2 pl-4">
             {input.tags.map((tag, idx) => (
               <div
@@ -653,29 +705,40 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               ))}
             </div>
           )}
-        </div>
+        </AnimatedSection>
         {/* remark */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={10}
+        >
           <p className="w-[100px] flex-none text-right pr-4">{t("remark")} :</p>
           <div className="w-full flex items-center px-4"></div>
-        </div>
-        <input
-          className="input-field w-9/11 max-w-[350px] min-h-[40px] concave bg-surface pl-3"
-          type="text"
-          value={input.remark}
-          name="remark"
-          onChange={hdlInput}
-        />
+        </AnimatedSection>
+        <AnimatedSection className="w-9/11 max-w-[350px]" index={11}>
+          <input
+            className="input-field w-full min-h-[40px] concave bg-surface pl-3"
+            type="text"
+            value={input.remark}
+            name="remark"
+            onChange={hdlInput}
+          />
+        </AnimatedSection>
         {/* photo */}
         {selectedTran?.isHavePhoto && (
           <>
-            <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+            <AnimatedSection
+              className="w-9/11 flex justify-center gap-2 mt-4 items-center"
+              index={12}
+            >
               <p className="w-[100px] flex-none text-right pr-2">
                 {t("photo")} :
               </p>
               <div className="w-full flex items-center px-4"></div>
-            </div>
-            <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
+            </AnimatedSection>
+            <AnimatedSection
+              className="w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl"
+              index={13}
+            >
               {/* list of files */}
               {selectedTran.photos?.map((el, idx) => (
                 <div
@@ -694,7 +757,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
                   />
                 </div>
               ))}
-            </div>
+            </AnimatedSection>
           </>
         )}
         {/*add photo */}
@@ -706,15 +769,20 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
           accept="image/*"
           onChange={hdlFileChange}
         />
-        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 mt-4 items-center"
+          index={selectedTran?.isHavePhoto ? 14 : 12}
+        >
           <p className="w-[100px] flex-none text-right pr-2">
             {t("addPhoto")} :
           </p>
           <div className="w-full flex items-center px-4"></div>
-        </div>
-        <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden rounded-xl"
+          index={selectedTran?.isHavePhoto ? 15 : 13}
+        >
           {/* add photo */}
-
           <div
             className="w-[80px] h-[80px] rounded-xl flex-shrink-0 box-border flex justify-center items-center cursor-pointer convex bg-surface"
             onClick={() => document.getElementById("input-file").click()}
@@ -741,9 +809,12 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
               </div>
             </div>
           ))}
-        </div>
+        </AnimatedSection>
         {/* button */}
-        <div className="flex gap-4">
+        <AnimatedSection
+          className="flex gap-4"
+          index={selectedTran?.isHavePhoto ? 16 : 14}
+        >
           <button
             className="btn w-[100px] h-[30px] mt-auto mb-10 convex font-bold bg-surface flex gap-1"
             onClick={() => setSelectedTran(null)}
@@ -768,7 +839,7 @@ function TransDetail({ setSelectedTran, selectedTran, getTrans }) {
             <DeleteIcon className="w-[20px] h-[20px]" />
             {t("delete")}
           </button>
-        </div>
+        </AnimatedSection>
       </div>
       <AmtKeypad
         show={showAmtKeypad}

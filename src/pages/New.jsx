@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import Footer from "../components/Footer";
 import useMainStore from "../stores/main-store";
 import { NumericFormat } from "react-number-format";
@@ -20,6 +20,30 @@ import {
 import AmtKeypad from "../components/AmtKeypad";
 import Header from "../components/Header";
 import { getRecentTagApi, getTagApi } from "../apis/tag-api";
+import {
+  TRANS_LIST_ANIMATION_DURATION_MS,
+  TRANS_LIST_ANIMATION_STAGGER_MS,
+} from "../config/animation";
+
+const AnimatedSection = forwardRef(
+  ({ children, index, className = "", style = {} }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`trans-list-item ${className}`.trim()}
+        style={{
+          animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+          animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+          ...style,
+        }}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+AnimatedSection.displayName = "AnimatedSection";
 
 function New() {
   const { t } = useTranslation();
@@ -491,7 +515,10 @@ function New() {
         {/* header */}
         <Header />
         {/* record date */}
-        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 mt-4 items-center"
+          index={0}
+        >
           <p className="w-[100px] flex-none text-right pr-2">
             {t("recordDate")} :
           </p>
@@ -504,9 +531,12 @@ function New() {
               onChange={hdlInput}
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* record time */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={1}
+        >
           <p className="w-[100px] flex-none text-right pr-2">
             {t("recordTime")} :
           </p>
@@ -519,10 +549,13 @@ function New() {
               onChange={hdlInput}
             />
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* paid by */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={2}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <UserIcon className="w-[20px] h-[20px]" />
             <p>{t("payer")} :</p>
@@ -546,9 +579,12 @@ function New() {
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
         {/* type */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={3}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <TypeIcon className="w-[20px] h-[20px]" />
             <p>{t("type")} :</p>
@@ -567,9 +603,12 @@ function New() {
               readOnly
             />
           </div>{" "}
-        </div>
+        </AnimatedSection>
         {/* amount */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={4}
+        >
           <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
             {t("totalAmount")} :
           </p>
@@ -595,9 +634,12 @@ function New() {
               autoComplete="off"
             />
           </div>
-        </div>
+        </AnimatedSection>
         {/* My Portion */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={5}
+        >
           <p className="w-[100px] flex-none text-right pr-2 text-[15px]">
             {t("payerPortion")} :
           </p>
@@ -620,8 +662,11 @@ function New() {
               }}
             />
           </div>
-        </div>
-        <div className=" w-9/11 flex justify-end pr-4 gap-2 items-center">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 flex justify-end pr-4 gap-2 items-center"
+          index={6}
+        >
           <div
             className={`w-[80px] h-[30px] convex flex justify-center items-center ${input.myPortion === 0 ? "text-text-reverse bg-primary" : "bg-surface"}`}
             onClick={() => {
@@ -677,9 +722,9 @@ function New() {
           >
             100%
           </div>
-        </div>
+        </AnimatedSection>
         {/* User Amount */}
-        <div className="flex flex-col gap-1">
+        <AnimatedSection className="flex flex-col gap-1" index={7}>
           <div className="w-9/11 grid grid-cols-6 items-center">
             <div className="col-span-3  flex justify-end mr-4">
               <div className="w-fit h-[30px] flex justify-center items-center convex bg-accent px-2">
@@ -745,11 +790,14 @@ function New() {
               />
             </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* installment plan */}
         {!user?.buddyAsUser1?.[0]?.user2?.isDummy && (
-          <div className=" w-9/11 flex justify-center gap-2 items-center">
+          <AnimatedSection
+            className="w-9/11 flex justify-center gap-2 items-center"
+            index={8}
+          >
             {!showInstallment &&
               input?.myPortion == 0 &&
               input?.totalAmt > 0 && (
@@ -785,21 +833,28 @@ function New() {
                 </div>
               </div>
             )}
-          </div>
+          </AnimatedSection>
         )}
         {typeof input.instPlan === "number" && input.instPlan > 0 && (
-          <div className=" w-9/11 flex justify-center gap-2 items-center pr-4">
+          <AnimatedSection
+            className="w-9/11 flex justify-center gap-2 items-center pr-4"
+            index={9}
+          >
             <div
               className="btn btn-primary text-text-reverse"
               onClick={hdlGenInstPlan}
             >
               {t("generate")}
             </div>
-          </div>
+          </AnimatedSection>
         )}
         {/* installment list */}
         {input.inst.map((el, idx) => (
-          <div key={idx} className="w-10/12 flex justify-center gap-2">
+          <AnimatedSection
+            key={idx}
+            className="w-10/12 flex justify-center gap-2"
+            index={10 + idx}
+          >
             <div className="flex-none h-[30px] w-[30px] flex justify-center items-center">
               {idx + 1}
             </div>
@@ -850,19 +905,25 @@ function New() {
               }}
               disabled
             />
-          </div>
+          </AnimatedSection>
         ))}
 
         {/* tag */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={10 + (input.inst.length || 0)}
+        >
           <div className="w-[100px] flex-none text-right pr-2 flex justify-end gap-1">
             <TagIcon className="w-[20px] h-[20px]" />
             <p>{t("tag")} :</p>
           </div>{" "}
           <div className="w-full flex items-center px-4"></div>
-        </div>
+        </AnimatedSection>
         {/* recent tag */}
-        <div className="w-9/11 flex justify-end gap-2 flex-wrap">
+        <AnimatedSection
+          className="w-9/11 flex justify-end gap-2 flex-wrap"
+          index={11 + (input.inst.length || 0)}
+        >
           {recentTag.map((tag) => (
             <div
               key={tag.tagId}
@@ -895,8 +956,12 @@ function New() {
               {tag.tagTxt}
             </div>
           ))}
-        </div>
-        <div ref={tagBoxRef} className="relative w-9/11 max-w-[350px]">
+        </AnimatedSection>
+        <AnimatedSection
+          ref={tagBoxRef}
+          className="relative w-9/11 max-w-[350px]"
+          index={12 + (input.inst.length || 0)}
+        >
           <div className="flex flex-wrap items-center gap-2 min-h-[35px] concave bg-surface rounded-lg px-2 py-2 pl-4">
             {input.tags.map((tag, idx) => (
               <div
@@ -968,19 +1033,27 @@ function New() {
               ))}
             </div>
           )}
-        </div>
+        </AnimatedSection>
         {/* remark */}
-        <div className=" w-9/11 flex justify-center gap-2 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 items-center"
+          index={13 + (input.inst.length || 0)}
+        >
           <p className="w-[100px] flex-none text-right pr-2">{t("remark")} :</p>
           <div className="w-full flex items-center px-4"></div>
-        </div>
-        <input
-          className="input-field w-9/11 max-w-[350px] min-h-[40px] concave bg-surface pl-4"
-          type="text"
-          value={input.remark}
-          name="remark"
-          onChange={hdlInput}
-        />
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-9/11 max-w-[350px]"
+          index={14 + (input.inst.length || 0)}
+        >
+          <input
+            className="input-field w-full min-h-[40px] concave bg-surface pl-4"
+            type="text"
+            value={input.remark}
+            name="remark"
+            onChange={hdlInput}
+          />
+        </AnimatedSection>
 
         {/* photo */}
         <input
@@ -991,13 +1064,18 @@ function New() {
           accept="image/*"
           onChange={hdlFileChange}
         />
-        <div className=" w-9/11 flex justify-center gap-2 mt-4 items-center">
+        <AnimatedSection
+          className="w-9/11 flex justify-center gap-2 mt-4 items-center"
+          index={15 + (input.inst.length || 0)}
+        >
           <p className="w-[100px] flex-none text-right pr-2">{t("photo")} :</p>
           <div className="w-full flex items-center px-4"></div>
-        </div>
-        <div className=" w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden">
+        </AnimatedSection>
+        <AnimatedSection
+          className="w-10/12 h-[100px] flex items-center gap-2 overflow-x-auto overflow-y-hidden"
+          index={16 + (input.inst.length || 0)}
+        >
           {/* add photo */}
-
           <div
             className="w-[80px] h-[80px]  rounded-2xl flex-shrink-0 bg-surface convex flex justify-center items-center cursor-pointer"
             onClick={() => document.getElementById("input-file").click()}
@@ -1024,31 +1102,36 @@ function New() {
               </div>
             </div>
           ))}
-        </div>
+        </AnimatedSection>
 
         {/* button add */}
-        {errMsg === "invalid_grant" && (
-          <p className="text-center mt-2 mb-[60px]">
-            Transaction added successfully but <br />
-            Email can't send, will go to TRANS in 3 sec.
-          </p>
-        )}
+        <AnimatedSection
+          className="w-full flex justify-center"
+          index={17 + (input.inst.length || 0)}
+        >
+          {errMsg === "invalid_grant" && (
+            <p className="text-center mt-2 mb-[60px]">
+              Transaction added successfully but <br />
+              Email can't send, will go to TRANS in 3 sec.
+            </p>
+          )}
 
-        {errMsg === "Request failed with status code 401" && (
-          <p className="text-center mt-2 mb-[60px]">
-            Transaction added successfully but <br />
-            Request failed with status code 401 <br />
-            Email can't send, will go to TRANS in 3 sec.
-          </p>
-        )}
-        {!errMsg && (
-          <button
-            className="btn btn-primary text-text-reverse mb-[10px]"
-            onClick={hdlAddTran}
-          >
-            {t("add")}
-          </button>
-        )}
+          {errMsg === "Request failed with status code 401" && (
+            <p className="text-center mt-2 mb-[60px]">
+              Transaction added successfully but <br />
+              Request failed with status code 401 <br />
+              Email can't send, will go to TRANS in 3 sec.
+            </p>
+          )}
+          {!errMsg && (
+            <button
+              className="btn btn-primary text-text-reverse mb-[10px]"
+              onClick={hdlAddTran}
+            >
+              {t("add")}
+            </button>
+          )}
+        </AnimatedSection>
 
         {/* <button
           className="btn btn-primary"
