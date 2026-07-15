@@ -17,6 +17,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
+const TRANS_LIST_ANIMATION_DURATION_MS = 200;
+const TRANS_LIST_ANIMATION_STAGGER_MS = 75;
+
 function formatDateTime(date, lang = "en") {
   const d = new Date(date);
 
@@ -126,7 +129,13 @@ function Trans() {
             {/* header */}
             <Header />
             {/* search */}
-            <div className="w-11/12  flex flex-col items-center gap-3 my-1 mt-[14px]">
+            <div
+              className="trans-list-item w-11/12 flex flex-col items-center gap-3 my-1 mt-[14px]"
+              style={{
+                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                animationDelay: "0ms",
+              }}
+            >
               <div className="w-full flex gap-2">
                 <div className=" flex w-full flex-1 items-center gap-1 concave bg-surface">
                   <input
@@ -174,7 +183,11 @@ function Trans() {
                     return (
                       <div
                         key={idx}
-                        className="w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1  items-center"
+                        className="trans-list-item w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
+                        style={{
+                          animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                          animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
+                        }}
                         onClick={(e) => hdlSelectedTran(e, el)}
                       >
                         <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">

@@ -7,6 +7,23 @@
       -1px -1px 2px var(--nm-shadow-light);
   }
 
+  .trans-list-item {
+    animation-name: trans-list-item-in;
+    animation-fill-mode: both;
+    opacity: 0;
+  }
+
+  @keyframes trans-list-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .convex-full {
     border-radius: 100%;
     box-shadow:
