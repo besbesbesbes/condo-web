@@ -6,13 +6,13 @@ import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
 import { AppIcon } from "../icons/menuIcon";
 import ModalRegister from "../components/ModalRegister";
+import AnimatedDiv from "../components/AnimatedDiv";
 
 function Login() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const setToken = useUserStore((state) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
-  const setCurMenu = useMainStore((state) => state.setCurMenu);
   const [input, setInput] = useState({
     inputUser: "",
     inputPassword: "",
@@ -69,25 +69,36 @@ function Login() {
   return (
     <div className="bg-app w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
-      <div className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 convex -translate-y-[50px]">
-        <div className="flex items-end-safe gap-2">
-          <div className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1">
+      <AnimatedDiv
+        className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 convex -translate-y-[50px]"
+        idx={0}
+      >
+        <AnimatedDiv className="flex items-end-safe gap-2" idx={0}>
+          <AnimatedDiv
+            className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1"
+            idx={1}
+          >
             <AppIcon className="p-4 text-text-reverse bg-primary" />
-          </div>
+          </AnimatedDiv>
           <div className="flex flex-col gap-1">
-            <p
+            <AnimatedDiv
+              idx={1}
               className={`font-bold text-primary ${i18n.language === "en" ? "text-3xl" : "text-2xl"}`}
             >
               {t("stang")}
-            </p>
-            <p
+            </AnimatedDiv>
+            <AnimatedDiv
+              idx={2}
               className={`italic -translate-y-1  ${i18n.language === "en" ? "text-base" : "text-sm"}`}
             >
               {t("everyStangMatters")}.
-            </p>
+            </AnimatedDiv>
           </div>
-        </div>
-        <div className=" w-full flex justify-center items-center">
+        </AnimatedDiv>
+        <AnimatedDiv
+          idx={3}
+          className=" w-full flex justify-center items-center"
+        >
           <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
           <input
             className="input-field w-[120px] h-[30px] concave pl-3 text-lg"
@@ -96,8 +107,11 @@ function Login() {
             value={input.inputUser}
             onChange={hdlInput}
           />
-        </div>
-        <div className=" w-full flex justify-center items-center">
+        </AnimatedDiv>
+        <AnimatedDiv
+          idx={4}
+          className=" w-full flex justify-center items-center"
+        >
           <p className="w-[100px] text-right pr-5">{t("password")} :</p>
           <input
             className="input-field w-[120px] h-[30px] concave pl-3  text-lg"
@@ -106,22 +120,31 @@ function Login() {
             value={input.inputPassword}
             onChange={hdlInput}
           />
-        </div>
-        <button
-          className="btn h-[30px] w-[130px] convex bg-accent font-bold"
-          onClick={hdlLogin}
-        >
-          {t("login")}
-        </button>
-        <button
-          className="btn h-[30px] w-[130px] convex bg-primary font-bold"
-          onClick={openRegisterModal}
-        >
-          {t("register")}
-        </button>
+        </AnimatedDiv>
+        <AnimatedDiv idx={5}>
+          <button
+            className="btn h-[30px] w-[130px] convex bg-accent font-bold"
+            onClick={hdlLogin}
+          >
+            {t("login")}
+          </button>
+        </AnimatedDiv>
+        <AnimatedDiv idx={6}>
+          <button
+            className="btn h-[30px] w-[130px] convex bg-primary font-bold"
+            onClick={openRegisterModal}
+          >
+            {t("register")}
+          </button>
+        </AnimatedDiv>
         {/* error message */}
-        {isShowErrMsg && <p className="font-bold text-accent">{errMsg}</p>}
-        <div className="self-end flex gap-2 items-center">
+        {isShowErrMsg && (
+          <AnimatedDiv>
+            {" "}
+            <p className="font-bold text-accent">{errMsg}</p>
+          </AnimatedDiv>
+        )}
+        <AnimatedDiv idx={7} className="self-end flex gap-2 items-center">
           {/* <p>{t("language")}</p> */}
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -133,8 +156,8 @@ function Login() {
             {/* <option value="cn">中国人</option> */}
             {/* <option value="jp">日语</option> */}
           </select>
-        </div>
-      </div>
+        </AnimatedDiv>
+      </AnimatedDiv>
       {/* register modal */}
       <dialog id="register_modal" className="modal">
         <ModalRegister onSuccess={hdlRegisterSuccess} />

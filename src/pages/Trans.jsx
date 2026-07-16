@@ -133,8 +133,10 @@ function Trans() {
             <div
               className="trans-list-item w-11/12 flex flex-col items-center gap-3 my-1 mt-[14px]"
               style={{
+                // animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
+                // animationDelay: `${TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
                 animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: "0ms",
+                animationDelay: `50ms`,
               }}
             >
               <div className="w-full flex gap-2">
@@ -187,7 +189,7 @@ function Trans() {
                         className="trans-list-item w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
                         style={{
                           animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                          animationDelay: `${idx * 0}ms`,
+                          animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
                         }}
                         onClick={(e) => hdlSelectedTran(e, el)}
                       >

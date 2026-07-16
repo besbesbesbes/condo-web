@@ -14,6 +14,7 @@ import Setting from "../pages/Setting";
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
 import Memo from "../pages/Memo";
+import TestAnimation from "../pages/TestAnimation";
 
 const GuestRoot = () => (
   <>
@@ -52,6 +53,7 @@ const userRouter = createBrowserRouter([
       { path: "calendar", element: <Calendar /> },
       { path: "memo", element: <Memo /> },
       { path: "setting", element: <Setting /> },
+      { path: "test-animation", element: <TestAnimation /> },
       { path: "*", element: <Navigate to="/trans" /> },
     ],
   },

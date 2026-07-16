@@ -359,6 +359,8 @@ function Report() {
                 outerRadius={120}
                 label={renderLabel}
                 labelLine={false}
+                animationBegin={0}
+                animationDuration={500}
               >
                 {pieData.map((entry, index) => (
                   <Cell
