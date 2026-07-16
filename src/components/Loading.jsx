@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AppIcon } from "../icons/menuIcon";
+import { Riple } from "react-loading-indicators";
 
 function Loading() {
   const dialogRef = useRef(null);
@@ -20,10 +21,17 @@ function Loading() {
       className="loading-dialog m-0 flex h-full w-full max-h-none max-w-none items-center justify-center border-0 p-0"
       onCancel={(e) => e.preventDefault()}
     >
-      <div role="status">
-        <div className="w-[100px] h-[100px] bg-primary rounded-full animate-spin [animation-duration:1.5s]">
-          <AppIcon className="p-4 text-text-reverse" />
-        </div>
+      <div role="status" className="relative">
+        {/* <div className="w-[100px] h-[100px] bg-primary rounded-full animate-spin [animation-duration:1.5s]">
+        <AppIcon className="p-4 text-text-reverse" />
+        </div> */}
+        <Riple
+          color="var(--color-primary)"
+          size="large"
+          text=""
+          textColor=""
+          speedPlus="-3"
+        />
       </div>
     </dialog>,
     document.body,

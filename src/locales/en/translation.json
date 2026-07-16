@@ -109,5 +109,8 @@
   "paid": "Paid",
   "expense": "Expense",
   "other": "Other",
-  "userInstallmentPlan": "Use Installment Plan"
+  "userInstallmentPlan": "Use Installment Plan",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirm": "Confirm"
 }

@@ -1,30 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CloseIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "./AnimatedSection";
 
 function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
   const { t } = useTranslation();
@@ -75,15 +52,18 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
   if (!show) return null;
 
   return (
-    <div className="bg-black/20 fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
+    <AnimatedSection
+      index={0}
+      className="bg-black/20 fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
+    >
       <div className="w-5/6 max-w-md rounded-t-3xl bg-app p-4 shadow-2xl convex">
         <div className=" flex items-center justify-between relative">
-          <div>
+          <AnimatedSection index={1}>
             <p className="text-sm">{t("expression")}</p>
             <p className="min-h-[28px] text-lg font-semibold break-words">
               {expression || "0"}
             </p>
-          </div>
+          </AnimatedSection>
 
           <button
             className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0  text-text-reverse bg-accent -translate-y-1"
@@ -92,13 +72,16 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
             <CloseIcon className="p-1" />
           </button>
         </div>
-        <div className="rounded-xl bg-surface-soft p-3 text-right">
+        <AnimatedSection
+          index={2}
+          className="rounded-xl bg-surface-soft p-3 text-right"
+        >
           <p className="text-xs text-surface-muted">{t("result")}</p>
           <p className="text-4xl font-bold text-primary">
             {result !== "" ? result : "0"}
           </p>
-        </div>
-        <div className="grid grid-cols-4 gap-2 text-2xl">
+        </AnimatedSection>
+        <AnimatedSection index={3} className="grid grid-cols-4 gap-2 text-2xl">
           {[
             "7",
             "8",
@@ -116,39 +99,43 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
             "00",
             ".",
             "+",
-          ].map((key) => {
+          ].map((key, idx) => {
             const displayMap = { "*": "×", "/": "÷" };
             const display = displayMap[key] || key;
             return (
-              <button
+              <AnimatedSection
+                index={1}
+                delay={idx * 16}
                 key={key}
                 className="bg-surface p-3 font-semibold convex"
                 onClick={() => appendKey(key)}
                 type="button"
               >
                 {display}
-              </button>
+              </AnimatedSection>
             );
           })}
-        </div>
+        </AnimatedSection>
         <div className="mt-5 my-1 flex gap-2">
-          <button
+          <AnimatedSection
+            index={8}
             className="flex-1 h-[50px] py-3 convex bg-accent text-text-reverse flex justify-center items-center"
             type="button"
             onClick={clearAll}
           >
             {t("clear")}
-          </button>
-          <button
+          </AnimatedSection>
+          <AnimatedSection
+            index={10}
             className="flex-1  h-[50px] py-3 convex bg-primary text-text-reverse flex justify-center items-center"
             type="button"
             onClick={confirm}
           >
             {t("ok")}
-          </button>
+          </AnimatedSection>
         </div>
       </div>
-    </div>
+    </AnimatedSection>
   );
 }
 

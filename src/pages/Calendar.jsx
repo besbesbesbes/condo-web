@@ -7,30 +7,7 @@ import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
 import { editTagTranApi, getTagApi, getTagTranApi } from "../apis/tag-api";
 import ModalEditTag from "../components/ModalEditTag";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "../components/AnimatedSection";
 
 function Calendar() {
   const { t } = useTranslation();
@@ -45,6 +22,7 @@ function Calendar() {
   const [calendarDays, setCalendarDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [activeTags, setActiveTags] = useState([]);
+  const [animationVersion, setAnimationVersion] = useState(0);
 
   const year = currentDate.getFullYear();
   const monthIndex = currentDate.getMonth(); // 0-11
@@ -171,6 +149,7 @@ function Calendar() {
       ];
 
       setTagList(tagList);
+      setAnimationVersion((v) => v + 1);
       setActiveTags((prevActiveTags) => {
         if (prevActiveTags.length === 0) {
           return tagList.slice(0, 4).map((tag, index) => ({
@@ -204,6 +183,7 @@ function Calendar() {
       }));
 
       setCalendarDays(daysWithTags);
+      setAnimationVersion((v) => v + 1);
 
       console.log(daysWithTags);
     } catch (err) {
@@ -285,25 +265,25 @@ function Calendar() {
         {/* Week Header */}
         <div className="grid grid-cols-7 gap-1 mt-1">
           {weekDays.map((day, idx) => (
-            <div
+            <AnimatedSection
+              delay={idx * 10}
+              index={1}
               key={day}
-              className="trans-list-item  h-8 flex items-center justify-center font-bold"
-              style={{
-                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-              }}
+              className=" h-8 flex items-center justify-center font-bold"
             >
               {day}
-            </div>
+            </AnimatedSection>
           ))}
         </div>
 
         {/* Days */}
         <div className="grid grid-cols-7 gap-1 place-items-center">
           {calendarDays.map((item, idx) => (
-            <div
-              key={item.date}
-              className={`trans-list-item h-[30px] w-[30px] rounded-full my-1 flex items-center justify-center
+            <AnimatedSection
+              delay={idx * 2}
+              index={2}
+              key={`${animationVersion}-${item.date}`}
+              className={` h-[30px] w-[30px] rounded-full my-1 flex items-center justify-center
         ${
           item.date === todayStr
             ? "bg-surface convex border border-blue-500 font-bold"
@@ -311,10 +291,6 @@ function Calendar() {
               ? "bg-surface"
               : "bg-surface text-gray-300"
         }`}
-              style={{
-                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: `${idx * 5}ms`,
-              }}
               onClick={() => openEditTag(item)}
             >
               {item.day}
@@ -334,7 +310,7 @@ function Calendar() {
                     />
                   ))}
               </div>
-            </div>
+            </AnimatedSection>
           ))}
         </div>
       </AnimatedSection>
@@ -386,32 +362,29 @@ function Calendar() {
       </AnimatedSection>
 
       {/* Filtered */}
-      <AnimatedSection
-        className="w-10/11 min-h-[40px] mt-4 concave bg-surface p-3"
-        index={2}
-      >
+      <AnimatedSection className="w-10/11 min-h-[40px] mt-4" index={2}>
         <div className="w-full flex flex-wrap gap-2">
           {tagList.map((tag, idx) => {
             const activeTag = activeTags.find((t) => t.tagId === tag.tagId);
-
             const bgColor = activeTag
               ? pinColors[activeTag.slot]
               : "bg-surface";
 
             return (
-              <button
-                key={tag.tagId}
-                onClick={() => toggleTag(tag.tagId)}
-                className={`trans-list-item px-3 py-1 my-1 rounded-full convex transition-all duration-200 ${bgColor} ${
-                  activeTag ? "text-white" : ""
-                }`}
-                style={{
-                  animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                  animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-                }}
+              <AnimatedSection
+                delay={idx * 24}
+                index={1}
+                key={`${animationVersion}-${tag.tagId}`}
               >
-                {tag.tagTxt}
-              </button>
+                <button
+                  onClick={() => toggleTag(tag.tagId)}
+                  className={` px-3 py-1 my-1 rounded-full convex transition-all duration-200 ${bgColor} ${
+                    activeTag ? "text-white" : ""
+                  }`}
+                >
+                  {tag.tagTxt}
+                </button>
+              </AnimatedSection>
             );
           })}
         </div>

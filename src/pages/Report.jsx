@@ -22,30 +22,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "../components/AnimatedSection";
 
 const COLORS = [
   "#f94144",

@@ -4,8 +4,11 @@ import { changePasswordApi } from "../apis/user-api";
 import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
 import { CloseIcon, TypeIcon, PasswordIcon } from "../icons/menuIcon";
+import AnimatedSection from "./AnimatedSection";
+import { useTranslation } from "react-i18next";
 
 function ModalChangePassword() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const token = useUserStore((state) => state.token);
   const setUser = useUserStore((state) => state.setUser);
@@ -46,7 +49,7 @@ function ModalChangePassword() {
         conPass: input.conPass,
       };
       const result = await changePasswordApi(token, body);
-
+      console.log(result);
       setUser(null);
       setToken("");
       navigate(0);
@@ -59,13 +62,21 @@ function ModalChangePassword() {
   };
 
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl rounded-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
+    <AnimatedSection
+      index={0}
+      className="w-[300px] h-auto bg-surface shadow-xl rounded-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-text px-4"
+    >
       <div className="w-full flex justify-center items-center gap-1 mb-3">
         <PasswordIcon className="w-[20px] h-[20px]" />
-        <p className="text-lg">Change Password</p>
+        <p className="text-lg">{t("changePassword")}</p>
       </div>
-      <div className=" w-full flex justify-center items-center">
-        <p className="w-[130px] text-right pr-5">Current Password :</p>
+      <AnimatedSection
+        index={1}
+        className=" w-full flex justify-center items-center"
+      >
+        <p className="w-[150px] text-right pr-5 flex-none">
+          {t("currentPassword")} :
+        </p>
         <input
           className="input-field w-[130px] concave pl-4"
           type="password"
@@ -73,9 +84,14 @@ function ModalChangePassword() {
           value={input.curPass}
           onChange={hdlInput}
         />
-      </div>
-      <div className=" w-full flex justify-center items-center">
-        <p className="w-[130px] text-right pr-5">New Password :</p>
+      </AnimatedSection>
+      <AnimatedSection
+        index={2}
+        className=" w-full flex justify-center items-center"
+      >
+        <p className="w-[150px] text-right pr-5 flex-none">
+          {t("newPassword")} :
+        </p>
         <input
           className="input-field w-[130px] concave pl-4"
           type="password"
@@ -83,9 +99,14 @@ function ModalChangePassword() {
           value={input.newPass}
           onChange={hdlInput}
         />
-      </div>
-      <div className=" w-full flex justify-center items-center">
-        <p className="w-[130px] text-right pr-5">Confirm Password :</p>
+      </AnimatedSection>
+      <AnimatedSection
+        index={3}
+        className=" w-full flex justify-center items-center"
+      >
+        <p className="w-[150px] text-right pr-5 flex-none">
+          {t("confirmPassword")} :
+        </p>
         <input
           className="input-field w-[130px] concave pl-4"
           type="password"
@@ -93,13 +114,14 @@ function ModalChangePassword() {
           value={input.conPass}
           onChange={hdlInput}
         />
-      </div>
-      <button
+      </AnimatedSection>
+      <AnimatedSection
+        index={4}
         className="btn btn-primary w-[130px] mt-2 text-text-reverse  text-base"
         onClick={hdlChangePass}
       >
-        Confirm
-      </button>
+        {t("confirm")}
+      </AnimatedSection>
       {/* error message */}
       {isShowErrMsg && <p className="font-bold">{errMsg}</p>}
       {/* <button
@@ -119,12 +141,11 @@ function ModalChangePassword() {
             conPass: "",
           });
           e.target.closest("dialog").close();
-          navigate(0);
         }}
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

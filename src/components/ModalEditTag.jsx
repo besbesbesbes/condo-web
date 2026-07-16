@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CloseIcon, SaveIcon, TagIcon } from "../icons/menuIcon";
+import AnimatedSection from "./AnimatedSection";
 
 function ModalEditTag({
   selectedDay,
@@ -206,21 +207,26 @@ function ModalEditTag({
     };
   };
   return (
-    <div className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-3 pb-4 pt-6 items-center text-lg text-text z-[50]">
+    <AnimatedSection
+      index={0}
+      className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-3 pb-4 pt-6 items-center text-lg text-text z-[50]"
+    >
       {/* title */}
-      <div className="w-10/11 flex gap-1 items-center">
+      <AnimatedSection index={0} className="w-10/11 flex gap-1 items-center">
         <TagIcon className="w-[20px] h-[20px]" />
         <p>
           {t("editTag")} : {formatDate(selectedDay?.date)}
         </p>
-      </div>
+      </AnimatedSection>
 
       {/* tag input area */}
-      <div ref={tagBoxRef} className="relative w-10/11">
+      <AnimatedSection index={1} ref={tagBoxRef} className="relative w-10/11">
         <div className="flex flex-wrap items-center gap-2 min-h-[40px] concave bg-surface rounded-lg p-3">
           {/* selected tags */}
           {tagList.map((tag, idx) => (
-            <div
+            <AnimatedSection
+              index={1}
+              delay={idx * 50}
               key={idx}
               className="bg-tag text-text-reverse rounded-full px-3 flex items-center gap-2"
             >
@@ -234,7 +240,7 @@ function ModalEditTag({
               >
                 ×
               </span>
-            </div>
+            </AnimatedSection>
           ))}
 
           {/* input */}
@@ -249,9 +255,12 @@ function ModalEditTag({
 
         {/* suggestions */}
         {showSuggest && (
-          <div className="absolute left-0 right-0 top-[45px] bg-surface rounded-2xl shadow-lg border z-50 max-h-[200px] overflow-y-auto">
+          <AnimatedSection
+            index={0}
+            className="absolute left-0 right-0 top-[45px] bg-surface rounded-2xl shadow-lg border z-50 max-h-[200px] overflow-y-auto"
+          >
             {tagSuggest.map((tag) => (
-              <div
+              <AnimatedSection
                 key={tag.tagId}
                 className="px-3 py-2 hover:bg-base-200 cursor-pointer"
                 onClick={() => {
@@ -281,20 +290,22 @@ function ModalEditTag({
                 }}
               >
                 {tag.tagTxt}
-              </div>
+              </AnimatedSection>
             ))}
-          </div>
+          </AnimatedSection>
         )}
-      </div>
+      </AnimatedSection>
 
       {/* save */}
-      <button
-        className="w-[100px] h-[30px] convex bg-primary text-text-reverse flex items-center justify-center gap-1"
-        onClick={handleSave}
-      >
-        <SaveIcon className="w-[20px] h-[20px]" />
-        <p>{t("save")}</p>
-      </button>
+      <AnimatedSection index={2}>
+        <button
+          className="w-[100px] h-[30px] convex bg-primary text-text-reverse flex items-center justify-center gap-1"
+          onClick={handleSave}
+        >
+          <SaveIcon className="w-[20px] h-[20px]" />
+          <p>{t("save")}</p>
+        </button>
+      </AnimatedSection>
 
       {/* close */}
       <button
@@ -303,7 +314,7 @@ function ModalEditTag({
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

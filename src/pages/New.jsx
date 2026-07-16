@@ -20,30 +20,7 @@ import {
 import AmtKeypad from "../components/AmtKeypad";
 import Header from "../components/Header";
 import { getRecentTagApi, getTagApi } from "../apis/tag-api";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = forwardRef(
-  ({ children, index, className = "", style = {} }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`trans-list-item ${className}`.trim()}
-        style={{
-          animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-          animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-          ...style,
-        }}
-      >
-        {children}
-      </div>
-    );
-  },
-);
-
-AnimatedSection.displayName = "AnimatedSection";
+import AnimatedSection from "../components/AnimatedSection";
 
 function New() {
   const { t } = useTranslation();

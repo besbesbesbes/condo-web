@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import useMainStore from "../stores/main-store";
 import { addMemo } from "../apis/memo-api";
 import useUserStore from "../stores/user-store";
+import AnimatedSection from "./AnimatedSection";
 
 function ModalAddMemo({ refreshMemo }) {
   const { t } = useTranslation();
@@ -43,27 +44,35 @@ function ModalAddMemo({ refreshMemo }) {
   };
 
   return (
-    <div className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text z-[50]">
+    <AnimatedSection
+      index={0}
+      className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text z-[50]"
+    >
       {/* title */}
-      <div className="w-10/11 flex gap-1 items-center">
+      <AnimatedSection index={1} className="w-10/11 flex gap-1 items-center">
         <MemoIcon className="w-[20px] h-[20px]" />
         <p className="">{t("addNewMemo")}</p>
         {" :"}
-      </div>
+      </AnimatedSection>
       {/* input area */}
-      <textarea
-        className="w-10/12 p-2 min-h-[200px] overflow-y-scroll concave focus:outline-none"
-        value={input.txt}
-        onChange={(e) =>
-          setInput((prev) => ({
-            ...prev,
-            txt: e.target.value,
-          }))
-        }
-        placeholder={t("memoHere")}
-      />
+      <AnimatedSection index={2} className="w-10/12">
+        <textarea
+          className="w-full p-2 min-h-[200px] overflow-y-scroll concave focus:outline-none"
+          value={input.txt}
+          onChange={(e) =>
+            setInput((prev) => ({
+              ...prev,
+              txt: e.target.value,
+            }))
+          }
+          placeholder={t("memoHere")}
+        />
+      </AnimatedSection>
       {/* private */}
-      <div className="w-10/12 flex items-center justify-between mt-1">
+      <AnimatedSection
+        index={3}
+        className="w-10/12 flex items-center justify-between mt-1"
+      >
         <div className="flex gap-1 items-center">
           <div className="w-[25px] h-[25px] flex justify-center items-center convex-full bg-primary">
             <PrivateIcon className="w-[16px] h-[16px]" />
@@ -82,9 +91,12 @@ function ModalAddMemo({ refreshMemo }) {
             }))
           }
         />
-      </div>
+      </AnimatedSection>
       {/* lock */}
-      <div className="w-10/12 flex items-center justify-between">
+      <AnimatedSection
+        index={4}
+        className="w-10/12 flex items-center justify-between"
+      >
         <div className="flex gap-1 items-center">
           <div className="w-[25px] h-[25px] flex justify-center items-center convex-full bg-primary">
             <LockIcon className="w-[16px] h-[16px]" />
@@ -103,20 +115,22 @@ function ModalAddMemo({ refreshMemo }) {
             }))
           }
         />
-      </div>
+      </AnimatedSection>
       {/* button */}
-      <button
-        className="w-[150px] h-[30px] btn btn-primary text-text-reverse mt-3 mb-2"
-        onClick={() => {
-          hdlAddMemo();
-        }}
-      >
-        {" "}
-        <div className="flex gap-1 items-center">
-          <NewIcon className="w-[20px] h-[20px]" />
-          {t("add")}
-        </div>
-      </button>
+      <AnimatedSection index={5}>
+        <button
+          className="w-[150px] h-[30px] btn btn-primary text-text-reverse mt-3 mb-2"
+          onClick={() => {
+            hdlAddMemo();
+          }}
+        >
+          {" "}
+          <div className="flex gap-1 items-center">
+            <NewIcon className="w-[20px] h-[20px]" />
+            {t("add")}
+          </div>
+        </button>
+      </AnimatedSection>
       {/* close */}
       <button
         className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
@@ -131,7 +145,7 @@ function ModalAddMemo({ refreshMemo }) {
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

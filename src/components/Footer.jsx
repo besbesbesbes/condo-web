@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { icons } from "../icons/menuIcon";
 import useMainStore from "../stores/main-store";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,9 @@ function MenuBox({ icon: Icon, txt, label }) {
 
 function Footer() {
   const { t } = useTranslation();
+  useEffect(() => {
+    console.log("Footer");
+  }, []);
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5  text-text text-xs font-bold rounded-2xl bg-surface convex">
       <MenuBox txt="trans" label={t("trans")} icon={icons.TransIcon} />

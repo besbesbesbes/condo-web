@@ -109,5 +109,8 @@
   "paid": "ชำระ",
   "expense": "ค่าใช้จ่าย",
   "other": "คนอื่น",
-  "userInstallmentPlan": "ใช้การผ่อนชำระ"
+  "userInstallmentPlan": "ใช้การผ่อนชำระ",
+  "currentPassword": "รหัสผ่านปัจจุบัน",
+  "newPassword": "รหัสผ่านใหม่",
+  "confirm": "ยืนยัน"
 }

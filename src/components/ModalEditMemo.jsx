@@ -12,6 +12,7 @@ import {
 import useMainStore from "../stores/main-store";
 import { editMemo } from "../apis/memo-api";
 import useUserStore from "../stores/user-store";
+import AnimatedSection from "./AnimatedSection";
 
 function ModalEditMemo({ refreshMemo, memo }) {
   const { t } = useTranslation();
@@ -68,16 +69,22 @@ function ModalEditMemo({ refreshMemo, memo }) {
   }, [memo]);
 
   return (
-    <div className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text z-[50]">
+    <AnimatedSection
+      index={0}
+      className="w-[320px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text z-[50]"
+    >
       {" "}
       {/* title */}
-      <div className="w-10/12 flex gap-1 items-center">
+      <AnimatedSection index={1} className="w-10/12 flex gap-1 items-center">
         <MemoIcon className="w-[20px] h-[20px]" />
         <p className="">{t("editMemo")}</p>
         {" :"}
-      </div>
+      </AnimatedSection>
       {/* date time */}
-      <div className="w-10/12 flex items-center justify-between mt-1">
+      <AnimatedSection
+        index={2}
+        className="w-10/12 flex items-center justify-between mt-1"
+      >
         <p>{t("lastUpdate")}</p>
         <p>
           {new Date(input?.updatedAt).toLocaleString("en-GB", {
@@ -89,7 +96,7 @@ function ModalEditMemo({ refreshMemo, memo }) {
             hour12: false,
           })}
         </p>
-      </div>
+      </AnimatedSection>
       {/* input area */}
       <textarea
         className={`w-10/12 p-2 min-h-[200px] overflow-y-scroll concave focus:outline-none`}
@@ -106,7 +113,10 @@ function ModalEditMemo({ refreshMemo, memo }) {
       {user.userName === input?.user?.userName && (
         <>
           {/* private */}
-          <div className="w-10/12 flex items-center justify-between mt-1">
+          <AnimatedSection
+            index={3}
+            className="w-10/12 flex items-center justify-between mt-1"
+          >
             <div className="flex gap-1 items-center">
               <div className="w-[25px] h-[25px] flex justify-center items-center convex-full bg-primary">
                 <PrivateIcon className="w-[16px] h-[16px]" />
@@ -125,9 +135,12 @@ function ModalEditMemo({ refreshMemo, memo }) {
                 }))
               }
             />
-          </div>
+          </AnimatedSection>
           {/* lock */}
-          <div className="w-10/12 flex items-center justify-between">
+          <AnimatedSection
+            index={4}
+            className="w-10/12 flex items-center justify-between"
+          >
             <div className="flex gap-1 items-center">
               <div className="w-[25px] h-[25px] flex justify-center items-center convex-full bg-primary">
                 <LockIcon className="w-[16px] h-[16px]" />
@@ -146,11 +159,14 @@ function ModalEditMemo({ refreshMemo, memo }) {
                 }))
               }
             />
-          </div>
+          </AnimatedSection>
         </>
       )}
       {/* hidden */}
-      <div className="w-10/12 flex items-center justify-between mt-1">
+      <AnimatedSection
+        index={5}
+        className="w-10/12 flex items-center justify-between mt-1"
+      >
         <div className="flex gap-1 items-center">
           <div className="w-[25px] h-[25px] flex justify-center items-center convex-full bg-primary">
             <PrivateIcon className="w-[16px] h-[16px]" />
@@ -169,31 +185,37 @@ function ModalEditMemo({ refreshMemo, memo }) {
             }))
           }
         />
-      </div>
+      </AnimatedSection>
       {/* button */}
       <div className="flex gap-2">
-        <button
-          className="w-[100px] h-[30px] btn btn-primary text-text-reverse mt-3 mb-2"
-          onClick={hdlEditMemo}
-        >
-          <div className="flex gap-1 items-center">
-            <SaveIcon className="w-[20px] h-[20px]" />
-            {t("save")}
-          </div>
-        </button>
-        {user.userName === input?.user?.userName && (
+        <AnimatedSection index={6}>
           <button
-            className="w-[100px] h-[30px] btn btn-accent text-text-reverse mt-3 mb-2"
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById("confirm-delete-memo-modal").showModal();
-            }}
+            className="w-[100px] h-[30px] btn btn-primary text-text-reverse mt-3 mb-2"
+            onClick={hdlEditMemo}
           >
             <div className="flex gap-1 items-center">
-              <DeleteIcon className="w-[20px] h-[20px]" />
-              {t("delete")}
+              <SaveIcon className="w-[20px] h-[20px]" />
+              {t("save")}
             </div>
           </button>
+        </AnimatedSection>
+        {user.userName === input?.user?.userName && (
+          <AnimatedSection index={7}>
+            <button
+              className="w-[100px] h-[30px] btn btn-accent text-text-reverse mt-3 mb-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                document
+                  .getElementById("confirm-delete-memo-modal")
+                  .showModal();
+              }}
+            >
+              <div className="flex gap-1 items-center">
+                <DeleteIcon className="w-[20px] h-[20px]" />
+                {t("delete")}
+              </div>
+            </button>
+          </AnimatedSection>
         )}
       </div>
       {/* close */}
@@ -205,7 +227,7 @@ function ModalEditMemo({ refreshMemo, memo }) {
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

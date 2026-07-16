@@ -2,51 +2,29 @@ import React from "react";
 import { CloseIcon, UserIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import useUserStore from "../stores/user-store";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "./AnimatedSection";
 
 function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
   const user = useUserStore((state) => state.user);
   const { t } = useTranslation();
   return (
-    <div className="w-[300px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text">
-      <div className="flex gap-1 items-center">
+    <AnimatedSection
+      index={0}
+      className="w-[300px] h-auto bg-surface shadow-xl convex fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 items-center text-lg text-text"
+    >
+      <AnimatedSection index={1} className="flex gap-1 items-center">
         <UserIcon className="w-[20px] h-[20px]" />
         <p className="">{headerTxt ? headerTxt : t("selectPaidBy")}</p>
-      </div>
+      </AnimatedSection>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
-      <div className="w-10/12 h-[150px] flex flex-col overflow-auto gap-4 justify-center items-center">
+      <div className="w-10/12 min-h-[80px] my-4 flex flex-col overflow-auto gap-4 justify-center items-center">
         {users?.length ? (
           users.map((el, idx) => (
-            <div
+            <AnimatedSection
+              delay={idx * 50}
+              index={1}
               key={idx}
-              className={`trans-list-item w-10/12 h-[30px] text-center text-text-reverse font-bold convex  ${el.userName === user.userName ? "bg-accent" : "bg-friend"}`}
-              style={{
-                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-              }}
+              className={`w-10/12 h-[30px] text-center text-text-reverse font-bold convex  ${el.userName === user.userName ? "bg-accent" : "bg-friend"}`}
               onClick={(e) => {
                 setInput((prev) => ({
                   ...prev,
@@ -62,7 +40,7 @@ function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
               }}
             >
               {el.userName}
-            </div>
+            </AnimatedSection>
           ))
         ) : (
           <p>No users</p>
@@ -78,7 +56,7 @@ function ModalPaidBy({ users, setInput, headerTxt, onSelect, onClose }) {
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

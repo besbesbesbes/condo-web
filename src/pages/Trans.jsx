@@ -16,10 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
+import AnimatedSection from "../components/AnimatedSection";
 
 function formatDateTime(date, lang = "en") {
   const d = new Date(date);
@@ -130,14 +127,9 @@ function Trans() {
             {/* header */}
             <Header />
             {/* search */}
-            <div
-              className="trans-list-item w-11/12 flex flex-col items-center gap-3 my-1 mt-[14px]"
-              style={{
-                // animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                // animationDelay: `${TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: `50ms`,
-              }}
+            <AnimatedSection
+              index={0}
+              className="w-11/12 flex flex-col items-center gap-3 my-1 mt-[14px]"
             >
               <div className="w-full flex gap-2">
                 <div className=" flex w-full flex-1 items-center gap-1 concave bg-surface">
@@ -165,145 +157,125 @@ function Trans() {
                   ))}
                 </select>
               </div>
-            </div>
-            <div className="w-11/12  flex flex-col gap-2 mb-2">
+            </AnimatedSection>
+            <AnimatedSection className="w-11/12  flex flex-col gap-2 mb-2">
               {hasTrans
-                ? trans.map((el, idx) => {
-                    const rawDate = new Date(el.recordDate);
-                    const curDate = rawDate.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                    });
-                    const prevDate =
-                      idx > 0
-                        ? new Date(
-                            trans[idx - 1].recordDate,
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                          })
-                        : null;
-                    return (
-                      <div
-                        key={idx}
-                        className="trans-list-item w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
-                        style={{
-                          animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                          animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-                        }}
-                        onClick={(e) => hdlSelectedTran(e, el)}
-                      >
-                        <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">
-                          {/* type */}
-                          <p className="flex-1 text-[16px]">
-                            {el.expenseType?.expenseName}
-                          </p>
-                          {/* totalAmt */}
+                ? trans.map((el, idx) => (
+                    <AnimatedSection
+                      delay={idx * 20}
+                      index={1}
+                      key={el.tranId}
+                      className=" w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
+                      onClick={(e) => hdlSelectedTran(e, el)}
+                    >
+                      <div className="w-full flex gap-1 h-[40px] flex-none justify-between px-1 items-center">
+                        {/* type */}
+                        <p className="flex-1 text-[16px]">
+                          {el.expenseType?.expenseName}
+                        </p>
+                        {/* totalAmt */}
+                        <NumericFormat
+                          className="flex-none w-[120px]  text-right text-[20px] font-bold"
+                          value={el.totalAmt}
+                          displayType="text"
+                          thousandSeparator=","
+                          decimalScale={2}
+                          fixedDecimalScale
+                        />
+                      </div>
+                      <div className="w-full px-1 flex gap-1 justify-between items-center">
+                        {/* paidUser & remark */}
+                        <div className="flex gap-1 items-center">
+                          <div
+                            className={`convex h-[22px] px-2 flex justify-center items-center text-[12px] text-text-reverse ${user.userId === el.paidUserId ? "bg-accent" : "bg-friend"} `}
+                            onClick={() => console.log(user)}
+                          >
+                            {el.paidUser?.userName}
+                          </div>
+                          {el.isHavePhoto && (
+                            <CameraIcon className="w-[16px] h-[16px]" />
+                          )}
+                          {el.remark && (
+                            <p className="text-[14px]">
+                              {" | "}{" "}
+                              <span className="italic">{el.remark}</span>
+                            </p>
+                          )}
+                        </div>
+                        {/* myProtion and myAmt */}
+                        <div className="flex items-center gap-1 text-[15px]">
+                          <span>(</span>
                           <NumericFormat
-                            className="flex-none w-[120px]  text-right text-[20px] font-bold"
-                            value={el.totalAmt}
+                            className="text-center"
+                            value={
+                              user.userId === el.paidUserId
+                                ? el.myPortion * 100
+                                : (1 - Number(el.myPortion)) * 100
+                            }
+                            displayType="text"
+                            thousandSeparator=","
+                            decimalScale={0}
+                            fixedDecimalScale
+                            suffix="%"
+                          />
+                          <span>)</span>
+                          <NumericFormat
+                            className="text-right"
+                            value={
+                              user.userId === el.paidUserId
+                                ? el.myAmt
+                                : el.otherAmt
+                            }
                             displayType="text"
                             thousandSeparator=","
                             decimalScale={2}
                             fixedDecimalScale
                           />
                         </div>
-                        <div className="w-full px-1 flex gap-1 justify-between items-center">
-                          {/* paidUser & remark */}
-                          <div className="flex gap-1 items-center">
-                            <div
-                              className={`convex h-[22px] px-2 flex justify-center items-center text-[12px] text-text-reverse ${user.userId === el.paidUserId ? "bg-accent" : "bg-friend"} `}
-                              onClick={() => console.log(user)}
-                            >
-                              {el.paidUser?.userName}
-                            </div>
-                            {el.isHavePhoto && (
-                              <CameraIcon className="w-[16px] h-[16px]" />
-                            )}
-                            {el.remark && (
-                              <p className="text-[14px]">
-                                {" | "}{" "}
-                                <span className="italic">{el.remark}</span>
-                              </p>
-                            )}
+                      </div>
+                      <div className="w-full px-1 flex gap-1 justify-between items-center mt-1 relative">
+                        {/* date time */}
+                        <div className="w-[150px] flex-none  flex items-center gap-1">
+                          <p className="text-text-50 text-[12px]">{t("by")}</p>
+                          <div
+                            className={`text-[12px] w-[18px] h-[18px] flex-none convex px-1 flex justify-center items-center ${el.user?.userName === user.userName ? "bg-accent" : "bg-friend"}`}
+                          >
+                            {el.user?.userName.charAt(0)}
                           </div>
-                          {/* myProtion and myAmt */}
-                          <div className="flex items-center gap-1 text-[15px]">
-                            <span>(</span>
-                            <NumericFormat
-                              className="text-center"
-                              value={
-                                user.userId === el.paidUserId
-                                  ? el.myPortion * 100
-                                  : (1 - Number(el.myPortion)) * 100
-                              }
-                              displayType="text"
-                              thousandSeparator=","
-                              decimalScale={0}
-                              fixedDecimalScale
-                              suffix="%"
-                            />
-                            <span>)</span>
-                            <NumericFormat
-                              className="text-right"
-                              value={
-                                user.userId === el.paidUserId
-                                  ? el.myAmt
-                                  : el.otherAmt
-                              }
-                              displayType="text"
-                              thousandSeparator=","
-                              decimalScale={2}
-                              fixedDecimalScale
-                            />
-                          </div>
+                          <p className="text-[12px] ml-1 text-text-50">
+                            {formatDateTime(el.recordDate, i18n.language)}
+                          </p>
                         </div>
-                        <div className="w-full px-1 flex gap-1 justify-between items-center mt-1 relative">
-                          {/* date time */}
-                          <div className="w-[150px] flex-none  flex items-center gap-1">
-                            <p className="text-text-50 text-[12px]">
-                              {t("by")}
-                            </p>
+                        {/* tags */}
+                        <div className="flex-1 flex gap-[2px] justify-end translate-x-1 flex-wrap">
+                          {el.tagTrans.map((el, idx) => (
                             <div
-                              className={`text-[12px] w-[18px] h-[18px] flex-none convex px-1 flex justify-center items-center ${el.user?.userName === user.userName ? "bg-accent" : "bg-friend"}`}
+                              key={idx}
+                              className="px-2 py-1 convex text-[13px] h-[20px] text-text bg-tag text-text-reverse flex justify-center items-center"
                             >
-                              {el.user?.userName.charAt(0)}
+                              {el?.tag?.tagTxt}
                             </div>
-                            <p className="text-[12px] ml-1 text-text-50">
-                              {formatDateTime(el.recordDate, i18n.language)}
-                            </p>
-                          </div>
-                          {/* tags */}
-                          <div className="flex-1 flex gap-[2px] justify-end translate-x-1 flex-wrap">
-                            {el.tagTrans.map((el, idx) => (
-                              <div
-                                key={idx}
-                                className="px-2 py-1 convex text-[13px] h-[20px] text-text bg-tag text-text-reverse flex justify-center items-center"
-                              >
-                                {el?.tag?.tagTxt}
-                              </div>
-                            ))}{" "}
-                          </div>
+                          ))}{" "}
                         </div>
                       </div>
-                    );
-                  })
+                    </AnimatedSection>
+                  ))
                 : !isLoad && (
                     <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
                       <NoTrans className="w-[40px] h-[40px]" />
                       <p className="text-center">{t("noRecordFound")}</p>
                     </div>
                   )}
-            </div>
+            </AnimatedSection>
           </div>{" "}
           {/* to top arrow */}
           {showToTop && (
-            <button
+            <AnimatedSection
               className="w-[44px] h-[44px] convex-full fixed bottom-19 left-1/2 -translate-x-1/2 bg-primary flex justify-center items-center animate-fade-in"
               onClick={hdlToTop}
             >
               <ToTopIcon className="w-[36px] h-[36px] text-text-reverse" />
-            </button>
+            </AnimatedSection>
           )}
           <Footer />
         </>

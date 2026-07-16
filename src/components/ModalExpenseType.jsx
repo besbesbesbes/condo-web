@@ -5,30 +5,7 @@ import useUserStore from "../stores/user-store";
 import ModalEditType from "./ModalEditType";
 import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "./AnimatedSection";
 
 function ModalExpenseType({
   types,
@@ -70,11 +47,14 @@ function ModalExpenseType({
   }, []);
 
   return (
-    <div className="w-[300px] h-auto bg-app shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-4 pb-4 pt-6 items-center text-lg text-text text-text">
-      <div className="flex gap-1 items-center">
+    <AnimatedSection
+      index={0}
+      className="w-[300px] h-auto bg-app shadow-xl convex fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-4 pb-4 pt-6 items-center text-lg text-text text-text"
+    >
+      <AnimatedSection index={1} className="flex gap-1 items-center">
         <TypeIcon className="w-[20px] h-[20px]" />
         <p className="">{t("selectType")}</p>
-      </div>
+      </AnimatedSection>
       {/* <button onClick={() => console.log(users)}>Users</button> */}
       <div
         className="w-full h-[300px] flex flex-col overflow-auto p-4 items-center gap-4 rounded-xl"
@@ -83,13 +63,11 @@ function ModalExpenseType({
       >
         {types?.length ? (
           types.map((el, idx) => (
-            <div
+            <AnimatedSection
+              index={1}
+              delay={idx * 50}
               key={idx}
-              className="trans-list-item w-10/11 bg-surface flex justify-center items-center relative convex flex-none h-[32px]"
-              style={{
-                animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-                animationDelay: `${idx * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-              }}
+              className="w-10/11 bg-surface flex justify-center items-center relative convex flex-none h-[32px]"
             >
               <div
                 className="w-full text-center cursor-pointer"
@@ -117,14 +95,14 @@ function ModalExpenseType({
                   <EditIcon className="p-[3px]" />
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           ))
         ) : (
           <p>No type</p>
         )}
       </div>
       {/* add */}
-      <div className="w-10/12 flex gap-2">
+      <AnimatedSection index={4} className="w-10/12 flex gap-2">
         <input
           type="text"
           className="input-field w-10/12 concave pl-4 bg-surface"
@@ -139,7 +117,7 @@ function ModalExpenseType({
         >
           {t("add")}
         </button>
-      </div>
+      </AnimatedSection>
       {/* close button */}
       <button
         className="w-[30px] h-[30px] convex-full flex justify-center items-center py-1 mt-2 absolute top-0 right-0 -translate-x-2 text-text-reverse bg-accent"
@@ -157,7 +135,7 @@ function ModalExpenseType({
           getNewTranInfo={getNewTranInfo}
         />
       </dialog>
-    </div>
+    </AnimatedSection>
   );
 }
 

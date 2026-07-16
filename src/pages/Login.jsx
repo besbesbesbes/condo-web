@@ -6,7 +6,7 @@ import useMainStore from "../stores/main-store";
 import { useTranslation } from "react-i18next";
 import { AppIcon } from "../icons/menuIcon";
 import ModalRegister from "../components/ModalRegister";
-import AnimatedDiv from "../components/AnimatedDiv";
+import AnimatedSection from "../components/AnimatedSection";
 
 function Login() {
   const { t, i18n } = useTranslation();
@@ -69,34 +69,34 @@ function Login() {
   return (
     <div className="bg-app w-screen h-svh flex items-center justify-center text-sm">
       {/* login card */}
-      <AnimatedDiv
+      <AnimatedSection
         className="bg-surface w-[300px] h-auto m-auto flex flex-col items-center gap-4 px-4 pt-8 pb-2 convex -translate-y-[50px]"
-        idx={0}
+        index={0}
       >
-        <AnimatedDiv className="flex items-end-safe gap-2" idx={0}>
-          <AnimatedDiv
+        <AnimatedSection className="flex items-end-safe gap-2" idx={0}>
+          <AnimatedSection
             className="w-[80px] h-[80px] convex-full flex justify-center items-center overflow-hidden mb-1"
-            idx={1}
+            index={1}
           >
             <AppIcon className="p-4 text-text-reverse bg-primary" />
-          </AnimatedDiv>
+          </AnimatedSection>
           <div className="flex flex-col gap-1">
-            <AnimatedDiv
-              idx={1}
+            <AnimatedSection
+              index={2}
               className={`font-bold text-primary ${i18n.language === "en" ? "text-3xl" : "text-2xl"}`}
             >
               {t("stang")}
-            </AnimatedDiv>
-            <AnimatedDiv
-              idx={2}
+            </AnimatedSection>
+            <AnimatedSection
+              index={3}
               className={`italic -translate-y-1  ${i18n.language === "en" ? "text-base" : "text-sm"}`}
             >
               {t("everyStangMatters")}.
-            </AnimatedDiv>
+            </AnimatedSection>
           </div>
-        </AnimatedDiv>
-        <AnimatedDiv
-          idx={3}
+        </AnimatedSection>
+        <AnimatedSection
+          index={4}
           className=" w-full flex justify-center items-center"
         >
           <p className="w-[100px] text-right pr-5">{t("userName")} :</p>
@@ -107,9 +107,9 @@ function Login() {
             value={input.inputUser}
             onChange={hdlInput}
           />
-        </AnimatedDiv>
-        <AnimatedDiv
-          idx={4}
+        </AnimatedSection>
+        <AnimatedSection
+          index={5}
           className=" w-full flex justify-center items-center"
         >
           <p className="w-[100px] text-right pr-5">{t("password")} :</p>
@@ -120,31 +120,31 @@ function Login() {
             value={input.inputPassword}
             onChange={hdlInput}
           />
-        </AnimatedDiv>
-        <AnimatedDiv idx={5}>
+        </AnimatedSection>
+        <AnimatedSection index={6}>
           <button
             className="btn h-[30px] w-[130px] convex bg-accent font-bold"
             onClick={hdlLogin}
           >
             {t("login")}
           </button>
-        </AnimatedDiv>
-        <AnimatedDiv idx={6}>
+        </AnimatedSection>
+        <AnimatedSection index={7}>
           <button
             className="btn h-[30px] w-[130px] convex bg-primary font-bold"
             onClick={openRegisterModal}
           >
             {t("register")}
           </button>
-        </AnimatedDiv>
+        </AnimatedSection>
         {/* error message */}
         {isShowErrMsg && (
-          <AnimatedDiv>
+          <AnimatedSection>
             {" "}
             <p className="font-bold text-accent">{errMsg}</p>
-          </AnimatedDiv>
+          </AnimatedSection>
         )}
-        <AnimatedDiv idx={7} className="self-end flex gap-2 items-center">
+        <AnimatedSection index={8} className="self-end flex gap-2 items-center">
           {/* <p>{t("language")}</p> */}
           <select
             onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -156,8 +156,8 @@ function Login() {
             {/* <option value="cn">中国人</option> */}
             {/* <option value="jp">日语</option> */}
           </select>
-        </AnimatedDiv>
-      </AnimatedDiv>
+        </AnimatedSection>
+      </AnimatedSection>
       {/* register modal */}
       <dialog id="register_modal" className="modal">
         <ModalRegister onSuccess={hdlRegisterSuccess} />

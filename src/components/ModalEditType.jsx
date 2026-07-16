@@ -4,6 +4,7 @@ import useUserStore from "../stores/user-store";
 import useMainStore from "../stores/main-store";
 import { CloseIcon, TypeIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
+import AnimatedSection from "./AnimatedSection";
 
 function ModalEditType({ selectedType, getNewTranInfo }) {
   const { t } = useTranslation();
@@ -48,32 +49,41 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
   }, [selectedType]);
 
   return (
-    <div className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-3 pb-4 pt-6 items-center text-lg">
-      <div className="flex gap-1 items-center">
+    <AnimatedSection
+      index={0}
+      className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-3 pb-4 pt-6 items-center text-lg"
+    >
+      <AnimatedSection index={1} className="flex gap-1 items-center">
         <TypeIcon className="w-[20px] h-[20px]" />
         <p className="">{t("editType")}</p>
-      </div>
+      </AnimatedSection>
 
-      <input
-        type="text"
-        className="input-field w-10/12 concave pl-4 bg-surface"
-        value={typeTxt}
-        onChange={(e) => setTypeTxt(e.target.value)}
-      />
+      <AnimatedSection index={2} className="w-10/12">
+        <input
+          type="text"
+          className="input-field w-full concave pl-4 bg-surface"
+          value={typeTxt}
+          onChange={(e) => setTypeTxt(e.target.value)}
+        />
+      </AnimatedSection>
       {/* button */}
       <div className="flex gap-2 mt-1">
-        <button
-          className="btn btn-primary w-[100px] h-[30px] text-text-reverse"
-          onClick={hdlEditType}
-        >
-          {t("update")}
-        </button>
-        <button
-          className="btn btn-accent w-[100px] h-[30px] text-text-reverse"
-          onClick={hdlDeleteType}
-        >
-          {t("delete")}
-        </button>
+        <AnimatedSection index={3}>
+          <button
+            className="btn btn-primary w-[100px] h-[30px] text-text-reverse"
+            onClick={hdlEditType}
+          >
+            {t("update")}
+          </button>
+        </AnimatedSection>
+        <AnimatedSection index={4}>
+          <button
+            className="btn btn-accent w-[100px] h-[30px] text-text-reverse"
+            onClick={hdlDeleteType}
+          >
+            {t("delete")}
+          </button>
+        </AnimatedSection>
       </div>
       {/* close button */}
       <button
@@ -84,7 +94,7 @@ function ModalEditType({ selectedType, getNewTranInfo }) {
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

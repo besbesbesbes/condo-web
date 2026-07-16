@@ -2,13 +2,13 @@ import React, { forwardRef } from "react";
 
 const DURATION = 320;
 const DELAY = 24;
-const AnimatedDiv = forwardRef(
+const AnimatedSection = forwardRef(
   (
     {
       children,
       className = "",
       style = {},
-      idx = 0,
+      index = 0,
       duration = DURATION,
       delay = DELAY,
       ...props
@@ -21,7 +21,7 @@ const AnimatedDiv = forwardRef(
         className={`animated-div ${className}`.trim()}
         style={{
           animationDuration: `${duration}ms`,
-          animationDelay: `${idx * delay}ms`,
+          animationDelay: `${index * delay}ms`,
           ...style,
         }}
         {...props}
@@ -32,6 +32,6 @@ const AnimatedDiv = forwardRef(
   },
 );
 
-AnimatedDiv.displayName = "AnimatedDiv";
+AnimatedSection.displayName = "AnimatedSection";
 
-export default AnimatedDiv;
+export default AnimatedSection;

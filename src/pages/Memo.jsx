@@ -21,30 +21,7 @@ import useUserStore from "../stores/user-store";
 import { getMemo } from "../apis/memo-api";
 import ModalEditMemo from "../components/ModalEditMemo";
 import ModalConfirmDeleteMemo from "../components/ModalConfirmDeleteMemo";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "../components/AnimatedSection";
 
 function Memo() {
   const setCurMenu = useMainStore((state) => state.setCurMenu);
@@ -57,6 +34,7 @@ function Memo() {
   const [searchText, setSearchText] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [animationVersion, setAnimationVersion] = useState(0);
   const [filter, setFilter] = useState({
     users: {}, // { userId: true/false }
     hidden: false,
@@ -114,6 +92,7 @@ function Memo() {
     });
 
     setFilteredMemos(filtered);
+    setAnimationVersion((v) => v + 1);
   };
 
   const hdlScrollToTop = () => {
@@ -183,7 +162,10 @@ function Memo() {
         className="w-10/11 flex items-center justify-between mt-3 gap-2"
         index={0}
       >
-        <div className="h-[30px] flex-1 concave bg-surface flex justify-between items-center px-2">
+        <AnimatedSection
+          index={1}
+          className="h-[30px] flex-1 concave bg-surface flex justify-between items-center px-2"
+        >
           <input
             className=" w-full focus:outline-none pl-1"
             value={searchText}
@@ -200,24 +182,32 @@ function Memo() {
           ) : (
             <SearchIcon className="w-[20px] h-[20px] flex-none" />
           )}
-        </div>
+        </AnimatedSection>
         {/* sort */}
         {sort === "new" ? (
-          <button
-            className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
-            onClick={() => setSort((prev) => (prev === "new" ? "old" : "new"))}
-          >
-            <SortNewIcon className="w-[20px] h-[20px]" />
-            <p>{t("new")}</p>
-          </button>
+          <AnimatedSection index={2}>
+            <button
+              className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
+              onClick={() =>
+                setSort((prev) => (prev === "new" ? "old" : "new"))
+              }
+            >
+              <SortNewIcon className="w-[20px] h-[20px]" />
+              <p>{t("new")}</p>
+            </button>{" "}
+          </AnimatedSection>
         ) : (
-          <button
-            className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
-            onClick={() => setSort((prev) => (prev === "new" ? "old" : "new"))}
-          >
-            <SortOldIcon className="w-[20px] h-[20px]" />
-            <p>{t("old")}</p>
-          </button>
+          <AnimatedSection index={2}>
+            <button
+              className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
+              onClick={() =>
+                setSort((prev) => (prev === "new" ? "old" : "new"))
+              }
+            >
+              <SortOldIcon className="w-[20px] h-[20px]" />
+              <p>{t("old")}</p>
+            </button>
+          </AnimatedSection>
         )}
       </AnimatedSection>
       {/* filter */}
@@ -225,61 +215,66 @@ function Memo() {
         className="w-10/11 flex items-center justify-between gap-2 mt-1 flex-wrap"
         index={1}
       >
-        {users.length > 1 && (
+        {users.length > 1 ? (
           <div className="flex gap-2">
-            {users.map((u) => {
+            {users.map((u, index) => {
               const isMe = Number(u.userId) === Number(user.userId);
               const isActive = filter.users[u.userId];
 
               return (
-                <button
-                  key={u.userId}
-                  className={`w-[100px] h-[30px] flex-none convex my-1 ${
-                    isActive
-                      ? isMe
-                        ? "bg-accent text-text-reverse font-bold"
-                        : "bg-friend text-text-reverse font-bold"
-                      : "bg-surface"
-                  }`}
-                  onClick={() =>
-                    setFilter((prev) => ({
-                      ...prev,
-                      users: {
-                        ...prev.users,
-                        [u.userId]: !prev.users[u.userId],
-                      },
-                    }))
-                  }
-                >
-                  {u.userName}
-                </button>
+                <AnimatedSection index={index} key={u.userId}>
+                  <button
+                    className={`w-[100px] h-[30px] flex-none convex my-1 ${
+                      isActive
+                        ? isMe
+                          ? "bg-accent text-text-reverse font-bold"
+                          : "bg-friend text-text-reverse font-bold"
+                        : "bg-surface"
+                    }`}
+                    onClick={() =>
+                      setFilter((prev) => ({
+                        ...prev,
+                        users: {
+                          ...prev.users,
+                          [u.userId]: !prev.users[u.userId],
+                        },
+                      }))
+                    }
+                  >
+                    {u.userName}
+                  </button>
+                </AnimatedSection>
               );
             })}
           </div>
-        )}
-        <button
-          className={`w-[100px] h-[30px] flex-none convex my-1 flex gap-1 items-center justify-center ${filter.hidden ? "bg-primary text-text-reverse font-bold" : "bg-surface"}`}
-          onClick={() =>
-            setFilter((prev) => ({ ...prev, hidden: !prev.hidden }))
-          }
-        >
-          {filter.hidden ? (
-            <UnHideIcon className="w-[20px] h-[20px]" />
-          ) : (
-            <HideIcon className="w-[20px] h-[20px]" />
-          )}
+        ) : (
+          <div className="flex gap-2"></div>
+        )}{" "}
+        <AnimatedSection index={2}>
+          <button
+            className={`w-[100px] h-[30px] flex-none convex my-1 flex gap-1 items-center justify-center ${filter.hidden ? "bg-primary text-text-reverse font-bold" : "bg-surface"}`}
+            onClick={() =>
+              setFilter((prev) => ({ ...prev, hidden: !prev.hidden }))
+            }
+          >
+            {filter.hidden ? (
+              <UnHideIcon className="w-[20px] h-[20px]" />
+            ) : (
+              <HideIcon className="w-[20px] h-[20px]" />
+            )}
 
-          {t("hidden")}
-        </button>
+            {t("hidden")}
+          </button>{" "}
+        </AnimatedSection>
       </AnimatedSection>
       {/* memo list */}
       <AnimatedSection className="w-9/10 flex flex-col gap-4 mt-2" index={2}>
         {filteredMemos?.length > 0 ? (
           filteredMemos.map((el, idx) => (
             <AnimatedSection
-              key={idx}
+              key={`${animationVersion}-${el.memoId}`}
               className="w-full flex gap-2"
-              index={3 + idx}
+              index={3 + idx * 2}
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedMemo({ ...el });
@@ -349,7 +344,8 @@ function Memo() {
         className="w-full flex justify-center"
         index={3 + filteredMemos.length}
       > */}
-      <button
+      <AnimatedSection
+        index={3}
         className="w-[150px] h-[30px] fixed bottom-18 my-2 btn btn-primary text-text-reverse"
         onClick={(e) => {
           e.stopPropagation();
@@ -360,16 +356,16 @@ function Memo() {
           <NewIcon className="w-[20px] h-[20px]" />
           {t("add")}
         </div>
-      </button>
+      </AnimatedSection>
       {/* </AnimatedSection> */}
       {/* to top */}
       {showToTop && (
-        <div
+        <AnimatedSection
           className="w-[30px] h-[30px] fixed bottom-18 right-4 my-2 bg-primary convex text-text-reverse flex justify-center items-center"
           onClick={hdlScrollToTop}
         >
           <ToTopIcon className="w-[20px] h-[20px]" />
-        </div>
+        </AnimatedSection>
       )}
 
       {/* modal add memo */}

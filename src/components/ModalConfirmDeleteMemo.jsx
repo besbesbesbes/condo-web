@@ -4,6 +4,7 @@ import useMainStore from "../stores/main-store";
 import { CloseIcon, DeleteIcon } from "../icons/menuIcon";
 import { useTranslation } from "react-i18next";
 import { deleteMemo } from "../apis/memo-api";
+import AnimatedSection from "./AnimatedSection";
 
 function ModalConfirmDeleteMemo({ refreshMemo, memo }) {
   const { t } = useTranslation();
@@ -34,27 +35,39 @@ function ModalConfirmDeleteMemo({ refreshMemo, memo }) {
   };
 
   return (
-    <div className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text">
-      <p className="text-lg" id="text-edit-type" tabIndex={-1}>
+    <AnimatedSection
+      index={1}
+      className="w-[300px] h-auto bg-app shadow-xl concave fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col gap-2 pb-4 pt-6 text-xs items-center text-text"
+    >
+      <AnimatedSection
+        index={2}
+        className="text-lg"
+        id="text-edit-type"
+        tabIndex={-1}
+      >
         {t("confirmDelete")}
-      </p>
+      </AnimatedSection>
       <div className="flex gap-4 my-2 text-base">
-        <button
-          className="btn btn-primary w-[100px] text-text-reverse flex justify-center items-center gap-1"
-          onClick={() => {
-            document.getElementById("confirm-delete-memo-modal")?.close();
-          }}
-        >
-          <CloseIcon className="w-[20px] h-[20px]" />
-          {t("cancel")}
-        </button>
-        <button
-          className="btn btn-accent w-[100px] text-text-reverse flex justify-center items-center gap-1"
-          onClick={hdlDeleteMemo}
-        >
-          <DeleteIcon className="w-[20px] h-[20px]" />
-          {t("delete")}
-        </button>
+        <AnimatedSection index={3}>
+          <button
+            className="btn btn-primary w-[100px] text-text-reverse flex justify-center items-center gap-1"
+            onClick={() => {
+              document.getElementById("confirm-delete-memo-modal")?.close();
+            }}
+          >
+            <CloseIcon className="w-[20px] h-[20px]" />
+            {t("cancel")}
+          </button>
+        </AnimatedSection>
+        <AnimatedSection index={4}>
+          <button
+            className="btn btn-accent w-[100px] text-text-reverse flex justify-center items-center gap-1"
+            onClick={hdlDeleteMemo}
+          >
+            <DeleteIcon className="w-[20px] h-[20px]" />
+            {t("delete")}
+          </button>
+        </AnimatedSection>
       </div>
       {/* close button */}
       <button
@@ -65,7 +78,7 @@ function ModalConfirmDeleteMemo({ refreshMemo, memo }) {
       >
         <CloseIcon className="p-1" />
       </button>
-    </div>
+    </AnimatedSection>
   );
 }
 

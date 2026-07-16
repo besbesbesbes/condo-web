@@ -16,30 +16,7 @@ import {
 import Header from "../components/Header";
 import { requestBuddyApi } from "../apis/buddy-api";
 import { APP_VERSION } from "../config/version";
-import {
-  TRANS_LIST_ANIMATION_DURATION_MS,
-  TRANS_LIST_ANIMATION_STAGGER_MS,
-} from "../config/animation";
-
-const AnimatedSection = ({
-  children,
-  index,
-  className = "",
-  style = {},
-  ...props
-}) => (
-  <div
-    className={`trans-list-item ${className}`.trim()}
-    style={{
-      animationDuration: `${TRANS_LIST_ANIMATION_DURATION_MS}ms`,
-      animationDelay: `${index * TRANS_LIST_ANIMATION_STAGGER_MS}ms`,
-      ...style,
-    }}
-    {...props}
-  >
-    {children}
-  </div>
-);
+import AnimatedSection from "../components/AnimatedSection";
 
 function Setting() {
   const { t, i18n } = useTranslation();
@@ -122,8 +99,8 @@ function Setting() {
       <div className="w-screen bg-app overflow-y-auto flex flex-col gap-7 items-center relative mb-[75px] mt-[60px]">
         <Header />
         <AnimatedSection
-          className="w-10/12 flex justify-center items-center gap-2 mt-4"
           index={0}
+          className="w-10/12 flex justify-center items-center gap-2 mt-4"
         >
           <p className="w-[100px] text-right pr-2 font-bold">
             {t("userName")} :
