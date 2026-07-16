@@ -19,6 +19,9 @@ const AnimatedSection = forwardRef(
       <div
         ref={ref}
         className={`animated-div ${className}`.trim()}
+        onAnimationEnd={(e) => {
+          e.currentTarget.style.animation = "none";
+        }}
         style={{
           animationDuration: `${duration}ms`,
           animationDelay: `${index * delay}ms`,
