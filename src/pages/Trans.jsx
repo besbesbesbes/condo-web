@@ -162,7 +162,8 @@ function Trans() {
               {hasTrans
                 ? trans.map((el, idx) => (
                     <AnimatedSection
-                      delay={idx * 20}
+                      // delay={idx * 20}
+                      delay={idx > 10 ? 0 : idx * 20}
                       index={1}
                       key={el.tranId}
                       className=" w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"

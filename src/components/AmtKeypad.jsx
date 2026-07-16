@@ -107,7 +107,7 @@ function AmtKeypad({ show, initialValue = "", onClose, onConfirm }) {
                 index={1}
                 delay={idx * 16}
                 key={key}
-                className="bg-surface p-3 font-semibold convex"
+                className="bg-surface p-3 font-semibold convex flex justify-center items-center"
                 onClick={() => appendKey(key)}
                 type="button"
               >
