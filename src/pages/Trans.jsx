@@ -8,8 +8,12 @@ import TransDetail from "./TransDetail";
 import {
   AppIcon,
   CameraIcon,
+  NextIcon,
   NoTrans,
+  PrevIcon,
   SearchIcon,
+  SortNewIcon,
+  SortOldIcon,
   ToTopIcon,
   TransIcon,
 } from "../icons/menuIcon";
@@ -48,6 +52,13 @@ function Trans() {
   const navigate = useNavigate();
   const [showToTop, setShowToTop] = useState(false);
   const hasTrans = Array.isArray(trans) && trans.length > 0;
+  const [searchText, setSearchText] = useState("");
+  const [sort, setSort] = useState("new");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const year = currentDate.getFullYear();
+  const monthIndex = currentDate.getMonth(); // 0-11
+  const month = monthIndex + 1; // 1-12
+  const years = Array.from({ length: 11 }, (_, i) => 2022 + i);
 
   const getTrans = useCallback(async () => {
     setIsLoad(true);
@@ -76,6 +87,19 @@ function Trans() {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const prevMonth = () => {
+    setCurrentDate(new Date(year, monthIndex - 1, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(year, monthIndex + 1, 1));
+  };
+
+  const changeYear = (e) => {
+    const selectedYear = Number(e.target.value);
+    setCurrentDate(new Date(selectedYear, monthIndex, 1));
   };
 
   useEffect(() => {
@@ -128,36 +152,103 @@ function Trans() {
             <Header />
             {/* search */}
             <AnimatedSection
+              className="w-10/11 flex items-center justify-between mt-3 gap-2"
               index={0}
-              className="w-11/12 flex flex-col items-center gap-3 my-1 mt-[14px]"
             >
-              <div className="w-full flex gap-2">
-                <div className=" flex w-full flex-1 items-center gap-1 concave bg-surface">
-                  <input
-                    className="input-field w-full h-[32px] pl-3"
-                    type="text"
-                    value={searchInput}
-                    placeholder={t("searchField")}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                  <div className="flex-none w-[32px] h-[32px] flex justify-center items-center">
-                    <SearchIcon className="w-[15px]" />
+              <AnimatedSection
+                index={1}
+                className="h-[30px] flex-1 concave bg-surface flex justify-between items-center px-2"
+              >
+                <input
+                  className=" w-full focus:outline-none pl-1 h-[30px]"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder={t("searchField")}
+                />
+                {searchText ? (
+                  <div
+                    className="h-[20px] text-[11px] bg-accent text-text-reverse convex px-2 flex items-center justify-center"
+                    onClick={() => setSearchText("")}
+                  >
+                    {t("clear")}
                   </div>
-                </div>
+                ) : (
+                  <SearchIcon className="w-[20px] h-[20px] flex-none" />
+                )}
+              </AnimatedSection>
+              {/* sort */}
+              {sort === "new" ? (
+                <AnimatedSection index={2}>
+                  <button
+                    className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
+                    onClick={() =>
+                      setSort((prev) => (prev === "new" ? "old" : "new"))
+                    }
+                  >
+                    <SortNewIcon className="w-[20px] h-[20px]" />
+                    <p>{t("new")}</p>
+                  </button>{" "}
+                </AnimatedSection>
+              ) : (
+                <AnimatedSection index={2}>
+                  <button
+                    className="flex-none h-[30px] w-[80px] flex justify-center items-center convex btn-primary text-text-reverse gap-1"
+                    onClick={() =>
+                      setSort((prev) => (prev === "new" ? "old" : "new"))
+                    }
+                  >
+                    <SortOldIcon className="w-[20px] h-[20px]" />
+                    <p>{t("old")}</p>
+                  </button>
+                </AnimatedSection>
+              )}
+            </AnimatedSection>
+            {/* filter */}
+            <AnimatedSection
+              className="w-10/11 h-[40px] flex items-center justify-between gap-2"
+              index={1}
+            >
+              <div className="w-[80px] h-[30px] convex bg-surface rounded-lg px-2">
                 <select
-                  className="input-field flex-none pl-4 w-[100px] h-[32px] convex bg-surface"
-                  name="year"
-                  value={yearInput}
-                  onChange={(e) => setYearInput(e.target.value)}
+                  value={year}
+                  onChange={changeYear}
+                  className="w-full h-full bg-transparent outline-none text-center appearance-none cursor-pointer"
                 >
-                  {Array.from({ length: 10 }, (_, i) => 2021 + i).map((y) => (
+                  {years.map((y) => (
                     <option key={y} value={y}>
                       {y}
                     </option>
                   ))}
                 </select>
               </div>
+              <div className="flex items-center justify-between flex-1 px-2">
+                <button
+                  className="w-[35px] h-[35px] flex justify-center items-center bg-surface convex rounded-full"
+                  onClick={prevMonth}
+                >
+                  <PrevIcon className="w-5 h-5" />
+                </button>
+
+                <p className="text-lg font-semibold">
+                  {t(currentDate.toLocaleString("en-US", { month: "long" }))}
+                </p>
+
+                <button
+                  className="w-[35px] h-[35px] flex justify-center items-center bg-surface convex rounded-full"
+                  onClick={nextMonth}
+                >
+                  <NextIcon className="w-5 h-5" />
+                </button>
+              </div>
+
+              <button
+                onClick={() => setCurrentDate(new Date())}
+                className="w-[80px] h-[30px] convex rounded-lg"
+              >
+                {t("today")}
+              </button>
             </AnimatedSection>
+            {/* Trans list */}
             <AnimatedSection className="w-11/12  flex flex-col gap-2 mb-2">
               {hasTrans
                 ? trans.map((el, idx) => (
