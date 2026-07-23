@@ -23,7 +23,7 @@ function MenuBox({ icon: Icon, txt, label }) {
 
   return (
     <div
-      className={`flex justify-center bg-surface items-center m-[6px] cursor-pointer  ${
+      className={`flex justify-center bg-surface items-center mx-[10px] mt-[8px] my-[12px] cursor-pointer  ${
         txt === curMenu ? "bg-primary convex" : ""
       }`}
       onClick={(e) => {
@@ -46,7 +46,8 @@ function Footer() {
     console.log("Footer");
   }, []);
   return (
-    <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5  text-text text-xs font-bold rounded-2xl bg-surface convex">
+    // <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-11/12 max-w-md h-[60px] grid grid-cols-5  text-text text-xs font-bold rounded-2xl bg-surface convex">
+    <div className="fixed bottom-0 w-full h-[70px] grid grid-cols-5 text-gray-600 text-xs font-bold bg-surface px-2">
       <MenuBox txt="trans" label={t("trans")} icon={icons.TransIcon} />
       <MenuBox txt="add" label={t("add")} icon={icons.NewIcon} />
       <MenuBox txt="report" label={t("report")} icon={icons.ReportIcon} />

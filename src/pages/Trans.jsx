@@ -253,9 +253,8 @@ function Trans() {
               {hasTrans
                 ? trans.map((el, idx) => (
                     <AnimatedSection
-                      // delay={idx * 20}
-                      delay={idx > 10 ? 0 : idx * 32}
                       index={1}
+                      delay={idx > 10 ? 0 : idx * 32}
                       key={el.tranId}
                       className=" w-full min-h-[30px] convex bg-surface flex flex-col p-2 gap-1 items-center"
                       onClick={(e) => hdlSelectedTran(e, el)}
@@ -264,12 +263,16 @@ function Trans() {
                         {/* type */}
                         <AnimatedSection
                           index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 2}
                           className="flex-1 text-[16px]"
                         >
                           {el.expenseType?.expenseName}
                         </AnimatedSection>
                         {/* totalAmt */}
-                        <AnimatedSection index={2}>
+                        <AnimatedSection
+                          index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 3}
+                        >
                           <NumericFormat
                             className="flex-none w-[120px]  text-right text-[20px] font-bold"
                             value={el.totalAmt}
@@ -283,7 +286,8 @@ function Trans() {
                       <div className="w-full px-1 flex gap-1 justify-between items-center">
                         {/* paidUser & remark */}
                         <AnimatedSection
-                          index={3}
+                          index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 4}
                           className="flex gap-1 items-center"
                         >
                           <div
@@ -304,7 +308,8 @@ function Trans() {
                         </AnimatedSection>
                         {/* myProtion and myAmt */}
                         <AnimatedSection
-                          index={4}
+                          index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 5}
                           className="flex items-center gap-1 text-[15px]"
                         >
                           <span>(</span>
@@ -339,7 +344,8 @@ function Trans() {
                       <div className="w-full px-1 flex gap-1 justify-between items-center mt-1 relative">
                         {/* date time */}
                         <AnimatedSection
-                          index={5}
+                          index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 6}
                           className="w-[150px] flex-none  flex items-center gap-1"
                         >
                           <p className="text-text-50 text-[12px]">{t("by")}</p>
@@ -354,12 +360,14 @@ function Trans() {
                         </AnimatedSection>
                         {/* tags */}
                         <AnimatedSection
-                          index={6}
+                          index={1}
+                          delay={idx > 10 ? 0 : idx * 32 * 7}
                           className="flex-1 flex gap-[2px] justify-end translate-x-1 flex-wrap"
                         >
                           {el.tagTrans.map((el, idx) => (
                             <AnimatedSection
-                              index={idx * 100}
+                              index={1}
+                              delay={idx > 10 ? 0 : idx * 50}
                               key={idx}
                               className="px-2 py-1 convex text-[13px] h-[20px] text-text bg-tag text-text-reverse flex justify-center items-center"
                             >
