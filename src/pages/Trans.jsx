@@ -350,7 +350,7 @@ function Trans() {
                         >
                           <p className="text-text-50 text-[12px]">{t("by")}</p>
                           <div
-                            className={`text-[12px] w-[18px] h-[18px] flex-none convex px-1 flex justify-center items-center ${el.user?.userName === user.userName ? "bg-accent" : "bg-friend"}`}
+                            className={`text-[12px] w-[18px] h-[18px] flex-none convex px-1 flex justify-center items-center text-text-reverse ${el.user?.userName === user.userName ? "bg-accent" : "bg-friend"}`}
                           >
                             {el.user?.userName.charAt(0)}
                           </div>
