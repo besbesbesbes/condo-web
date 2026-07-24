@@ -378,7 +378,8 @@ function Trans() {
                       </div>
                     </AnimatedSection>
                   ))
-                : !isLoad && (
+                : !isLoad &&
+                  trans?.length === 0 && (
                     <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
                       <NoTrans className="w-[40px] h-[40px]" />
                       <p className="text-center">{t("noRecordFound")}</p>

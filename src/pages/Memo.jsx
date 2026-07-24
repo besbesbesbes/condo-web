@@ -29,6 +29,7 @@ function Memo() {
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
   const setIsLoad = useMainStore((state) => state.setIsLoad);
+  const isLoad = useMainStore((state) => state.isLoad);
   const [memos, setMemos] = useState([]);
   const [filteredMemos, setFilteredMemos] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -269,75 +270,76 @@ function Memo() {
       </AnimatedSection>
       {/* memo list */}
       <AnimatedSection className="w-9/10 flex flex-col gap-4 mt-2" index={2}>
-        {filteredMemos?.length > 0 ? (
-          filteredMemos.map((el, idx) => (
-            <AnimatedSection
-              key={`${animationVersion}-${el.memoId}`}
-              className="w-full flex gap-2"
-              index={3 + idx * 2}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedMemo({ ...el });
-              }}
-            >
-              <div className="w-[50px] flex-none flex flex-col items-center">
-                <div
-                  className={`w-[24px] h-[24px] flex justify-center items-center convex bg-primary ${el?.userId === user.userId ? "bg-accent" : "bg-friend"}`}
-                >
-                  <p className="text-text-reverse">
-                    {el.user.userName?.[0]?.toUpperCase()}
+        {filteredMemos?.length > 0
+          ? filteredMemos.map((el, idx) => (
+              <AnimatedSection
+                key={`${animationVersion}-${el.memoId}`}
+                className="w-full flex gap-2"
+                index={3 + idx * 2}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedMemo({ ...el });
+                }}
+              >
+                <div className="w-[50px] flex-none flex flex-col items-center">
+                  <div
+                    className={`w-[24px] h-[24px] flex justify-center items-center convex bg-primary ${el?.userId === user.userId ? "bg-accent" : "bg-friend"}`}
+                  >
+                    <p className="text-text-reverse">
+                      {el.user.userName?.[0]?.toUpperCase()}
+                    </p>
+                  </div>
+                  <div className="w-[50px] flex flex-col">
+                    {/* date */}
+                    <div className=" text-center text-[12px] border-b border-main">
+                      {new Date(el.updatedAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                      })}
+                    </div>
+                    {/* time */}
+                    <div className="text-[12px] text-center">
+                      {new Date(el.updatedAt).toLocaleTimeString("en-GB", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full min-w-0 min-h-[70px] convex bg-surface p-2 relative">
+                  <p className="whitespace-pre-wrap break-words line-clamp-3">
+                    {el.txt}
                   </p>
-                </div>
-                <div className="w-[50px] flex flex-col">
-                  {/* date */}
-                  <div className=" text-center text-[12px] border-b border-main">
-                    {new Date(el.updatedAt).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                    })}
+                  {/* badges */}
+                  <div className="absolute right-0 top-0 text-[11px] flex gap-1 -translate-y-2 translate-x-1">
+                    {el?.isPrivate && (
+                      <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-accent">
+                        <PrivateIcon className="w-[14px] h-[14px] my-[3px]" />
+                        {t("private")}
+                      </div>
+                    )}
+                    {el?.isLock && (
+                      <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-primary">
+                        <LockIcon className="w-[14px] h-[14px] my-[3px]" />
+                      </div>
+                    )}
+                    {el?.isHidden && (
+                      <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-accent">
+                        <HideIcon className="w-[14px] h-[14px] my-[3px]" />
+                      </div>
+                    )}
                   </div>
-                  {/* time */}
-                  <div className="text-[12px] text-center">
-                    {new Date(el.updatedAt).toLocaleTimeString("en-GB", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })}
-                  </div>
                 </div>
+              </AnimatedSection>
+            ))
+          : !isLoad && (
+              // no tran
+              <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
+                <NoTrans className="w-[40px] h-[40px]" />
+                <p className="text-center">{t("noRecordFound")}</p>
               </div>
-              <div className="w-full min-w-0 min-h-[70px] convex bg-surface p-2 relative">
-                <p className="whitespace-pre-wrap break-words line-clamp-3">
-                  {el.txt}
-                </p>
-                {/* badges */}
-                <div className="absolute right-0 top-0 text-[11px] flex gap-1 -translate-y-2 translate-x-1">
-                  {el?.isPrivate && (
-                    <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-accent">
-                      <PrivateIcon className="w-[14px] h-[14px] my-[3px]" />
-                      {t("private")}
-                    </div>
-                  )}
-                  {el?.isLock && (
-                    <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-primary">
-                      <LockIcon className="w-[14px] h-[14px] my-[3px]" />
-                    </div>
-                  )}
-                  {el?.isHidden && (
-                    <div className="flex justify-between items-center convex px-1 gap-1 text-text-reverse bg-accent">
-                      <HideIcon className="w-[14px] h-[14px] my-[3px]" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </AnimatedSection>
-          ))
-        ) : (
-          <div className="flex flex-col justify-center items-center m-4 gap-2 text-text/50">
-            <NoTrans className="w-[40px] h-[40px]" />
-            <p className="text-center">{t("noRecordFound")}</p>
-          </div>
-        )}
+            )}
       </AnimatedSection>
       {/* add new */}
       {/* <AnimatedSection
